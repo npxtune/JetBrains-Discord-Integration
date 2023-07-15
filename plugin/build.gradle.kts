@@ -17,39 +17,32 @@
 @file:Suppress("SuspiciousCollectionReassignment")
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jsoup.Jsoup
 
 plugins {
-    kotlin("jvm")
-    id("org.jetbrains.intellij")
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.intellij)
+
     antlr
 }
 
 val github = "https://github.com/Almighty-Alpaca/JetBrains-Discord-Integration"
 
 dependencies {
-    val versionCommonsIo: String by project
-    val versionJackson: String by project
-    val versionIpc: String by project
-    val versionRpc: String by project
-    val versionJUnit: String by project
-    val versionAntlr: String by project
-
     implementation(project(path = ":icons", configuration = "minimizedJar"))
 
-    implementation(group = "com.github.cbyrneee", name = "DiscordIPC", version = versionIpc)
-    implementation(group = "club.minnced", name = "java-discord-rpc", version = versionRpc)
+    implementation(libs.discord.ipc)
+    implementation(libs.discord.rpc)
 
-    implementation(group = "commons-io", name = "commons-io", version = versionCommonsIo)
+    implementation(libs.commons.io)
 
-    implementation(group = "com.fasterxml.jackson.dataformat", name = "jackson-dataformat-yaml", version = versionJackson)
+    implementation(libs.jackson.dataformat.yaml)
 
-    antlr(group = "org.antlr", name = "antlr4", version = versionAntlr)
-    implementation(group = "org.antlr", name = "antlr4-runtime", version = versionAntlr)
+    antlr(libs.antlr)
+    implementation(libs.antlr.runtime)
 
-    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-api", version = versionJUnit)
-    testRuntimeOnly(group = "org.junit.jupiter", name = "junit-jupiter-engine", version = versionJUnit)
+    testImplementation(libs.junit.jupiter.api)
+    testRuntimeOnly(libs.junit.jupiter.engine)
 }
 
 repositories {
@@ -71,11 +64,9 @@ sourceSets {
 val isCI by lazy { System.getenv("CI") != null }
 
 intellij {
-    val versionIde: String by project
-
     pluginName(rootProject.name)
 
-    version(versionIde)
+    version(libs.versions.ide)
 
     downloadSources(!isCI)
 
@@ -85,10 +76,10 @@ intellij {
 
     instrumentCode(false)
 
-    plugins.add("git4idea")
+    plugins("vcs-git")
 
     // For testing with a custom theme
-    // setPlugins("git4idea", "com.chrisrm.idea.MaterialThemeUI:3.10.0")
+    // plugins("com.chrisrm.idea.MaterialThemeUI:3.10.0")
 }
 
 configurations {
@@ -97,67 +88,22 @@ configurations {
         setExtendsFrom(extendsFrom.filter { it != antlr.get() })
     }
 
-    // Replace Kotlin with the one provided by IntelliJ
-    all {
-        if (name.contains("kotlin", ignoreCase = true) || name.contains("idea", ignoreCase = true)) {
-            return@all
-        }
+    implementation {
+        exclude("org.jetbrains.kotlin", "kotlin-reflect")
+        exclude("org.jetbrains.kotlin", "kotlin-stdlib")
+        exclude("org.jetbrains.kotlin", "kotlin-stdlib-common")
+        exclude("org.jetbrains.kotlin", "kotlin-stdlib-jdk7")
+        exclude("org.jetbrains.kotlin", "kotlin-stdlib-jdk8")
+        exclude("org.jetbrains.kotlin", "kotlin-test")
+        exclude("org.jetbrains.kotlin", "kotlin-test-common")
+        exclude("org.jetbrains.kotlinx", "kotlinx-coroutines-core")
+        exclude("org.jetbrains.kotlinx", "kotlinx-coroutines-core-common")
+        exclude("org.jetbrains.kotlinx", "kotlinx-coroutines-jdk8")
+        exclude("org.slf4j", "slf4j-api")
     }
 }
 
 tasks {
-    setupDependencies {
-        configurations {
-
-            // Replace Kotlin with the one provided by IntelliJ
-            all {
-                if (name.contains("kotlin", ignoreCase = true) || name.contains("idea", ignoreCase = true)) {
-                    return@all
-                }
-
-                exclude("org.jetbrains.kotlin", "kotlin-reflect")
-                exclude("org.jetbrains.kotlin", "kotlin-stdlib")
-                exclude("org.jetbrains.kotlin", "kotlin-stdlib-common")
-                exclude("org.jetbrains.kotlin", "kotlin-stdlib-jdk7")
-                exclude("org.jetbrains.kotlin", "kotlin-stdlib-jdk8")
-                exclude("org.jetbrains.kotlin", "kotlin-test")
-                exclude("org.jetbrains.kotlin", "kotlin-test-common")
-                exclude("org.jetbrains.kotlinx", "kotlinx-coroutines-core")
-                exclude("org.jetbrains.kotlinx", "kotlinx-coroutines-core-common")
-                exclude("org.jetbrains.kotlinx", "kotlinx-coroutines-jdk8")
-                exclude("org.slf4j", "slf4j-api")
-
-
-//                resolutionStrategy.dependencySubstitution {
-//                    val ideaDependency = this@setupDependencies.idea.map { "com.jetbrains:${it.name}:${it.version}" }
-//
-//                    val ideaModules = listOf(
-//                        "org.jetbrains.kotlin:kotlin-reflect",
-//                        "org.jetbrains.kotlin:kotlin-stdlib",
-//                        "org.jetbrains.kotlin:kotlin-stdlib-common",
-//                        "org.jetbrains.kotlin:kotlin-stdlib-jdk7",
-//                        "org.jetbrains.kotlin:kotlin-stdlib-jdk8",
-//                        "org.jetbrains.kotlin:kotlin-test",
-//                        "org.jetbrains.kotlin:kotlin-test-common",
-//                        "org.jetbrains.kotlinx:kotlinx-coroutines-core",
-//                        "org.jetbrains.kotlinx:kotlinx-coroutines-core-common",
-//                        "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8",
-//                        "org.slf4j:slf4j-api"
-//                    )
-//
-//                    all action@{
-//                        val requested = requested as? ModuleComponentSelector ?: return@action
-//
-//                        if ("${requested.group}:${requested.module}" in ideaModules) {
-//                            useTarget(ideaDependency)
-//                        }
-//                    }
-//                }
-            }
-        }
-
-    }
-
     val minimizedJar by registering(ShadowJar::class) {
         group = "build"
 
@@ -228,12 +174,6 @@ tasks {
 
     check {
         dependsOn(verifyPlugin)
-    }
-
-    withType<KotlinCompile> {
-        kotlinOptions {
-            freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
-        }
     }
 
     generateGrammarSource {

@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package com.almightyalpaca.jetbrains.plugins.discord.plugin.time
+enableFeaturePreview("VERSION_CATALOGS")
 
-import com.intellij.openapi.application.PreloadingActivity
-
-@Suppress("UnstableApiUsage")
-class TimePreloadingActivity : PreloadingActivity() {
-    @Suppress("MissingRecentApi")
-    override fun preload() {
-        timeService.load()
+dependencyResolutionManagement {
+    versionCatalogs {
+        create("libs") {
+            from(files("../libs.versions.toml"))
+        }
     }
 }

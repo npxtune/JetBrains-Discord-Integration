@@ -23,14 +23,14 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.nio.file.Files
 
 plugins {
-    kotlin("jvm") apply false
-    id("com.github.ben-manes.versions")
-    id("com.palantir.git-version")
+    alias(libs.plugins.kotlin) apply false
+    alias(libs.plugins.versions)
+    alias(libs.plugins.gitversion)
 }
 
 group = "com.almightyalpaca.jetbrains.plugins.discord"
 
-val versionDetails: Closure<VersionDetails> by project.extra
+val versionDetails: Closure<VersionDetails> by extra
 
 var version = versionDetails().lastTag.removePrefix("v")
 version += when (versionDetails().commitDistance) {
@@ -66,19 +66,20 @@ subprojects {
     tasks {
         withType<KotlinCompile> {
             kotlinOptions {
-                jvmTarget = "11"
+                jvmTarget = "17"
                 freeCompilerArgs += "-Xjvm-default=enable"
 
-                languageVersion = "1.4"
+                apiVersion = kotlinLanguageVersion(libs.versions.kotlin.ide())
+                languageVersion = kotlinLanguageVersion(libs.versions.kotlin.ide())
             }
         }
 
         withType<JavaCompile> {
-            targetCompatibility = "11"
-            sourceCompatibility = "11"
+            targetCompatibility = "17"
+            sourceCompatibility = "17"
 
             if (JavaVersion.current() >= JavaVersion.VERSION_1_9) {
-                options.compilerArgs as MutableList<String> += listOf("--release", "11")
+                options.compilerArgs as MutableList<String> += listOf("--release", "17")
             }
         }
     }
@@ -101,10 +102,8 @@ tasks {
     }
 
     withType<Wrapper> {
-        val versionGradle: String by project
-
         distributionType = Wrapper.DistributionType.BIN
-        gradleVersion = versionGradle
+        gradleVersion = libs.versions.gradle()
     }
 
     create<Delete>("clean") {
