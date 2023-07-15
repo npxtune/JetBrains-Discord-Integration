@@ -1,3 +1,9 @@
+## v2.0.0
+THIS RELEASE IS FROM A FORK OF THE ORIGINAL PLUGIN - see readme for more info
+- Fix fields `large_text` and `small_text` throwing errors if empty (https://github.com/Almighty-Alpaca/JetBrains-Discord-Integration/pull/289)
+- Fix discord ipc issues (https://github.com/Almighty-Alpaca/JetBrains-Discord-Integration/pull/314)
+- Support IntelliJ version up to 2023.1.4
+
 ## v1.11.0
 - Fix compatibility with IntelliJ version 2022.3
 
