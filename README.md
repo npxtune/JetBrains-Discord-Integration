@@ -22,7 +22,7 @@ Note : The plugin is not available on the JetBrains plugin repository yet.
 
 #### ...from the GitHub release page
 
-Go to the [GitHub release page](https://github.com/Almighty-Alpaca/JetBrains-Discord-Integration/releases/latest) and grab the latest `JetBrains-Discord-Integration-X.X.X.zip`. Do not unzip the file. In your IDE go to `Settings > Plugins > Install plugin from disk...` and select the previously downloaded zip file.
+Go to the [GitHub release page](https://github.com/Azn9/JetBrains-Discord-Integration/tags) and grab the latest `JetBrains-Discord-Integration-X.X.X.zip`. Do not unzip the file. In your IDE go to `Settings > Plugins > Install plugin from disk...` and select the previously downloaded zip file.
 
 #### ...or compile from source
 
