@@ -30,10 +30,7 @@ import dev.cbyrne.kdiscordipc.data.activity.activity
 import dev.cbyrne.kdiscordipc.data.activity.largeImage
 import dev.cbyrne.kdiscordipc.data.activity.smallImage
 import dev.cbyrne.kdiscordipc.data.activity.timestamps
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import dev.cbyrne.kdiscordipc.data.user.User as NativeUser
 
 class DiscordIpcConnection(override val appId: Long, private val userCallback: UserCallback) :
@@ -56,7 +53,19 @@ class DiscordIpcConnection(override val appId: Long, private val userCallback: U
         if (!ipcClient.connected) {
             DiscordPlugin.LOG.debug("Starting new ipc connection")
 
-            launch { ipcClient.connect() }
+            launch {
+                try {
+                    withTimeoutOrNull(5000) {
+                        try {
+                            ipcClient.connect()
+                        } catch (e: Exception) {
+                            DiscordPlugin.LOG.warn("Error connecting to ipc, is the client running?", e)
+                        }
+                    }
+                } catch (e: Exception) {
+                    DiscordPlugin.LOG.warn("Error connecting to ipc, is the client running?", e)
+                }
+            }
 
             DiscordPlugin.LOG.debug("Started new ipc connection")
         }
@@ -65,8 +74,14 @@ class DiscordIpcConnection(override val appId: Long, private val userCallback: U
     override suspend fun send(presence: RichPresence?) {
         DiscordPlugin.LOG.debug("Sending new presence")
 
-        if (running)
-            ipcClient.activityManager.setActivity(presence?.toNative())
+        try {
+            if (running)
+                ipcClient.activityManager.setActivity(presence?.toNative())
+        } catch (e: Exception) {
+            DiscordPlugin.LOG.warn("Error sending presence, is the client running?", e)
+        }
+
+        DiscordPlugin.LOG.debug("Sent new presence")
     }
 
     override suspend fun disconnect() = disconnectInternal()
@@ -74,7 +89,11 @@ class DiscordIpcConnection(override val appId: Long, private val userCallback: U
     private fun disconnectInternal() {
         DiscordPlugin.LOG.debug("Closing IPC connection")
 
-        ipcClient.disconnect()
+        try {
+            ipcClient.disconnect()
+        } catch (e: Exception) {
+            DiscordPlugin.LOG.error("Error closing IPC connection, is the client running?", e)
+        }
     }
 
     override fun dispose() {

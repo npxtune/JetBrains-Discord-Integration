@@ -19,7 +19,7 @@
     <name>Discord Integration V2</name>
     <vendor email="contact@azn9.dev" url="https://github.com/Azn9">Azn9</vendor>
 
-    <idea-version since-build="223"/>
+    <idea-version since-build="232"/>
 
     <depends>com.intellij.modules.lang</depends>
 

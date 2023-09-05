@@ -22,6 +22,7 @@ import com.almightyalpaca.jetbrains.plugins.discord.plugin.rpc.connection.Discor
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.rpc.connection.DiscordRpcConnection
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.utils.DisposableCoroutineScope
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.utils.debugLazy
+import com.almightyalpaca.jetbrains.plugins.discord.plugin.utils.infoLazy
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.utils.lowercase
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
@@ -77,9 +78,11 @@ class RpcService : DisposableCoroutineScope {
     }
 
     fun update(presence: RichPresence?, forceUpdate: Boolean = false, forceReconnect: Boolean = false) = launch {
+        DiscordPlugin.LOG.debug("Called .update , islocked=${mutex.isLocked}")
+
         mutex.withLock {
             try {
-                DiscordPlugin.LOG.debugLazy { "Updating presence, forceUpdate=$forceUpdate, forceReconnect=$forceReconnect" }
+                DiscordPlugin.LOG.debug("Updating presence, forceUpdate=$forceUpdate, forceReconnect=$forceReconnect")
 
                 // TODO: check if this is the source of stuck updates
                 // if (!forceUpdate && !forceReconnect && lastPresence == presence) {
@@ -125,11 +128,18 @@ class RpcService : DisposableCoroutineScope {
 
                     }
 
-                    connection?.send(presence)
+                    try {
+                        withTimeoutOrNull(5000) {
+                            connection?.send(presence)
+                        }
+                    } catch (e: Exception) {
+                        DiscordPlugin.LOG.warn("Error sending presence, is the client running?", e)
+                    }
                 }
             } catch (e: ProcessCanceledException) {
+                DiscordPlugin.LOG.error("PCE while updating presence", e)
                 throw e
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 DiscordPlugin.LOG.error("Error while updating presence", e)
             }
         }

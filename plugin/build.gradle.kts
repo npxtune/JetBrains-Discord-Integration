@@ -48,6 +48,8 @@ dependencies {
 repositories {
     jcenter() // TODO: remove once using GameSDK
     maven("https://jitpack.io")
+
+    maven("https://nexus.azn9.dev/repository/public")
 }
 
 val generatedSourceDir = project.file("src/generated")
