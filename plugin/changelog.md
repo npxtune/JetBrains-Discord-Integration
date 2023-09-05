@@ -1,3 +1,10 @@
+## v2.0.1
+This version fixes https://github.com/Azn9/JetBrains-Discord-Integration/issues/3
+- Fix presence not re-showing if discord is restarted
+- Fix presence not showing if discord is started after the IDE
+- Fix error logged when closing discord
+- Support IntelliJ version up to 2023.2.1
+
 ## v2.0.0
 THIS RELEASE IS FROM A FORK OF THE ORIGINAL PLUGIN - see readme for more info
 - Fix fields `large_text` and `small_text` throwing errors if empty (https://github.com/Almighty-Alpaca/JetBrains-Discord-Integration/pull/289)
