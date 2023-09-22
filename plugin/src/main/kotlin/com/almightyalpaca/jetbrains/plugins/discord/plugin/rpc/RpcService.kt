@@ -84,13 +84,53 @@ class RpcService : DisposableCoroutineScope {
             try {
                 DiscordPlugin.LOG.debug("Updating presence, forceUpdate=$forceUpdate, forceReconnect=$forceReconnect")
 
-                // TODO: check if this is the source of stuck updates
-                // if (!forceUpdate && !forceReconnect && lastPresence == presence) {
-                //     DiscordPlugin.LOG.debug("Skipping presence update, nothing to do")
-                //     return
-                // }
+                if (!(forceUpdate || forceReconnect)) {
+                    if (lastPresence != null) {
+                        var different = false
 
-                lastPresence = presence
+                        if (lastPresence!!.appId != presence?.appId) {
+                            different = true
+                        }
+
+                        if (lastPresence!!.details != presence?.details) {
+                            different = true
+                        }
+
+                        if (lastPresence!!.state != presence?.state) {
+                            different = true
+                        }
+
+                        if (lastPresence!!.startTimestamp != presence?.startTimestamp) {
+                            different = true
+                        }
+
+                        if (lastPresence!!.endTimestamp != presence?.endTimestamp) {
+                            different = true
+                        }
+
+                        if (lastPresence!!.largeImage?.key != presence?.largeImage?.key) {
+                            different = true
+                        }
+
+                        if (lastPresence!!.largeImage?.text != presence?.largeImage?.text) {
+                            different = true
+                        }
+
+                        if (lastPresence!!.smallImage?.key != presence?.smallImage?.key) {
+                            different = true
+                        }
+
+                        if (lastPresence!!.smallImage?.text != presence?.smallImage?.text) {
+                            different = true
+                        }
+
+                        if (!different) {
+                            return@withLock
+                        }
+
+                        lastPresence = presence
+                    }
+                }
 
                 if (presence?.appId == null) { // Stop connection
                     when (presence) {
