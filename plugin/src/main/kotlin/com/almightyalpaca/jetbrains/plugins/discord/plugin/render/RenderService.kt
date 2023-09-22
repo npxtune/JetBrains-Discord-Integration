@@ -47,7 +47,7 @@ class RenderService : DisposableCoroutineScope {
     @Synchronized
     fun render(force: Boolean = false) {
         renderJob?.let {
-            DiscordPlugin.LOG.info("Canceling previous render due to new request")
+            DiscordPlugin.LOG.debug("Canceling previous render due to new request")
             it.cancel()
         }
 
