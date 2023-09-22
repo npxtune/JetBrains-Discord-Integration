@@ -1,3 +1,8 @@
+## v2.0.2
+- Added support for RustRover
+- Fix presence being updated even if there is no change, causing an exponential delay between updates
+- Fix some debug data being logged even if debug logging is disabled
+
 ## v2.0.1
 This version fixes https://github.com/Azn9/JetBrains-Discord-Integration/issues/3
 - Fix presence not re-showing if discord is restarted
