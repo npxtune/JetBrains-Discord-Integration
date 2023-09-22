@@ -24,7 +24,7 @@ object ApplicationUpdateNotification {
     private val content = """
         Thank you for using the JetBrains Discord Integration!
         New in this version:${getChangelog()}
-        Enjoying this plugin? Having issues? Join our <a href="https://discord.gg/SvuyuMP">Discord</a> server for news and support.
+        Enjoying this plugin? Having issues? Join our <a href="https://discord.gg/mEDvg6sYp2">Discord</a> server for news and support.
         """.trimIndent()
 
     private val group = NotificationGroup("${Plugin.getId()}.update", NotificationDisplayType.STICKY_BALLOON, true)

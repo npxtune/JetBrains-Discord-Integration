@@ -54,13 +54,13 @@ class DiscordRpcConnection(
 
     init {
         ready = OnReady { user ->
-            DiscordPlugin.LOG.info("Rpc connected, user: ${user.username}#${user.discriminator}")
+            DiscordPlugin.LOG.debug("Rpc connected, user: ${user.username}#${user.discriminator}")
 
             running = true
             userCallback(user.toGeneric())
         }
         disconnected = OnStatus { _, _ ->
-            DiscordPlugin.LOG.info("Rpc disconnected")
+            DiscordPlugin.LOG.debug("Rpc disconnected")
 
             running = false
             userCallback(null)
