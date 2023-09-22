@@ -47,12 +47,12 @@ class RenderService : DisposableCoroutineScope {
     @Synchronized
     fun render(force: Boolean = false) {
         renderJob?.let {
-            DiscordPlugin.LOG.info("Canceling previous render due to new request")
+            DiscordPlugin.LOG.debug("Canceling previous render due to new request")
             it.cancel()
         }
 
         renderJob = launch {
-            DiscordPlugin.LOG.info("Scheduling render, force=$force")
+            DiscordPlugin.LOG.debug("Scheduling render, force=$force")
 
             val data = dataService.getData(Renderer.Mode.NORMAL) ?: return@launch
 
@@ -62,9 +62,9 @@ class RenderService : DisposableCoroutineScope {
             val presence = renderer?.render()
 
             if (presence == null) {
-                DiscordPlugin.LOG.info("Render result: visible")
+                DiscordPlugin.LOG.debug("Render result: visible")
             } else {
-                DiscordPlugin.LOG.info("Render result: hidden")
+                DiscordPlugin.LOG.debug("Render result: hidden")
             }
 
             rpcService.update(presence, force)
@@ -88,7 +88,7 @@ class RenderService : DisposableCoroutineScope {
     }
 
     override fun dispose() {
-        DiscordPlugin.LOG.info("Disposing render service")
+        DiscordPlugin.LOG.debug("Disposing render service")
         renderClockJob?.cancel(true)
     }
 }
