@@ -1,3 +1,10 @@
+## v2.0.3
+- Fix icons for RustRover (thanks @zakuciael)
+- Fix plugin not working on Linux with IDEs version 2023.2.3.X.
+- Fix many issues triggering error logs when closing discord, or launching the IDE before discord.
+- Fix the application id for RustRover with the classic theme.
+- Added a link to the community discord (https://discord.gg/mEDvg6sYp2)
+
 ## v2.0.2
 - Added support for RustRover
 - Fix presence being updated even if there is no change, causing an exponential delay between updates
