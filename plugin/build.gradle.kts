@@ -34,6 +34,8 @@ dependencies {
     implementation(libs.discord.ipc)
     implementation(libs.discord.rpc)
 
+    implementation(libs.junixsocket.core)
+
     implementation(libs.commons.io)
 
     implementation(libs.jackson.dataformat.yaml)

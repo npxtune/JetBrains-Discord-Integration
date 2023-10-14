@@ -16,6 +16,7 @@ jackson                     = "2.13.4"
 jda                         = "4.4.0_352"
 junit                       = "5.9.1"
 junit-jupiter               = "5.9.1"
+junixsocket                 = "2.6.2"
 konf                        = "1.1.2"
 kotlin-ide                  = "1.7.20"
 kotlin-latest               = "1.7.20"
@@ -47,6 +48,7 @@ jackson-dataformat-yaml                 = { group = "com.fasterxml.jackson.dataf
 jda                                     = { group = "net.dv8tion", name = "JDA", version.ref = "jda" }
 junit-jupiter-api                       = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit"}
 junit-jupiter-engine                    = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit"}
+junixsocket-core                        = { module = "com.kohlschutter.junixsocket:junixsocket-core", version.ref = "junixsocket" }
 konf-core                               = { group = "com.uchuhimo", name = "konf-core", version.ref = "konf"}
 konf-yaml                               = { group = "com.uchuhimo", name = "konf-yaml", version.ref = "konf"}
 kotlin-bom-ide                          = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "kotlin-ide" }
