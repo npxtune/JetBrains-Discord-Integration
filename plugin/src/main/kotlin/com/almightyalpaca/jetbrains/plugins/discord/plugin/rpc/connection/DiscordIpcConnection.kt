@@ -1,5 +1,6 @@
 /*
  * Copyright 2017-2020 Aljoscha Grebe
+ * Copyright 2017-2020 Axel JOLY (Azn9) - https://github.com/Azn9
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +24,7 @@ import com.almightyalpaca.jetbrains.plugins.discord.plugin.rpc.UserCallback
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.utils.DisposableCoroutineScope
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.utils.errorLazy
 import dev.cbyrne.kdiscordipc.KDiscordIPC
+import dev.cbyrne.kdiscordipc.core.error.ConnectionError
 import dev.cbyrne.kdiscordipc.core.event.impl.CurrentUserUpdateEvent
 import dev.cbyrne.kdiscordipc.core.event.impl.ErrorEvent
 import dev.cbyrne.kdiscordipc.core.event.impl.ReadyEvent
@@ -51,23 +53,22 @@ class DiscordIpcConnection(override val appId: Long, private val userCallback: U
 
     override suspend fun connect() {
         if (!ipcClient.connected) {
-            DiscordPlugin.LOG.debug("Starting new ipc connection")
+            DiscordPlugin.LOG.debug("Starting new ipc connection...")
 
-            launch {
-                try {
-                    withTimeoutOrNull(5000) {
-                        try {
-                            ipcClient.connect()
-                        } catch (e: Exception) {
-                            DiscordPlugin.LOG.warn("Error connecting to ipc, is the client running?", e)
-                        }
-                    }
-                } catch (e: Exception) {
-                    DiscordPlugin.LOG.warn("Error connecting to ipc, is the client running?", e)
+            val exceptionHandler = CoroutineExceptionHandler { _, error ->
+                if (error is ConnectionError) {
+                    DiscordPlugin.LOG.warn("Error connecting to ipc", error)
+                } else {
+                    DiscordPlugin.LOG.error("Error connecting to ipc", error)
                 }
             }
 
-            DiscordPlugin.LOG.debug("Started new ipc connection")
+            MainScope().launch(exceptionHandler) {
+                withTimeoutOrNull(5000) {
+                    ipcClient.connect()
+                    DiscordPlugin.LOG.debug("Started new ipc connection")
+                }
+            }
         }
     }
 
@@ -87,12 +88,29 @@ class DiscordIpcConnection(override val appId: Long, private val userCallback: U
     override suspend fun disconnect() = disconnectInternal()
 
     private fun disconnectInternal() {
-        DiscordPlugin.LOG.debug("Closing IPC connection")
+        DiscordPlugin.LOG.debug("Closing IPC connection...")
 
-        try {
-            ipcClient.disconnect()
-        } catch (e: Exception) {
-            DiscordPlugin.LOG.error("Error closing IPC connection, is the client running?", e)
+        val exceptionHandler = CoroutineExceptionHandler { _, error ->
+            when (error) {
+                is ConnectionError -> {
+                    DiscordPlugin.LOG.warn("Error closing ipc connection", error)
+                }
+
+                is UninitializedPropertyAccessException -> {
+                    DiscordPlugin.LOG.warn("Error closing ipc connection", error)
+                }
+
+                else -> {
+                    DiscordPlugin.LOG.error("Error closing ipc connection", error)
+                }
+            }
+        }
+
+        MainScope().launch(exceptionHandler) {
+            withTimeoutOrNull(5000) {
+                ipcClient.disconnect()
+                DiscordPlugin.LOG.debug("IPC connection closed")
+            }
         }
     }
 

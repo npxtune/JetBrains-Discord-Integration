@@ -44,6 +44,12 @@ To install the zip file follow the steps from the [previous install method](#fro
 
 ## Support...
 
+### ...by joining the plugin Discord server
+
+There is a [dedicated Discord server](https://discord.gg/mEDvg6sYp2) for the JetBrains Discord Integration Plugin where we provide support for the plugin and have many of the users of the plugin chilling out.
+
+[![JetBrains Discord Integration Plugin Server](https://discordapp.com/api/guilds/1148801249425235968/embed.png?style=banner3)](https://discord.gg/mEDvg6sYp2)
+
 ### ...using GitHub issues
 
 For feature requests and bug reports, feel free to make use of the GitHub issues by submitting a new issue. Please check whether someone has reported your issue already before creating your own report. If you submit a new Issue please include as much detail as possible in your issue and how to reproduce it if possible and relevant.

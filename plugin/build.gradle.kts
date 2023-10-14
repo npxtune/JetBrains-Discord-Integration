@@ -1,5 +1,6 @@
 /*
  * Copyright 2017-2020 Aljoscha Grebe
+ * Copyright 2017-2020 Axel JOLY (Azn9) - https://github.com/Azn9
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +34,8 @@ dependencies {
 
     implementation(libs.discord.ipc)
     implementation(libs.discord.rpc)
+
+    implementation(libs.junixsocket.core)
 
     implementation(libs.commons.io)
 
