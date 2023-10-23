@@ -17,12 +17,23 @@
 
 package com.almightyalpaca.jetbrains.plugins.discord.plugin.time
 
-import com.intellij.openapi.application.PreloadingActivity
+import com.intellij.ide.ApplicationInitializedListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Suppress("UnstableApiUsage")
-class TimePreloadingActivity : PreloadingActivity() {
-    @Suppress("MissingRecentApi")
-    override fun preload() {
+class TimePreloadingActivity : ApplicationInitializedListener {
+
+    @Suppress("OVERRIDE_DEPRECATION")
+    override fun componentsInitialized() {
         timeService.load()
     }
+
+    @Suppress("MissingRecentApi")
+    suspend fun execute(asyncScope: CoroutineScope) {
+        asyncScope.launch {
+            timeService.load()
+        }
+    }
+
 }

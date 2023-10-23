@@ -49,7 +49,8 @@ dependencies {
 }
 
 repositories {
-    jcenter() // TODO: remove once using GameSDK
+    jcenter()
+    mavenCentral()
     maven("https://jitpack.io")
 
     maven("https://nexus.azn9.dev/repository/public")
@@ -81,7 +82,9 @@ intellij {
 
     instrumentCode(false)
 
-    plugins("vcs-git")
+    //plugins("vcs-git")
+
+    plugins("git4idea")
 
     // For testing with a custom theme
     // plugins("com.chrisrm.idea.MaterialThemeUI:3.10.0")

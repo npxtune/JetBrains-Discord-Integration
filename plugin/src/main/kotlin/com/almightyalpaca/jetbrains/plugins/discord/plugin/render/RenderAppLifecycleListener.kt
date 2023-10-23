@@ -17,12 +17,23 @@
 
 package com.almightyalpaca.jetbrains.plugins.discord.plugin.render
 
-import com.intellij.openapi.application.PreloadingActivity
+import com.intellij.ide.ApplicationInitializedListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Suppress("UnstableApiUsage")
-class RenderPreloadingActivity : PreloadingActivity() {
-    @Suppress("MissingRecentApi")
-    override fun preload() {
+class RenderPreloadingActivity : ApplicationInitializedListener {
+
+    @Suppress("OVERRIDE_DEPRECATION")
+    override fun componentsInitialized() {
         renderService.startRenderClock()
     }
+
+    @Suppress("MissingRecentApi")
+    suspend fun execute(asyncScope: CoroutineScope) {
+        asyncScope.launch {
+            renderService.startRenderClock()
+        }
+    }
+
 }

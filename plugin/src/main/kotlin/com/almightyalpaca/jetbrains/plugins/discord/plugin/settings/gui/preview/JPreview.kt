@@ -18,7 +18,10 @@
 package com.almightyalpaca.jetbrains.plugins.discord.plugin.settings.gui.preview
 
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.render.Renderer
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
 import java.awt.event.HierarchyEvent
 import javax.swing.ImageIcon
 import javax.swing.JLabel
@@ -53,6 +56,8 @@ class JPreview : JLabel() {
             }
         }
     }
+
+    private val mutex = Mutex()
 
     @Synchronized
     fun update(force: Boolean = false) {
