@@ -29,7 +29,7 @@ object Plugin {
 
     val version: Version? by lazy { plugin?.version?.let { Version(it) } }
 
-    val branchBase = "https://github.com/Almighty-Alpaca/JetBrains-Discord-Integration/blob/" + when (val version = version) {
+    val branchBase = "https://github.com/Azn9/JetBrains-Discord-Integration/blob" + when (val version = version) {
         null -> "master"
         else -> "v" + version.lastStable
     }
