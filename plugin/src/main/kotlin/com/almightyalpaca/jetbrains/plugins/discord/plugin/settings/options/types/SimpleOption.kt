@@ -82,6 +82,7 @@ abstract class SimpleValue<T> : Value() {
             setStoredValue(value)
             setPreviewValue(value)
         }
+
         Renderer.Mode.PREVIEW -> {
             setPreviewValue(value)
         }

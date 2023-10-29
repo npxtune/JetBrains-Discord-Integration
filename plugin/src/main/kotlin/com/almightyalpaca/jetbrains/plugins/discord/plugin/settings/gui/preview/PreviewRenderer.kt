@@ -117,6 +117,7 @@ class PreviewRenderer {
                     lastAvatarEmpty = true
                     getAvatar(user, 90)
                 }
+
                 lastAvatarEmpty -> getAvatar(user, 90)
                 else -> null
             }

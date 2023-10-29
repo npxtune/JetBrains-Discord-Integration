@@ -33,7 +33,6 @@ dependencies {
     implementation(project(path = ":icons", configuration = "minimizedJar"))
 
     implementation(libs.discord.ipc)
-    implementation(libs.discord.rpc)
 
     implementation(libs.junixsocket.core)
 
@@ -87,8 +86,11 @@ intellij {
 
     plugins("git4idea")
 
-    // For testing with a custom theme
-    // plugins("com.chrisrm.idea.MaterialThemeUI:3.10.0")
+kotlin {
+    jvmToolchain {
+        vendor = JvmVendorSpec.JETBRAINS
+        languageVersion = JavaLanguageVersion.of(libs.versions.jdk.get())
+    }
 }
 
 configurations {
@@ -109,6 +111,32 @@ configurations {
         exclude("org.jetbrains.kotlinx", "kotlinx-coroutines-core-common")
         exclude("org.jetbrains.kotlinx", "kotlinx-coroutines-jdk8")
         exclude("org.slf4j", "slf4j-api")
+    }
+}
+
+testing {
+    @Suppress("UnstableApiUsage")
+    suites {
+        val test by getting(JvmTestSuite::class) {
+            useJUnitJupiter(libs.versions.junit.jupiter)
+
+            targets.configureEach {
+                testTask {
+                    enableAssertions = true
+
+                    maxHeapSize = "1G"
+                }
+            }
+
+            dependencies {
+                implementation(libs.kotlin.test)
+            }
+            project.tasks {
+                compileTestKotlin {
+                    dependsOn(generateTestGrammarSource)
+                }
+            }
+        }
     }
 }
 
@@ -134,12 +162,8 @@ tasks {
 
     runIde {
         // Force a specific icon source
-        // environment["com.almightyalpaca.jetbrains.plugins.discord.plugin.source"] = "local:${project(":icons").parent!!.projectDir.absolutePath}"
+        // environment["com.almightyalpaca.jetbrains.plugins.discord.plugin.source"] = "local:${projects.icons.parent!!.projectDir.absolutePath}"
         // environment["com.almightyalpaca.jetbrains.plugins.discord.plugin.source"] = "classpath:discord"
-
-        // Force a specific rpc connection type
-        // environment["com.almightyalpaca.jetbrains.plugins.discord.plugin.rpc.connection"] = "rpc"
-        // environment["com.almightyalpaca.jetbrains.plugins.discord.plugin.rpc.connection"] = "ipc"
 
         enableAssertions = true
     }
@@ -171,7 +195,7 @@ tasks {
         archiveClassifier("options")
     }
 
-    prepareSandbox task@{
+    prepareSandbox {
         dependsOn(minimizedJar)
 
         pluginJar(minimizedJar.flatMap { it.archiveFile })
@@ -228,12 +252,6 @@ tasks {
 
     check {
         dependsOn(":uploader:check")
-    }
-
-    test {
-        useJUnitPlatform()
-
-        maxHeapSize = "1G"
     }
 }
 

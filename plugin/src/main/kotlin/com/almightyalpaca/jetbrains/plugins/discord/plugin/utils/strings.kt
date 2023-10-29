@@ -18,7 +18,6 @@
 package com.almightyalpaca.jetbrains.plugins.discord.plugin.utils
 
 import java.awt.FontMetrics
-import java.util.*
 import java.util.stream.IntStream
 
 fun CharSequence.find(char: Char, ignoreCase: Boolean = false): IntStream =
@@ -32,6 +31,7 @@ fun String?.limit(range: IntRange, dots: Boolean = true) = when {
             true -> "${substring(0, range.last - 1)}…"
             false -> substring(0, 128)
         }
+
         false -> when (length < range.first) {
             true -> this + ('\u200b' * (range.first - length))
             false -> this
@@ -75,5 +75,3 @@ fun verifyingLength(initialValue: String?, range: IntRange) =
 fun CharSequence.isInvisible(): Boolean {
     return indices.all { this[it].isWhitespace() || this[it] == '\u200B' }
 }
-
-fun String.lowercase() = toLowerCase(Locale.ROOT)

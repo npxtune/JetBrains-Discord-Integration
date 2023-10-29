@@ -46,7 +46,6 @@ class DiscordIpcConnection(override val appId: Long, private val userCallback: U
             on<ErrorEvent>(::onError)
             on<CurrentUserUpdateEvent>(::onCurrentUserUpdate)
         }
-//        setListener(this@DiscordIpcConnection)
     }
 
     override val running by ipcClient::connected
@@ -144,15 +143,14 @@ class DiscordIpcConnection(override val appId: Long, private val userCallback: U
 
 private fun NativeUser.toGeneric() = User.Normal(this.username, discriminator, this.id.toLong(), this.avatar)
 
-private fun stateDetails(s: String?): String {
+private fun emptyLineHack(s: String?): String {
     if (s == null || s.length < 2) return "  "
     return s
 }
 
 private fun RichPresence.toNative() = activity(
-    // kdiscordipc has them backwards
-    stateDetails(this@toNative.details),
-    stateDetails(this@toNative.state),
+    state = emptyLineHack(this@toNative.state),
+    details = emptyLineHack(this@toNative.details),
 ) {
 
     this@toNative.startTimestamp?.let {

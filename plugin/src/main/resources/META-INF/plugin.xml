@@ -28,8 +28,8 @@
 
     <applicationListeners>
         <listener
-                class="com.almightyalpaca.jetbrains.plugins.discord.plugin.development.PreventUnloadingDynamicPluginListener"
-                topic="com.intellij.ide.plugins.DynamicPluginListener"/>
+                class="com.almightyalpaca.jetbrains.plugins.discord.plugin.time.TimeProjectManagerListener"
+                topic="com.intellij.openapi.project.ProjectManagerListener"/>
 
         <listener
                 class="com.almightyalpaca.jetbrains.plugins.discord.plugin.time.TimeFileEditorManagerListener"
