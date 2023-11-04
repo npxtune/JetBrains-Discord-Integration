@@ -19,12 +19,26 @@ package com.almightyalpaca.jetbrains.plugins.discord.plugin.diagnose
 
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.DiscordPlugin
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.settings.values.ApplicationType
-import com.intellij.openapi.application.PreloadingActivity
+import com.intellij.ide.ApplicationInitializedListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Suppress("UnstableApiUsage")
-class DiagnosePreloadingActivity : PreloadingActivity() {
+class DiagnosePreloadingActivity : ApplicationInitializedListener {
+
+    @Suppress("OVERRIDE_DEPRECATION")
+    override fun componentsInitialized() {
+        diagnose()
+    }
+
     @Suppress("MissingRecentApi")
-    override fun preload() {
+    suspend fun execute(asyncScope: CoroutineScope) {
+        asyncScope.launch {
+            diagnose()
+        }
+    }
+
+    private fun diagnose() {
         DiscordPlugin.LOG.info("App starting, diagnosing environment")
 
         DiscordPlugin.LOG.debug("Application identifiers: ${ApplicationType.IDE.applicationName}, ${ApplicationType.IDE_EDITION.applicationName}")
