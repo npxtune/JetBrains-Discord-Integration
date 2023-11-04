@@ -19,6 +19,7 @@ package com.almightyalpaca.jetbrains.plugins.discord.plugin.notifications
 
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.utils.Plugin
 import com.intellij.notification.*
+import com.intellij.openapi.actionSystem.AnAction
 
 object ApplicationUpdateNotification {
     private val title: (String) -> String = { version -> "Discord Integration updated to $version" }
@@ -28,12 +29,11 @@ object ApplicationUpdateNotification {
         Enjoying this plugin? Having issues? Join our <a href="https://discord.gg/mEDvg6sYp2">Discord</a> server for news and support.
         """.trimIndent()
 
-    private val group = NotificationGroup("${Plugin.getId()}.update", NotificationDisplayType.STICKY_BALLOON, true)
-
-    private fun getChangelog(): String = ApplicationUpdateNotification::class.java.getResource("/discord/changes.html").readText()
+    private fun getChangelog(): String = ApplicationUpdateNotification::class.java.getResource("/discord/changes.html")?.readText() ?: "Error loading changelog"
 
     fun show(version: String) =
-        group
-            .createNotification(title(version), content, NotificationType.INFORMATION, NotificationListener.UrlOpeningListener(false))
+        NotificationGroupManager.getInstance()
+            .getNotificationGroup("com.almightyalpaca.jetbrains.plugins.discord.notification.update")
+            .createNotification(title(version), content, NotificationType.INFORMATION)
             .run(Notifications.Bus::notify)
 }

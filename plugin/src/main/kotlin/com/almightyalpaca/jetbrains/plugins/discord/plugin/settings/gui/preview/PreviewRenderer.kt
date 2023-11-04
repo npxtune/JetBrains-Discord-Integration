@@ -90,11 +90,10 @@ class PreviewRenderer {
     private val font14BoldMaxHeight: Int = font14BoldMetrics.maxAscent + font14BoldMetrics.leading + font14BoldMetrics.maxDescent
     private val font14MediumMaxHeight: Int = font14MediumMetrics.maxAscent + font14MediumMetrics.leading + font14MediumMetrics.maxDescent
 
-    @Synchronized
     suspend fun draw(type: Renderer.Type.Application, force: Boolean = false): ModifiedImage {
-        val data = dataService
+        val data = /*dataService
             .getData(Renderer.Mode.PREVIEW)
-            ?.completeMissingData()
+            ?*/Data.None.completeMissingData()
             ?: return ModifiedImage(false, image)
 
         val context = RenderContext(sourceService.source, data, Renderer.Mode.PREVIEW)

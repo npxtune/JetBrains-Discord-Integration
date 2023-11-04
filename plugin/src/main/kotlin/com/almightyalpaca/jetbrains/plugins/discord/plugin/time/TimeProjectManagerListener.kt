@@ -17,11 +17,13 @@
 
 package com.almightyalpaca.jetbrains.plugins.discord.plugin.time
 
+import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManagerListener
+import com.intellij.openapi.startup.StartupActivity
 
-class TimeProjectManagerListener : ProjectManagerListener {
-    override fun projectOpened(project: Project) {
+class TimeProjectManagerListener : StartupActivity, DumbAware {
+    override fun runActivity(project: Project) {
         if (!project.isDefault)
             timeService.initializeProject(project)
     }

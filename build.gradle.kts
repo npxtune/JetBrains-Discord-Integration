@@ -68,7 +68,7 @@ subprojects {
         withType<KotlinCompile> {
             kotlinOptions {
                 jvmTarget = "17"
-                freeCompilerArgs += "-Xjvm-default=enable"
+                freeCompilerArgs += "-Xjvm-default=all"
 
                 apiVersion = kotlinLanguageVersion(libs.versions.kotlin.ide())
                 languageVersion = kotlinLanguageVersion(libs.versions.kotlin.ide())
