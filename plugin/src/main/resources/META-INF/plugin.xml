@@ -20,7 +20,7 @@
     <name>Discord Integration V2</name>
     <vendor email="contact@azn9.dev" url="https://github.com/Azn9">Azn9</vendor>
 
-    <idea-version since-build="232"/>
+    <idea-version since-build="222"/>
 
     <depends>com.intellij.modules.lang</depends>
 
@@ -30,15 +30,6 @@
         <listener
                 class="com.almightyalpaca.jetbrains.plugins.discord.plugin.development.PreventUnloadingDynamicPluginListener"
                 topic="com.intellij.ide.plugins.DynamicPluginListener"/>
-
-        <!--
-        <listener
-                class="com.almightyalpaca.jetbrains.plugins.discord.plugin.time.TimeDynamicPluginListener"
-                topic="com.intellij.ide.plugins.DynamicPluginListener"/>
-        -->
-        <listener
-                class="com.almightyalpaca.jetbrains.plugins.discord.plugin.time.TimeProjectManagerListener"
-                topic="com.intellij.openapi.project.ProjectManagerListener"/>
 
         <listener
                 class="com.almightyalpaca.jetbrains.plugins.discord.plugin.time.TimeFileEditorManagerListener"
@@ -71,11 +62,17 @@
         <backgroundPostStartupActivity
                 implementation="com.almightyalpaca.jetbrains.plugins.discord.plugin.notifications.NotificationPostStartupActivity"/>
 
-        <preloadingActivity implementation="com.almightyalpaca.jetbrains.plugins.discord.plugin.time.TimePreloadingActivity"/>
+        <notificationGroup displayType="STICKY_BALLOON" id="com.almightyalpaca.jetbrains.plugins.discord.notification.project.show"/>
+        <notificationGroup displayType="STICKY_BALLOON" id="com.almightyalpaca.jetbrains.plugins.discord.notification.update" isLogByDefault="true"/>
 
-        <preloadingActivity implementation="com.almightyalpaca.jetbrains.plugins.discord.plugin.diagnose.DiagnosePreloadingActivity"/>
+        <postStartupActivity implementation="com.almightyalpaca.jetbrains.plugins.discord.plugin.time.TimeProjectManagerListener"/>
 
-        <preloadingActivity implementation="com.almightyalpaca.jetbrains.plugins.discord.plugin.render.RenderPreloadingActivity"/>
+        <!--suppress PluginXmlValidity -->
+        <applicationInitializedListener implementation="com.almightyalpaca.jetbrains.plugins.discord.plugin.time.TimePreloadingActivity"/>
+        <!--suppress PluginXmlValidity -->
+        <applicationInitializedListener implementation="com.almightyalpaca.jetbrains.plugins.discord.plugin.diagnose.DiagnosePreloadingActivity"/>
+        <!--suppress PluginXmlValidity -->
+        <applicationInitializedListener implementation="com.almightyalpaca.jetbrains.plugins.discord.plugin.render.RenderPreloadingActivity"/>
     </extensions>
 
     <actions>

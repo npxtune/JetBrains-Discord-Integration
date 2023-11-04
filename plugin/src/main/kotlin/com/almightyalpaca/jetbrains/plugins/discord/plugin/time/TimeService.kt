@@ -192,7 +192,9 @@ class TimeService : Disposable {
 //        KeyboardFocusManager.getCurrentKeyboardFocusManager()
 //            .addPropertyChangeListener("focusedWindow", propertyChangeListener)
 
-        IdeEventQueue.getInstance().addActivityListener(activityListener, this)
+        IdeEventQueue.invokeLater {
+            IdeEventQueue.getInstance().addActivityListener(activityListener, this)
+        }
     }
 
     fun load() {

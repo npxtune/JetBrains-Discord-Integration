@@ -20,7 +20,9 @@ package com.almightyalpaca.jetbrains.plugins.discord.plugin.notifications
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.settings.settings
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.settings.values.ProjectShow
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.utils.Plugin
-import com.intellij.notification.*
+import com.intellij.notification.NotificationGroupManager
+import com.intellij.notification.NotificationType
+import com.intellij.notification.Notifications
 import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.project.Project
 import kotlin.coroutines.resume
@@ -30,23 +32,19 @@ private const val title = "Show project in Rich Presence?"
 private const val content =
     "Select if this project should be visible. You can change this later at any time under Settings > Other Settings > Discord > Project"
 
-private val group = NotificationGroup(
-    "${Plugin.getId()}.project.show",
-    NotificationDisplayType.STICKY_BALLOON,
-    true
-)
-
 object ProjectShowNotification {
     suspend fun show(project: Project) = suspendCoroutine<ProjectShow> { continuation ->
-        group.createNotification(title, content, NotificationType.INFORMATION)
+        NotificationGroupManager.getInstance()
+            .getNotificationGroup("com.almightyalpaca.jetbrains.plugins.discord.notification.project.show")
+            .createNotification(title, content, NotificationType.INFORMATION)
             .apply {
-                collapseDirection = Notification.CollapseActionsDirection.KEEP_LEFTMOST
                 for (value in project.settings.show.selectableValues) {
                     addAction(DumbAwareAction.create(value.text) {
                         expire()
                         continuation.resume(value)
                     })
                 }
-            }.run { Notifications.Bus.notify(this, project) }
+            }
+            .run { Notifications.Bus.notify(this, project) }
     }
 }

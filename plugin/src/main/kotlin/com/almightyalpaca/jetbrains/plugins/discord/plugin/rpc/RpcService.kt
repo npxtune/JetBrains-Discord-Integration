@@ -29,6 +29,7 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.progress.ProcessCanceledException
 import com.intellij.openapi.util.Disposer
+import dev.cbyrne.kdiscordipc.core.error.ConnectionError
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -81,8 +82,20 @@ class RpcService : DisposableCoroutineScope {
     fun update(presence: RichPresence?, forceUpdate: Boolean = false, forceReconnect: Boolean = false) = launch {
         DiscordPlugin.LOG.debug("Called .update , islocked=${mutex.isLocked}")
 
+        val exceptionHandler = CoroutineExceptionHandler { _, error ->
+            when (error) {
+                is ProcessCanceledException -> {
+                    DiscordPlugin.LOG.warn("PCE while updating presence", error)
+                }
+
+                else -> {
+                    DiscordPlugin.LOG.warn("Error while updating presence", error)
+                }
+            }
+        }
+
         mutex.withLock {
-            try {
+            MainScope().launch(exceptionHandler) {
                 DiscordPlugin.LOG.debug("Updating presence, forceUpdate=$forceUpdate, forceReconnect=$forceReconnect")
 
                 if (!(forceUpdate || forceReconnect)) {
@@ -126,7 +139,7 @@ class RpcService : DisposableCoroutineScope {
                         }
 
                         if (!different) {
-                            return@withLock
+                            return@launch
                         }
 
                         lastPresence = presence
@@ -169,19 +182,10 @@ class RpcService : DisposableCoroutineScope {
 
                     }
 
-                    try {
-                        withTimeoutOrNull(5000) {
-                            connection?.send(presence)
-                        }
-                    } catch (e: Exception) {
-                        DiscordPlugin.LOG.warn("Error sending presence, is the client running?", e)
+                    withTimeoutOrNull(1000) {
+                        connection?.send(presence)
                     }
                 }
-            } catch (e: ProcessCanceledException) {
-                DiscordPlugin.LOG.error("PCE while updating presence", e)
-                throw e
-            } catch (e: Throwable) {
-                DiscordPlugin.LOG.error("Error while updating presence", e)
             }
         }
     }
