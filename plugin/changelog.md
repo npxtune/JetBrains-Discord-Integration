@@ -1,3 +1,9 @@
+## v2.0.4
+- Added support for Writerside (thanks @mister-proger)
+- Added support for Aqua
+- Fixed info link to the correct GitHub repo (thanks @KaylaSolace)
+- Fixed issues with latest IDEs versions
+
 ## v2.0.3
 - Fix icons for RustRover (thanks @zakuciael)
 - Fix plugin not working on Linux with IDEs version 2023.2.3.X.
