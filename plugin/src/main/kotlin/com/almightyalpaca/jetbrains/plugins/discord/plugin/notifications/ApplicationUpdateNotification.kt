@@ -26,7 +26,7 @@ object ApplicationUpdateNotification {
     private val content = """
         Thank you for using the JetBrains Discord Integration!
         New in this version:${getChangelog()}
-        Enjoying this plugin? Having issues? Join our <a href="https://discord.gg/mEDvg6sYp2">Discord</a> server for news and support.
+        Enjoying this plugin? Having issues? Join our Discord server for news and support.
         """.trimIndent()
 
     private fun getChangelog(): String = ApplicationUpdateNotification::class.java.getResource("/discord/changes.html")?.readText() ?: "Error loading changelog"
@@ -35,5 +35,6 @@ object ApplicationUpdateNotification {
         NotificationGroupManager.getInstance()
             .getNotificationGroup("com.almightyalpaca.jetbrains.plugins.discord.notification.update")
             .createNotification(title(version), content, NotificationType.INFORMATION)
+            .addAction(BrowseNotificationAction("Join Discord", "https://discord.gg/mEDvg6sYp2"))
             .run(Notifications.Bus::notify)
 }
