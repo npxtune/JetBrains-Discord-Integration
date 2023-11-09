@@ -1,3 +1,7 @@
+## v2.0.5
+- Added support for CLion Nova
+- Fixed Discord link not clickable in the notification popup
+
 ## v2.0.4
 - Added support for Writerside (thanks @mister-proger)
 - Added support for Aqua
