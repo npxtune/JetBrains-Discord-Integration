@@ -41,7 +41,7 @@ class DiagnosePreloadingActivity : ApplicationInitializedListener {
     private fun diagnose() {
         DiscordPlugin.LOG.info("App starting, diagnosing environment")
 
-        DiscordPlugin.LOG.debug("Application identifiers: ${ApplicationType.IDE.applicationName}, ${ApplicationType.IDE_EDITION.applicationName}")
+        DiscordPlugin.LOG.info("Application identifiers: ${ApplicationType.IDE.applicationName}, ${ApplicationType.IDE_EDITION.applicationName}")
 
         diagnoseService.discord
         diagnoseService.plugins
