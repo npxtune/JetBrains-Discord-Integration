@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-enableFeaturePreview("VERSION_CATALOGS")
+rootProject.name = "Gradle-Plugins"
 
 dependencyResolutionManagement {
     versionCatalogs {

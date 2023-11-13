@@ -53,6 +53,7 @@ repositories {
     mavenCentral()
     maven("https://jitpack.io")
 
+    mavenLocal()
     maven("https://nexus.azn9.dev/repository/public")
 }
 
