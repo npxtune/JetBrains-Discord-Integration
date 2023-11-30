@@ -27,7 +27,7 @@ plugins {
     antlr
 }
 
-val github = "https://github.com/Almighty-Alpaca/JetBrains-Discord-Integration"
+val github = "https://github.com/Azn9/JetBrains-Discord-Integration"
 
 dependencies {
     implementation(project(path = ":icons", configuration = "minimizedJar"))

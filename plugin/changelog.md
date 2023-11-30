@@ -1,3 +1,13 @@
+## v2.0.6
+- Changed plugin id to `dev.azn9.jetbrains.plugins.discord` to avoid conflicts with the original plugin
+- Added buttons to the rich presence. The title and the url of each button can be configured in the project settings
+- Allow to change the icon theme per project
+- Changed the discord icon on the tools menu
+- Prevent `ContainerDisposedException` happening when switching between projects
+- Updated copyright year
+- Updated whole project to rebase onto the original plugin
+- Added some missing themes for RustRover, Writerside and Aqua
+
 ## v2.0.5
 - Added support for CLion Nova
 - Fixed Discord link not clickable in the notification popup
