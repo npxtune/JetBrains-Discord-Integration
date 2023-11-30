@@ -1,6 +1,6 @@
 /*
  * Copyright 2017-2020 Aljoscha Grebe
- * Copyright 2017-2020 Axel JOLY (Azn9) - https://github.com/Azn9
+ * Copyright 2023 Axel JOLY (Azn9) <contact@azn9.dev>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ class LocalAsset(private val source: LocalSource, id: String, theme: Theme, priv
                 source.pathApplications.resolve("$applicationName.png")
             }
         }
+
         else -> source.pathThemes.resolve("${theme.id}/$id.png")
     }.let { p -> Files.newInputStream(p) }.use(ImageIO::read)
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright 2017-2020 Aljoscha Grebe
- * Copyright 2017-2020 Axel JOLY (Azn9) - https://github.com/Azn9
+ * Copyright 2023 Axel JOLY (Azn9) <contact@azn9.dev>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,11 @@ plugins {
     alias(libs.plugins.kotlin) apply false
     alias(libs.plugins.versions)
     alias(libs.plugins.gitversion)
+
+    id("buildUtils")
 }
 
-group = "com.almightyalpaca.jetbrains.plugins.discord"
+group = "dev.azn9.jetbrains.plugins.discord"
 
 val versionDetails: Closure<VersionDetails> by extra
 
@@ -42,10 +44,6 @@ version += when (versionDetails().commitDistance) {
 project.version = version
 
 allprojects {
-    repositories {
-        mavenCentral()
-    }
-
     fun secret(name: String) {
         project.extra[name] = System.getenv(name) ?: return
     }
@@ -56,7 +54,7 @@ allprojects {
 }
 
 subprojects {
-    group = rootProject.group.toString() + "." + project.name.toLowerCase()
+    group = rootProject.group.toString() + "." + project.name.lowercase()
     version = rootProject.version
 
     val secrets: File = rootProject.file("secrets.gradle.kts")
@@ -64,23 +62,19 @@ subprojects {
         apply(from = secrets)
     }
 
+    repositories {
+        mavenCentral()
+        maven("https://jitpack.io")
+    }
+
     tasks {
         withType<KotlinCompile> {
             kotlinOptions {
-                jvmTarget = "17"
+                jvmTarget = libs.versions.jdk.get()
                 freeCompilerArgs += "-Xjvm-default=all"
 
                 apiVersion = kotlinLanguageVersion(libs.versions.kotlin.ide())
                 languageVersion = kotlinLanguageVersion(libs.versions.kotlin.ide())
-            }
-        }
-
-        withType<JavaCompile> {
-            targetCompatibility = "17"
-            sourceCompatibility = "17"
-
-            if (JavaVersion.current() >= JavaVersion.VERSION_1_9) {
-                options.compilerArgs as MutableList<String> += listOf("--release", "17")
             }
         }
     }
@@ -102,11 +96,6 @@ tasks {
         }
     }
 
-    withType<Wrapper> {
-        distributionType = Wrapper.DistributionType.BIN
-        gradleVersion = libs.versions.gradle()
-    }
-
     create<Delete>("clean") {
         group = "build"
 
@@ -116,7 +105,7 @@ tasks {
             .filter { p -> regex.matches(p.fileName.toString()) }
             .forEach { p -> delete(p) }
 
-        delete(project.buildDir)
+        delete(project.layout.buildDirectory)
     }
 
     create("default") {
@@ -138,3 +127,4 @@ tasks {
         delete(project.file(".sandbox"))
     }
 }
+

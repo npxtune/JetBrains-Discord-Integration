@@ -1,6 +1,6 @@
 /*
  * Copyright 2017-2020 Aljoscha Grebe
- * Copyright 2017-2020 Axel JOLY (Azn9) - https://github.com/Azn9
+ * Copyright 2023 Axel JOLY (Azn9) <contact@azn9.dev>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,12 +33,11 @@ class RichPresence(
     var largeImage: Image? = null,
     var smallImage: Image? = null,
     partyId: String? = null,
-    var partySize: Int = 0,
-    var partyMax: Int = 0,
-    matchSecret: String? = null,
-    joinSecret: String? = null,
-    spectateSecret: String? = null,
-    var instance: Boolean = false
+    var instance: Boolean = false,
+    var button1Title: String? = null,
+    var button1Url: String? = null,
+    var button2Title: String? = null,
+    var button2Url: String? = null
 ) {
     constructor(appId: Long?, initializer: RichPresence.() -> Unit) : this(appId) {
         if (appId != null) {
@@ -49,9 +48,7 @@ class RichPresence(
     var state by limitingLength(state, 2..128, true)
     var details by limitingLength(details, 2..128, true)
     var partyId by verifyingLength(partyId, 0..128)
-    var matchSecret by verifyingLength(matchSecret, 0..128)
-    var joinSecret by verifyingLength(joinSecret, 0..128)
-    var spectateSecret by verifyingLength(spectateSecret, 0..128)
+    // TODO : validate length for button titles and urls
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -62,22 +59,34 @@ class RichPresence(
         if (endTimestamp != other.endTimestamp) return false
         if (largeImage != other.largeImage) return false
         if (smallImage != other.smallImage) return false
-        if (partySize != other.partySize) return false
-        if (partyMax != other.partyMax) return false
         if (instance != other.instance) return false
+        if (state != other.state) return false
+        if (details != other.details) return false
+        if (partyId != other.partyId) return false
+        if (button1Title != other.button1Title) return false
+        if (button1Url != other.button1Url) return false
+        if (button2Title != other.button2Title) return false
+        if (button2Url != other.button2Url) return false
 
         return true
     }
 
     override fun hashCode(): Int {
         var result = appId?.hashCode() ?: 0
+
         result = 31 * result + (startTimestamp?.hashCode() ?: 0)
         result = 31 * result + (endTimestamp?.hashCode() ?: 0)
         result = 31 * result + (largeImage?.hashCode() ?: 0)
         result = 31 * result + (smallImage?.hashCode() ?: 0)
-        result = 31 * result + partySize
-        result = 31 * result + partyMax
         result = 31 * result + instance.hashCode()
+        result = 31 * result + (state?.hashCode() ?: 0)
+        result = 31 * result + (details?.hashCode() ?: 0)
+        result = 31 * result + (partyId?.hashCode() ?: 0)
+        result = 31 * result + (button1Title?.hashCode() ?: 0)
+        result = 31 * result + (button1Url?.hashCode() ?: 0)
+        result = 31 * result + (button2Title?.hashCode() ?: 0)
+        result = 31 * result + (button2Url?.hashCode() ?: 0)
+
         return result
     }
 

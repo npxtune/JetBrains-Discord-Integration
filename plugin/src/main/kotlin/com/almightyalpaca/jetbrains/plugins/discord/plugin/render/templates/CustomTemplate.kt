@@ -1,6 +1,6 @@
 /*
  * Copyright 2017-2020 Aljoscha Grebe
- * Copyright 2017-2020 Axel JOLY (Azn9) - https://github.com/Azn9
+ * Copyright 2023 Axel JOLY (Azn9) <contact@azn9.dev>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,6 +85,7 @@ object Utils {
                 is TemplateParser.VarContext -> {
                     getVarValue(child.NAME()?.text ?: "", context) ?: ""
                 }
+
                 is TemplateParser.FunContext -> {
                     val name = child.NAME()?.symbol?.text ?: ""
                     val req = when (name) {
@@ -101,10 +102,12 @@ object Utils {
                             "RegexEscape" -> {
                                 Regex.escape(evalVisitor(context, arr[0]))
                             }
+
                             "NotNull" -> {
                                 varNullCheck(context, evalVisitor(context, arr[0]))
                                     .toString()
                             }
+
                             "Matches" -> {
                                 withRegex(evalVisitor(context, arr[1])) {
                                     evalVisitor(context, arr[0])
@@ -112,22 +115,26 @@ object Utils {
                                         .toString()
                                 }
                             }
+
                             "ReplaceFirst" -> {
                                 withRegex(evalVisitor(context, arr[1])) {
                                     evalVisitor(context, arr[0])
                                         .replaceFirst(it, evalVisitor(context, arr[2]))
                                 }
                             }
+
                             "ReplaceAll" -> {
                                 withRegex(evalVisitor(context, arr[1])) {
                                     evalVisitor(context, arr[0])
                                         .replace(it, evalVisitor(context, arr[2]))
                                 }
                             }
+
                             else -> ""
                         }
                     }
                 }
+
                 is TemplateParser.If_ruleContext -> {
                     val args = child.text_eval()
 
@@ -151,11 +158,13 @@ object Utils {
                         }
                     }
                 }
+
                 is TemplateParser.Raw_text_ruleContext -> {
                     val txt = child.text
                     txt.substring(2, txt.length - 2) // take out the first and last 2 characters(the '#"' at the beginning
                     // and '"#' at the end)
                 }
+
                 else -> child.text // NAME/TEXT/parentheses from the grammar
             }
         }
@@ -209,14 +218,17 @@ private fun Data.asTemplateData(): TemplateData =
                 this.pathInModule,
                 this.fileSize
             )
+
         is Data.Project ->
             TemplateData.Project(
                 this.applicationVersion, this.projectName, this.projectDescription, this.vcsBranch, this.debuggerActive
             )
+
         is Data.Application ->
             TemplateData.Application(
                 this.applicationVersion
             )
+
         else -> throw IllegalArgumentException()
     }
 

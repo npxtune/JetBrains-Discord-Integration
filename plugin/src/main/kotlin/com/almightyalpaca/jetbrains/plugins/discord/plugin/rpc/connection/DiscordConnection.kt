@@ -1,6 +1,6 @@
 /*
  * Copyright 2017-2020 Aljoscha Grebe
- * Copyright 2017-2020 Axel JOLY (Azn9) - https://github.com/Azn9
+ * Copyright 2023 Axel JOLY (Azn9) <contact@azn9.dev>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ package com.almightyalpaca.jetbrains.plugins.discord.plugin.rpc.connection
 
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.rpc.RichPresence
 import com.intellij.openapi.Disposable
-
-const val UPDATE_DELAY = 2000L
 
 interface DiscordConnection : Disposable {
     val appId: Long

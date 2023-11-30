@@ -1,6 +1,6 @@
 /*
  * Copyright 2017-2020 Aljoscha Grebe
- * Copyright 2017-2020 Axel JOLY (Azn9) - https://github.com/Azn9
+ * Copyright 2023 Axel JOLY (Azn9) <contact@azn9.dev>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,20 +17,30 @@
 
 package com.almightyalpaca.jetbrains.plugins.discord.plugin.render
 
+import com.almightyalpaca.jetbrains.plugins.discord.plugin.data.Data
+import com.almightyalpaca.jetbrains.plugins.discord.plugin.rpc.RichPresence
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.settings.settings
 
 class ProjectRenderer(context: RenderContext) : Renderer(context) {
-    override fun RenderContext.render() = render(
-        details = settings.projectDetails,
-        detailsCustom = settings.projectDetailsCustom,
-        state = settings.projectState,
-        stateCustom = settings.projectStateCustom,
-        largeIcon = settings.projectIconLarge,
-        largeIconText = settings.projectIconLargeText,
-        largeIconTextCustom = settings.projectIconLargeTextCustom,
-        smallIcon = settings.projectIconSmall,
-        smallIconText = settings.projectIconSmallText,
-        smallIconTextCustom = settings.projectIconSmallTextCustom,
-        startTimestamp = settings.projectTime
-    )
+    override fun RenderContext.render(): RichPresence {
+        val projectSettings = (context.data as Data.Project).projectSettings
+
+        return render(
+            details = settings.projectDetails,
+            detailsCustom = settings.projectDetailsCustom,
+            state = settings.projectState,
+            stateCustom = settings.projectStateCustom,
+            largeIcon = settings.projectIconLarge,
+            largeIconText = settings.projectIconLargeText,
+            largeIconTextCustom = settings.projectIconLargeTextCustom,
+            smallIcon = settings.projectIconSmall,
+            smallIconText = settings.projectIconSmallText,
+            smallIconTextCustom = settings.projectIconSmallTextCustom,
+            startTimestamp = settings.projectTime,
+            button1Title = projectSettings.button1Title.getValue(),
+            button1Url = projectSettings.button1Url.getValue(),
+            button2Title = projectSettings.button2Title.getValue(),
+            button2Url = projectSettings.button2Url.getValue()
+        )
+    }
 }

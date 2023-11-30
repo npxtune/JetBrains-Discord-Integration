@@ -1,6 +1,6 @@
 /*
  * Copyright 2017-2020 Aljoscha Grebe
- * Copyright 2017-2020 Axel JOLY (Azn9) - https://github.com/Azn9
+ * Copyright 2023 Axel JOLY (Azn9) <contact@azn9.dev>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ interface VcsInfoExtension {
     fun getCurrentVcsBranch(project: Project, file: VirtualFile?): String?
 
     companion object {
-        private val EXTENSION_POINT_NAME = ExtensionPointName.create<VcsInfoExtension>("com.almightyalpaca.intellij.plugins.discord.vcsInfo")
+        private val EXTENSION_POINT_NAME = ExtensionPointName.create<VcsInfoExtension>("dev.azn9.intellij.plugins.discord.vcsInfo")
 
         fun getCurrentVcsBranch(project: Project, file: VirtualFile?): String? =
             EXTENSION_POINT_NAME

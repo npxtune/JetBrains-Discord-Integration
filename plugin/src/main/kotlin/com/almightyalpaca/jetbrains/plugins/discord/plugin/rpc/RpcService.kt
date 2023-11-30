@@ -1,6 +1,6 @@
 /*
  * Copyright 2017-2020 Aljoscha Grebe
- * Copyright 2017-2020 Axel JOLY (Azn9) - https://github.com/Azn9
+ * Copyright 2023 Axel JOLY (Azn9) <contact@azn9.dev>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +20,11 @@ package com.almightyalpaca.jetbrains.plugins.discord.plugin.rpc
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.DiscordPlugin
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.rpc.connection.DiscordConnection
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.rpc.connection.DiscordIpcConnection
-import com.almightyalpaca.jetbrains.plugins.discord.plugin.rpc.connection.DiscordRpcConnection
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.utils.DisposableCoroutineScope
-import com.almightyalpaca.jetbrains.plugins.discord.plugin.utils.debugLazy
-import com.almightyalpaca.jetbrains.plugins.discord.plugin.utils.infoLazy
-import com.almightyalpaca.jetbrains.plugins.discord.plugin.utils.lowercase
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.progress.ProcessCanceledException
 import com.intellij.openapi.util.Disposer
-import dev.cbyrne.kdiscordipc.core.error.ConnectionError
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -100,45 +95,7 @@ class RpcService : DisposableCoroutineScope {
 
                 if (!(forceUpdate || forceReconnect)) {
                     if (lastPresence != null) {
-                        var different = false
-
-                        if (lastPresence!!.appId != presence?.appId) {
-                            different = true
-                        }
-
-                        if (lastPresence!!.details != presence?.details) {
-                            different = true
-                        }
-
-                        if (lastPresence!!.state != presence?.state) {
-                            different = true
-                        }
-
-                        if (lastPresence!!.startTimestamp != presence?.startTimestamp) {
-                            different = true
-                        }
-
-                        if (lastPresence!!.endTimestamp != presence?.endTimestamp) {
-                            different = true
-                        }
-
-                        if (lastPresence!!.largeImage?.key != presence?.largeImage?.key) {
-                            different = true
-                        }
-
-                        if (lastPresence!!.largeImage?.text != presence?.largeImage?.text) {
-                            different = true
-                        }
-
-                        if (lastPresence!!.smallImage?.key != presence?.smallImage?.key) {
-                            different = true
-                        }
-
-                        if (lastPresence!!.smallImage?.text != presence?.smallImage?.text) {
-                            different = true
-                        }
-
-                        if (!different) {
+                        if (lastPresence == presence) {
                             return@launch
                         }
 
@@ -197,23 +154,6 @@ class RpcService : DisposableCoroutineScope {
     }
 
     private fun createConnection(appId: Long): DiscordConnection {
-        fun forName(name: String?): DiscordConnection? =
-            when (name) {
-                "rpc" -> {
-                    // before initializing the connection
-                    System.setProperty("jna.nounpack", "false")
-                    System.setProperty("jna.noclasspath", "false")
-
-                    DiscordRpcConnection(appId, ::updateUser)
-                }
-
-                "ipc" -> DiscordIpcConnection(appId, ::updateUser)
-                else -> null
-            }
-
-        return forName(System.getenv()["com.almightyalpaca.jetbrains.plugins.discord.plugin.rpc.connection"]?.lowercase())
-            ?: forName(System.getProperty("com.almightyalpaca.jetbrains.plugins.discord.plugin.rpc.connection")?.lowercase())
-            ?: DiscordIpcConnection(appId, ::updateUser)
+        return DiscordIpcConnection(appId, ::updateUser)
     }
-
 }

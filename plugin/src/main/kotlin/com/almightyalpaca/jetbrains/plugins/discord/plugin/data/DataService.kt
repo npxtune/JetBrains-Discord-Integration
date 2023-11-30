@@ -1,6 +1,6 @@
 /*
  * Copyright 2017-2020 Aljoscha Grebe
- * Copyright 2017-2020 Axel JOLY (Azn9) - https://github.com/Azn9
+ * Copyright 2023 Axel JOLY (Azn9) <contact@azn9.dev>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,6 +72,7 @@ class DataService {
                     val idleTimestamp = System.currentTimeMillis() - application.idleTime
                     return Data.Idle(idleTimestamp)
                 }
+
                 HIDE -> return Data.None
             }
         }
@@ -80,7 +81,12 @@ class DataService {
 
         val editor: FileEditor? = project?.let {
             invokeOnEventThread {
-                FileEditorManager.getInstance(project)?.selectedEditor
+                try {
+                    FileEditorManager.getInstance(project)?.selectedEditor
+                } catch (e: Throwable) {
+                    DiscordPlugin.LOG.warn("Error getting selected editor", e)
+                    null
+                }
             }
         }
 

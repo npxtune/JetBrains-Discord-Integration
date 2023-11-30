@@ -1,6 +1,6 @@
 /*
  * Copyright 2017-2020 Aljoscha Grebe
- * Copyright 2017-2020 Axel JOLY (Azn9) - https://github.com/Azn9
+ * Copyright 2023 Axel JOLY (Azn9) <contact@azn9.dev>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,6 @@
  * limitations under the License.
  */
 
-enableFeaturePreview("VERSION_CATALOGS")
+fun ktor(module: String, version: String? = null) = "io.ktor:ktor-$module:${version ?: ""}"
 
-dependencyResolutionManagement {
-    versionCatalogs {
-        create("libs") {
-            from(files("../libs.versions.toml"))
-        }
-    }
-}
+fun kotlinx(module: String, version: String? = null) = "org.jetbrains.kotlinx:kotlinx-$module:${version ?: ""}"

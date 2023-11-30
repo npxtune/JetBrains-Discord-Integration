@@ -1,6 +1,6 @@
 /*
  * Copyright 2017-2020 Aljoscha Grebe
- * Copyright 2017-2020 Axel JOLY (Azn9) - https://github.com/Azn9
+ * Copyright 2023 Axel JOLY (Azn9) <contact@azn9.dev>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,26 +17,36 @@
 
 rootProject.name = "JetBrains-Discord-Integration"
 
+includeBuild("gradle/plugins")
+
 include("icons")
 include("plugin")
 include("uploader")
 
-enableFeaturePreview("VERSION_CATALOGS")
-
-dependencyResolutionManagement {
-    @Suppress("UnstableApiUsage")
-    versionCatalogs {
-        create("libs") {
-            from(files("libs.versions.toml"))
-        }
-    }
-}
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
 pluginManagement {
     repositories {
         gradlePluginPortal()
         mavenCentral()
-        maven(url = "https://palantir.bintray.com/releases")
+//        maven(url = "https://palantir.bintray.com/releases")
         maven(url = "https://oss.sonatype.org/content/repositories/snapshots/")
     }
 }
+
+plugins {
+    // Version Catalogs are not supported in settings.gradle.kts
+    // alias(libs.plugins.foojay.resolver.convention)
+    id("org.gradle.toolchains.foojay-resolver-convention") version ("0.7.0")
+}
+
+// TODO: use when https://github.com/JetBrains/gradle-intellij-plugin/issues/776 is fixed
+//@Suppress("UnstableApiUsage")
+//dependencyResolutionManagement {
+//    repositoriesMode = RepositoriesMode.PREFER_SETTINGS
+//    repositories {
+//        mavenCentral()
+//        maven("https://jitpack.io")
+//    }
+//}

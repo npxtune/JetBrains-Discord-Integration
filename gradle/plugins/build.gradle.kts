@@ -1,6 +1,6 @@
 /*
  * Copyright 2017-2020 Aljoscha Grebe
- * Copyright 2017-2020 Axel JOLY (Azn9) - https://github.com/Azn9
+ * Copyright 2023 Axel JOLY (Azn9) <contact@azn9.dev>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,6 @@
  * limitations under the License.
  */
 
-import java.nio.file.Files
-import java.util.*
-
 plugins {
     `kotlin-dsl`
     alias(libs.plugins.versions)
@@ -26,14 +23,13 @@ plugins {
 repositories {
     gradlePluginPortal()
     mavenCentral()
-}
-
-val properties = Properties().apply {
-    this.load(Files.newBufferedReader(rootDir.toPath().resolve("../gradle.properties")))
+    maven(url = "https://plugins.gradle.org/m2/")
 }
 
 dependencies {
-    implementation(libs.gradle.shadow)
+//    implementation(libs.gradle.shadow)
+    implementation("com.github.johnrengelman:shadow:8.1.0") // TODO
+    implementation("org.apache.ant:ant:1.10.14")
 
     implementation(libs.pngtastic)
     implementation(libs.zeroAllocationHashing)
@@ -56,6 +52,11 @@ gradlePlugin {
         create("FileIndicesPlugin") {
             id = "fileIndices"
             implementationClass = "FileIndicesPlugin"
+        }
+
+        create("BuildUtils") {
+            id = "buildUtils"
+            implementationClass = "BuildUtils"
         }
     }
 }

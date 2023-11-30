@@ -1,6 +1,6 @@
 /*
  * Copyright 2017-2020 Aljoscha Grebe
- * Copyright 2017-2020 Axel JOLY (Azn9) - https://github.com/Azn9
+ * Copyright 2023 Axel JOLY (Azn9) <contact@azn9.dev>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,9 @@
 package com.almightyalpaca.jetbrains.plugins.discord.plugin.render
 
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.DiscordPlugin
-import com.almightyalpaca.jetbrains.plugins.discord.plugin.render.templates.CustomTemplate
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.render.templates.asCustomTemplateContext
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.rpc.RichPresence
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.settings.options.types.SimpleValue
-import com.almightyalpaca.jetbrains.plugins.discord.plugin.settings.options.types.StringValue
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.settings.options.types.TemplateValue
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.settings.values.*
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.utils.Plugin
@@ -46,7 +44,11 @@ abstract class Renderer(protected val context: RenderContext) {
         smallIcon: IconValue?,
         smallIconText: TextValue?,
         smallIconTextCustom: TemplateValue?,
-        startTimestamp: TimeValue?
+        startTimestamp: TimeValue?,
+        button1Title: String? = null,
+        button1Url: String? = null,
+        button2Title: String? = null,
+        button2Url: String? = null
     ): RichPresence {
         DiscordPlugin.LOG.debug("Rendering presence, data=${context.data}, mode=${context.mode}")
         DiscordPlugin.LOG.debug("Themes: ${context.source.getThemesOrNull()}")
@@ -106,6 +108,11 @@ abstract class Renderer(protected val context: RenderContext) {
                     RichPresence.Image(icon.value, caption)
                 }
             }
+
+            this@presence.button1Title = button1Title
+            this@presence.button1Url = button1Url
+            this@presence.button2Title = button2Title
+            this@presence.button2Url = button2Url
 
             this.partyId = Plugin.version?.toString()
         }

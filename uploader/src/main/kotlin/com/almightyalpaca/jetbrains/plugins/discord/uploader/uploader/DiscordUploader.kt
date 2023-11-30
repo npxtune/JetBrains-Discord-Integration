@@ -1,6 +1,6 @@
 /*
  * Copyright 2017-2020 Aljoscha Grebe
- * Copyright 2017-2020 Axel JOLY (Azn9) - https://github.com/Azn9
+ * Copyright 2023 Axel JOLY (Azn9) <contact@azn9.dev>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,6 @@ import okhttp3.Dispatcher
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.io.IOUtils
 import java.io.File
-import java.io.InputStream
 import java.net.URL
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -140,17 +139,16 @@ private fun CoroutineScope.createIcon(client: HttpClient, appId: Long, name: Str
 
 private fun CoroutineScope.deleteIcon(client: HttpClient, appId: Long, iconId: Long) = launch(Dispatchers.IO) {
     try {
-        client.delete{
+        client.delete {
             url(URL("https://discordapp.com/api/oauth2/applications/$appId/assets/$iconId"))
         }
+    } catch (e: ClientRequestException) {
+        if (e.response.status.value == 404) {
+            // Icon was probably already deleted, eventually consistent™
+        } else {
+            throw e
+        }
     }
-     catch (e: ClientRequestException) {
-         if (e.response.status.value == 404) {
-             // Icon was probably already deleted, eventually consistent™
-         } else {
-             throw e
-         }
-     }
 }
 
 private sealed class DiscordChange {
@@ -241,7 +239,7 @@ private fun CoroutineScope.getClasspathIconsAsync(source: ClasspathSource, appCo
 }
 
 private fun CoroutineScope.getDiscordIconsAsync(client: HttpClient, appId: Long) = async(Dispatchers.IO) {
-    val response = client.get{
+    val response = client.get {
         url(URL("https://discord.com/api/v9/oauth2/applications/$appId/assets"))
     }
 

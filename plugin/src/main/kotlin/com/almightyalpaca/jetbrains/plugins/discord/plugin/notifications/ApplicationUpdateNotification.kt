@@ -1,6 +1,6 @@
 /*
  * Copyright 2017-2020 Aljoscha Grebe
- * Copyright 2017-2020 Axel JOLY (Azn9) - https://github.com/Azn9
+ * Copyright 2023 Axel JOLY (Azn9) <contact@azn9.dev>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package com.almightyalpaca.jetbrains.plugins.discord.plugin.notifications
 
 import com.almightyalpaca.jetbrains.plugins.discord.plugin.utils.Plugin
 import com.intellij.notification.*
-import com.intellij.openapi.actionSystem.AnAction
+import java.net.URL
 
 object ApplicationUpdateNotification {
     private val title: (String) -> String = { version -> "Discord Integration updated to $version" }
@@ -29,7 +29,12 @@ object ApplicationUpdateNotification {
         Enjoying this plugin? Having issues? Join our Discord server for news and support.
         """.trimIndent()
 
-    private fun getChangelog(): String = ApplicationUpdateNotification::class.java.getResource("/discord/changes.html")?.readText() ?: "Error loading changelog"
+    private val group = NotificationGroup("${Plugin.getId()}.update", NotificationDisplayType.STICKY_BALLOON, true)
+
+    private fun getChangelog(): String {
+        val resource: URL = ApplicationUpdateNotification::class.java.getResource("/discord/changes.html")!!
+        return resource.readText()
+    }
 
     fun show(version: String) =
         NotificationGroupManager.getInstance()

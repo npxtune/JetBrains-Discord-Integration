@@ -1,6 +1,6 @@
 /*
  * Copyright 2017-2020 Aljoscha Grebe
- * Copyright 2017-2020 Axel JOLY (Azn9) - https://github.com/Azn9
+ * Copyright 2023 Axel JOLY (Azn9) <contact@azn9.dev>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,10 +28,7 @@ import dev.cbyrne.kdiscordipc.core.error.ConnectionError
 import dev.cbyrne.kdiscordipc.core.event.impl.CurrentUserUpdateEvent
 import dev.cbyrne.kdiscordipc.core.event.impl.ErrorEvent
 import dev.cbyrne.kdiscordipc.core.event.impl.ReadyEvent
-import dev.cbyrne.kdiscordipc.data.activity.activity
-import dev.cbyrne.kdiscordipc.data.activity.largeImage
-import dev.cbyrne.kdiscordipc.data.activity.smallImage
-import dev.cbyrne.kdiscordipc.data.activity.timestamps
+import dev.cbyrne.kdiscordipc.data.activity.*
 import kotlinx.coroutines.*
 import dev.cbyrne.kdiscordipc.data.user.User as NativeUser
 
@@ -46,7 +43,6 @@ class DiscordIpcConnection(override val appId: Long, private val userCallback: U
             on<ErrorEvent>(::onError)
             on<CurrentUserUpdateEvent>(::onCurrentUserUpdate)
         }
-//        setListener(this@DiscordIpcConnection)
     }
 
     override val running by ipcClient::connected
@@ -144,15 +140,14 @@ class DiscordIpcConnection(override val appId: Long, private val userCallback: U
 
 private fun NativeUser.toGeneric() = User.Normal(this.username, discriminator, this.id.toLong(), this.avatar)
 
-private fun stateDetails(s: String?): String {
+private fun emptyLineHack(s: String?): String {
     if (s == null || s.length < 2) return "  "
     return s
 }
 
 private fun RichPresence.toNative() = activity(
-    // kdiscordipc has them backwards
-    stateDetails(this@toNative.details),
-    stateDetails(this@toNative.state),
+    state = emptyLineHack(this@toNative.state),
+    details = emptyLineHack(this@toNative.details),
 ) {
 
     this@toNative.startTimestamp?.let {
@@ -164,6 +159,19 @@ private fun RichPresence.toNative() = activity(
 
     this@toNative.largeImage?.key?.let { this.largeImage(it, this@toNative.largeImage?.text) }
     this@toNative.smallImage?.key?.let { this.smallImage(it, this@toNative.smallImage?.text) }
+
+    if ((this@toNative.button1Title ?: "") != "" && (this@toNative.button1Url ?: "") != "") {
+        this.button(
+            label = this@toNative.button1Title!!,
+            url = this@toNative.button1Url!!
+        )
+    }
+    if ((this@toNative.button2Title ?: "") != "" && (this@toNative.button2Url ?: "") != "") {
+        this.button(
+            label = this@toNative.button2Title!!,
+            url = this@toNative.button2Url!!
+        )
+    }
 
     this.instance = this@toNative.instance
 }

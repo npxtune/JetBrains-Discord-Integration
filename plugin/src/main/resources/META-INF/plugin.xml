@@ -1,6 +1,6 @@
 <!--
   ~ Copyright 2017-2020 Aljoscha Grebe
-  ~ Copyright 2017-2020 Axel JOLY (Azn9) - https://github.com/Azn9
+  ~ Copyright 2023 Axel JOLY (Azn9) <contact@azn9.dev>
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
   -->
 
 <idea-plugin url="https://github.com/Almighty-Alpaca/JetBrains-Discord-Integration" require-restart="true">
-    <id>com.almightyalpaca.intellij.plugins.discord</id>
+    <id>dev.azn9.intellij.plugins.discord</id>
     <name>Discord Integration V2</name>
-    <vendor email="contact@azn9.dev" url="https://github.com/Azn9">Azn9</vendor>
+    <vendor email="contact@azn9.dev" url="https://github.com/Azn9/JetBrains-Discord-Integration">Azn9</vendor>
 
     <idea-version since-build="222"/>
 
@@ -27,10 +27,6 @@
     <depends optional="true" config-file="git-extension.xml">Git4Idea</depends>
 
     <applicationListeners>
-        <listener
-                class="com.almightyalpaca.jetbrains.plugins.discord.plugin.development.PreventUnloadingDynamicPluginListener"
-                topic="com.intellij.ide.plugins.DynamicPluginListener"/>
-
         <listener
                 class="com.almightyalpaca.jetbrains.plugins.discord.plugin.time.TimeFileEditorManagerListener"
                 topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
