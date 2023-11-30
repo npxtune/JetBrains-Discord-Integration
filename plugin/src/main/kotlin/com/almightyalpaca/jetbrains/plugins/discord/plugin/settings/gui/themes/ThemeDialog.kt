@@ -32,7 +32,7 @@ import javax.swing.JPanel
 import javax.swing.plaf.basic.BasicComboBoxRenderer
 import kotlin.coroutines.CoroutineContext
 
-class ThemeDialog(private val themes: ThemeMap, private val initialValue: String?) : DialogWrapper(null, true, IdeModalityType.IDE), CoroutineScope {
+class ThemeDialog(private val themes: ThemeMap, private val initialValue: String?, private val showDefault: Boolean = false) : DialogWrapper(null, true, IdeModalityType.IDE), CoroutineScope {
     private val parentJob: Job = SupervisorJob()
 
     override val coroutineContext: CoroutineContext
@@ -78,9 +78,15 @@ class ThemeDialog(private val themes: ThemeMap, private val initialValue: String
                 return this
             }
         }
-        field = JComboBox(themes.values.toTypedArray()).apply box@{
+
+        var themeValues = themes.values.toTypedArray()
+        if (showDefault) {
+            themeValues += Theme.Default
+        }
+
+        field = JComboBox(themeValues).apply box@{
             this@box.renderer = renderer
-            selectedItem = themes[initialValue]
+            selectedItem = themes[initialValue] ?: (if (showDefault) Theme.Default else themes.values.first())
         }
 
         add(field)

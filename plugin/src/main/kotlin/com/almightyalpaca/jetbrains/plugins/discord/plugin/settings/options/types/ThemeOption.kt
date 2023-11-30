@@ -37,10 +37,10 @@ import javax.swing.JComponent
 import javax.swing.JPanel
 import kotlin.reflect.KProperty
 
-fun OptionCreator<in ThemeValue>.themeChooser(text: String, description: String? = null) =
-    OptionProviderImpl(this, ThemeOption(text, description))
+fun OptionCreator<in ThemeValue>.themeChooser(text: String, description: String? = null, showDefault: Boolean = false) =
+    OptionProviderImpl(this, ThemeOption(text, description, showDefault))
 
-class ThemeOption(text: String, val description: String?) : Option<ThemeValue>(text), ThemeValue.Provider {
+class ThemeOption(text: String, val description: String?, val showDefault: Boolean) : Option<ThemeValue>(text), ThemeValue.Provider {
     private val source: Source = sourceService.source
 
     private val listeners = mutableListOf<(ThemeValue) -> Unit>()
@@ -64,7 +64,7 @@ class ThemeOption(text: String, val description: String?) : Option<ThemeValue>(t
             val themes = this@ThemeOption.source.getThemesOrNull()
 
             if (themes != null) {
-                val dialog = ThemeDialog(themes, componentValue)
+                val dialog = ThemeDialog(themes, componentValue, showDefault)
                 val result = dialog.showAndGet()
 
                 if (result) {

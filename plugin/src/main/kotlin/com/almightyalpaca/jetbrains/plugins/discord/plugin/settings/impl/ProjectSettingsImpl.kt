@@ -39,4 +39,6 @@ class ProjectSettingsImpl(override val project: Project) : ProjectSettings, Pers
     override val nameOverrideText by nameOverrideToggle.option.text("", "")
 
     override val description by text("Project description", "")
+
+    override val theme by themeChooser("Project theme", "The theme to use for this project", true)
 }

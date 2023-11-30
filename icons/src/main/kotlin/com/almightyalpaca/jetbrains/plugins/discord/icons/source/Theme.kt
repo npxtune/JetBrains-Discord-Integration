@@ -18,6 +18,22 @@
 package com.almightyalpaca.jetbrains.plugins.discord.icons.source
 
 interface Theme {
+    object Default : Theme {
+        override val id: String
+            get() = "default"
+        override val name: String
+            get() = "Default"
+        override val description: String
+            get() = "The default theme"
+        override val applications: Map<String, Long>
+            get() = emptyMap()
+
+        override fun getIconSet(applicationName: String): IconSet? {
+            return null
+        }
+
+    }
+
     val id: String
     val name: String
     val description: String

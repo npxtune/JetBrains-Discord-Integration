@@ -28,10 +28,6 @@
 
     <applicationListeners>
         <listener
-                class="com.almightyalpaca.jetbrains.plugins.discord.plugin.time.TimeProjectManagerListener"
-                topic="com.intellij.openapi.project.ProjectManagerListener"/>
-
-        <listener
                 class="com.almightyalpaca.jetbrains.plugins.discord.plugin.time.TimeFileEditorManagerListener"
                 topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
     </applicationListeners>
