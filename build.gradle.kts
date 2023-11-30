@@ -31,7 +31,7 @@ plugins {
     id("buildUtils")
 }
 
-group = "com.almightyalpaca.jetbrains.plugins.discord"
+group = "dev.azn9.jetbrains.plugins.discord"
 
 val versionDetails: Closure<VersionDetails> by extra
 

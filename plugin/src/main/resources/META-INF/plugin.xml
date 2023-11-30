@@ -16,9 +16,9 @@
   -->
 
 <idea-plugin url="https://github.com/Almighty-Alpaca/JetBrains-Discord-Integration" require-restart="true">
-    <id>com.almightyalpaca.intellij.plugins.discord</id>
+    <id>dev.azn9.intellij.plugins.discord</id>
     <name>Discord Integration V2</name>
-    <vendor email="contact@azn9.dev" url="https://github.com/Azn9">Azn9</vendor>
+    <vendor email="contact@azn9.dev" url="https://github.com/Azn9/JetBrains-Discord-Integration">Azn9</vendor>
 
     <idea-version since-build="222"/>
 
