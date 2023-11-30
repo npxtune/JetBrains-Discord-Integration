@@ -184,7 +184,7 @@ class PreviewRenderer {
         var lastImagesEmpty: Boolean? = null
 
         fun draw(image: BufferedImage, presence: RichPresence, force: Boolean): Boolean {
-
+// TODO : add buttons
             val (imagesModified, imagesEmpty) = images.draw(image, presence, force)
 
             if (force || first) {

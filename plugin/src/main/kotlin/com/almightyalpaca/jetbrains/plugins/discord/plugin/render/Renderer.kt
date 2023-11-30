@@ -44,7 +44,11 @@ abstract class Renderer(protected val context: RenderContext) {
         smallIcon: IconValue?,
         smallIconText: TextValue?,
         smallIconTextCustom: TemplateValue?,
-        startTimestamp: TimeValue?
+        startTimestamp: TimeValue?,
+        button1Title: String? = null,
+        button1Url: String? = null,
+        button2Title: String? = null,
+        button2Url: String? = null
     ): RichPresence {
         DiscordPlugin.LOG.debug("Rendering presence, data=${context.data}, mode=${context.mode}")
         DiscordPlugin.LOG.debug("Themes: ${context.source.getThemesOrNull()}")
@@ -104,6 +108,11 @@ abstract class Renderer(protected val context: RenderContext) {
                     RichPresence.Image(icon.value, caption)
                 }
             }
+
+            this@presence.button1Title = button1Title
+            this@presence.button1Url = button1Url
+            this@presence.button2Title = button2Title
+            this@presence.button2Url = button2Url
 
             this.partyId = Plugin.version?.toString()
         }

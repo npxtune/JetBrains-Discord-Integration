@@ -28,10 +28,7 @@ import dev.cbyrne.kdiscordipc.core.error.ConnectionError
 import dev.cbyrne.kdiscordipc.core.event.impl.CurrentUserUpdateEvent
 import dev.cbyrne.kdiscordipc.core.event.impl.ErrorEvent
 import dev.cbyrne.kdiscordipc.core.event.impl.ReadyEvent
-import dev.cbyrne.kdiscordipc.data.activity.activity
-import dev.cbyrne.kdiscordipc.data.activity.largeImage
-import dev.cbyrne.kdiscordipc.data.activity.smallImage
-import dev.cbyrne.kdiscordipc.data.activity.timestamps
+import dev.cbyrne.kdiscordipc.data.activity.*
 import kotlinx.coroutines.*
 import dev.cbyrne.kdiscordipc.data.user.User as NativeUser
 
@@ -162,6 +159,19 @@ private fun RichPresence.toNative() = activity(
 
     this@toNative.largeImage?.key?.let { this.largeImage(it, this@toNative.largeImage?.text) }
     this@toNative.smallImage?.key?.let { this.smallImage(it, this@toNative.smallImage?.text) }
+
+    if ((this@toNative.button1Title ?: "") != "" && (this@toNative.button1Url ?: "") != "") {
+        this.button(
+            label = this@toNative.button1Title!!,
+            url = this@toNative.button1Url!!
+        )
+    }
+    if ((this@toNative.button2Title ?: "") != "" && (this@toNative.button2Url ?: "") != "") {
+        this.button(
+            label = this@toNative.button2Title!!,
+            url = this@toNative.button2Url!!
+        )
+    }
 
     this.instance = this@toNative.instance
 }

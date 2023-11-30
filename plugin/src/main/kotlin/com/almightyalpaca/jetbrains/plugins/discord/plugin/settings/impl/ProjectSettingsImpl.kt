@@ -41,4 +41,9 @@ class ProjectSettingsImpl(override val project: Project) : ProjectSettings, Pers
     override val description by text("Project description", "")
 
     override val theme by themeChooser("Project theme", "The theme to use for this project", true)
+
+    override val button1Title by text("Button 1 title", "")
+    override val button1Url by text("Button 1 url", "")
+    override val button2Title by text("Button 2 title", "")
+    override val button2Url by text("Button 2 url", "")
 }
