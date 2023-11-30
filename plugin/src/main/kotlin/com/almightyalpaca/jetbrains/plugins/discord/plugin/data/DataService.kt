@@ -81,7 +81,12 @@ class DataService {
 
         val editor: FileEditor? = project?.let {
             invokeOnEventThread {
-                FileEditorManager.getInstance(project)?.selectedEditor
+                try {
+                    FileEditorManager.getInstance(project)?.selectedEditor
+                } catch (e: Throwable) {
+                    DiscordPlugin.LOG.warn("Error getting selected editor", e)
+                    null
+                }
             }
         }
 
