@@ -2,10 +2,10 @@
 
 <plugins>
   <plugin
-    id="com.almightyalpaca.intellij.plugins.discord"
+    id="dev.azn9.intellij.plugins.discord"
     url="https://github.com/Azn9/JetBrains-Discord-Integration/releases/download/v2.0.6/JetBrains-Discord-Integration-2.0.6.zip"
     version="2.0.6">
-    <idea-version since-build="222" />
+    <idea-version since-build="222.0" />
     <name>Discord Integration v2</name>
     <description><![CDATA[
     Discord Integration v2
