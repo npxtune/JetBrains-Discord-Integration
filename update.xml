@@ -3,9 +3,9 @@
 <plugins>
   <plugin
     id="dev.azn9.intellij.plugins.discord"
-    url="https://github.com/Azn9/JetBrains-Discord-Integration/releases/download/v2.0.5/JetBrains-Discord-Integration-2.0.5.zip"
-    version="2.0.5">
-    <idea-version since-build="203.0" />
+    url="https://github.com/Azn9/JetBrains-Discord-Integration/releases/download/v2.0.6/JetBrains-Discord-Integration-2.0.6.zip"
+    version="2.0.6">
+    <idea-version since-build="222.0" />
     <name>Discord Integration v2</name>
     <description><![CDATA[
     Discord Integration v2
@@ -18,7 +18,7 @@ Feel free to open a pull request if you want to contribute to the project.<br>
 Note : The plugin is not available on the JetBrains plugin repository yet.
 ]]></description>
     <change-notes><![CDATA[
-    visit <a href="https://github.com/Azn9/JetBrains-Discord-Integration/releases/tag/v2.0.5">GitHub</a> for changelog
+    visit <a href="https://github.com/Azn9/JetBrains-Discord-Integration/releases/tag/v2.0.6">GitHub</a> for changelog
     ]]></change-notes>
   </plugin>
 
