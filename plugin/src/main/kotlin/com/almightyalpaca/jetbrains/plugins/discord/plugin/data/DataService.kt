@@ -48,7 +48,9 @@ val dataService: DataService
 
 @Service
 class DataService {
-    suspend fun getData(mode: Renderer.Mode): Data? = tryOrNull { mode.run { getData() } }
+    suspend fun getData(mode: Renderer.Mode): Data? = tryOrNull {
+        mode.runCatching {getData() }.getOrNull()
+    }
 
     @JvmName("getDataInternal")
     private suspend fun (Renderer.Mode).getData(): Data {
@@ -81,12 +83,7 @@ class DataService {
 
         val editor: FileEditor? = project?.let {
             invokeOnEventThread {
-                try {
-                    FileEditorManager.getInstance(project)?.selectedEditor
-                } catch (e: Throwable) {
-                    DiscordPlugin.LOG.warn("Error getting selected editor", e)
-                    null
-                }
+                FileEditorManager.getInstance(project)?.selectedEditor
             }
         }
 
