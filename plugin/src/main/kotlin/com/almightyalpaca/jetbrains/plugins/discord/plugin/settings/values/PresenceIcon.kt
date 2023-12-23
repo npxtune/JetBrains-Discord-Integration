@@ -25,6 +25,10 @@ import com.almightyalpaca.jetbrains.plugins.discord.icons.source.Asset as Source
 typealias IconValue = SimpleValue<PresenceIcon>
 
 enum class PresenceIcon(override val text: String, override val description: String? = null) : RenderedValue<PresenceIcon.Result>, UiValueType {
+
+    PROJECT_ICON("Project icon") {
+        override fun RenderContext.getResult() = Result.ProjectIcon
+    },
     APPLICATION("Application") {
         override fun RenderContext.getResult() = icons?.getAsset("application").toResult()
     },
@@ -56,6 +60,7 @@ enum class PresenceIcon(override val text: String, override val description: Str
 
     sealed class Result {
         object Empty : Result()
+        object ProjectIcon : Result()
         data class Asset(val value: SourceAsset) : Result()
     }
 }

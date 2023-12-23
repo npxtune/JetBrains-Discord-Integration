@@ -85,6 +85,14 @@ abstract class Renderer(protected val context: RenderContext) {
 
             this@presence.largeImage = when (val icon = largeIcon?.getValue()?.get(context)) {
                 null, PresenceIcon.Result.Empty -> null
+                is PresenceIcon.Result.ProjectIcon -> {
+                    val caption = when (val text = largeIconText?.getValue()?.get(context)) {
+                        null, PresenceText.Result.Empty -> null
+                        is PresenceText.Result.String -> text.value
+                        PresenceText.Result.Custom -> largeIconTextCustom?.getValue()?.execute(customTemplateContext)
+                    }
+                    RichPresence.Image(icon.value, caption)
+                }
                 is PresenceIcon.Result.Asset -> {
                     val caption = when (val text = largeIconText?.getValue()?.get(context)) {
                         null, PresenceText.Result.Empty -> null
