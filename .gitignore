@@ -59,7 +59,7 @@ hs_err_pid*
 secrets.gradle.kts
 
 ## IntelliJ Sandbox
-.sandbox/
+.sandbox*
 
 ## Plugin .zip
 JetBrains-Discord-Integration-*.zip
@@ -69,3 +69,6 @@ bot/config.yaml
 
 ## ANTLR-generated sources
 plugin/src/generated/
+
+# Signing certificates
+plugin/certs

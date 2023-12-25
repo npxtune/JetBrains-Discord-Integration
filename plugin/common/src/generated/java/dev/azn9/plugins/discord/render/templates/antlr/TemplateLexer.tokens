@@ -1,0 +1,17 @@
+DOLLAR_SIGN=1
+PERCENT_SIGN=2
+PR_OPEN=3
+PR_CLOSED=4
+BR_OPEN=5
+BR_CLOSED=6
+RAW_TEXT=7
+IF_sym=8
+NAME=9
+TEXT=10
+'$'=1
+'%'=2
+'('=3
+')'=4
+'{'=5
+'}'=6
+'if'=8

@@ -13,12 +13,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *//*
+
 
 @file:Suppress("SuspiciousCollectionReassignment")
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jsoup.Jsoup
+
+fun properties(key: String) = providers.gradleProperty(key)
 
 plugins {
     alias(libs.plugins.kotlin)
@@ -31,6 +34,7 @@ val github = "https://github.com/Azn9/JetBrains-Discord-Integration"
 
 dependencies {
     implementation(project(path = ":icons", configuration = "minimizedJar"))
+    implementation(project(":plugin:common", configuration = "instrumentedJar"))
 
     implementation(libs.discord.ipc)
 
@@ -45,7 +49,7 @@ dependencies {
 }
 
 repositories {
-    jcenter()
+    //jcenter()
     mavenCentral()
     maven("https://jitpack.io")
 
@@ -67,21 +71,16 @@ sourceSets {
 val isCI by lazy { System.getenv("CI") != null }
 
 intellij {
-    pluginName(rootProject.name)
+    pluginName = properties("pluginName")
 
-    version(libs.versions.ide)
-
+    version(libs.versions.ide.common)
     downloadSources(!isCI)
-
-    updateSinceUntilBuild(false)
-
     sandboxDir("${project.rootDir.absolutePath}/.sandbox")
 
     instrumentCode(false)
 
-    //plugins("vcs-git")
-
-    plugins("git4idea")
+    plugins("vcs-git")
+    //plugins("git4idea")
 }
 
 kotlin {
@@ -154,14 +153,14 @@ tasks {
     }
 
     patchPluginXml {
-        changeNotes(readInfoFile(project.file("changelog.md")))
-        pluginDescription(readInfoFile(project.file("description.md")))
+        changeNotes(readInfoFile(project.file("../changelog.md")))
+        pluginDescription(readInfoFile(project.file("../description.md")))
     }
 
     runIde {
         // Force a specific icon source
-        // environment["com.almightyalpaca.jetbrains.plugins.discord.plugin.source"] = "local:${projects.icons.parent!!.projectDir.absolutePath}"
-        // environment["com.almightyalpaca.jetbrains.plugins.discord.plugin.source"] = "classpath:discord"
+        // environment["dev.azn9.plugins.discord.source"] = "local:${projects.icons.parent!!.projectDir.absolutePath}"
+        // environment["dev.azn9.plugins.discord.source"] = "classpath:discord"
 
         enableAssertions = true
     }
@@ -208,7 +207,7 @@ tasks {
     }
 
     generateGrammarSource {
-        val packageName = "com.almightyalpaca.jetbrains.plugins.discord.plugin.render.templates.antlr"
+        val packageName = "dev.azn9.plugins.discord.render.templates.antlr"
 
         arguments = arguments + listOf("-package", packageName, "-no-listener")
         outputDirectory = generatedJavaSourceDir.resolve(packageName.replace('.', File.separatorChar))
@@ -251,6 +250,12 @@ tasks {
     check {
         dependsOn(":uploader:check")
     }
+
+    signPlugin {
+        certificateChainFile.set(file("../certs/chain.crt"))
+        privateKeyFile.set(file("../certs/private.pem"))
+        password.set(file("../certs/password").readText())
+    }
 }
 
 fun readInfoFile(file: File): String {
@@ -281,4 +286,25 @@ fun readInfoFile(file: File): String {
 
         // Replace newlines
         .replace("\n", "<br>")
+}
+*/
+
+tasks {
+    create("buildPlugin") {
+        val buildPluginPre = project.tasks.getByPath("pre231:buildPlugin") as Zip
+        val buildPluginPost = project.tasks.getByPath("post231:buildPlugin") as Zip
+
+        dependsOn(buildPluginPre, buildPluginPost)
+
+        doLast {
+            copy {
+                from(buildPluginPre.outputs)
+                into("..")
+            }
+            copy {
+                from(buildPluginPost.outputs)
+                into("..")
+            }
+        }
+    }
 }

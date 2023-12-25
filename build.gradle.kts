@@ -109,16 +109,8 @@ tasks {
     }
 
     create("default") {
-        val buildPlugin = project.tasks.getByPath("plugin:buildPlugin") as Zip
-
+        val buildPlugin = project.tasks.getByPath("plugin:buildPlugin")
         dependsOn(buildPlugin)
-
-        doLast {
-            copy {
-                from(buildPlugin.outputs)
-                into(".")
-            }
-        }
     }
 
     create<Delete>("clean-sandbox") {
