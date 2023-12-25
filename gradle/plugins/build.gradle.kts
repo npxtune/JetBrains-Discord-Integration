@@ -28,7 +28,7 @@ repositories {
 
 dependencies {
 //    implementation(libs.gradle.shadow)
-    implementation("com.github.johnrengelman:shadow:8.1.0") // TODO
+    implementation("com.github.johnrengelman:shadow:8.1.1") // TODO
     implementation("org.apache.ant:ant:1.10.14")
 
     implementation(libs.pngtastic)
