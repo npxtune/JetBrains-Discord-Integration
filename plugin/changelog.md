@@ -1,3 +1,6 @@
+## v2.0.8
+- Fixed compatibility issues with IDEs version 2023.2 and above 
+
 ## v2.0.7
 - Added back support for IDEs version from 2021.2 to 2022.3
 - Fixed some deprecated API usages to conform with the jetbrains marketplace requirements

@@ -2,10 +2,10 @@
 
 <plugins>
   <plugin
-    id="dev.azn9.intellij.plugins.discord"
-    url="https://github.com/Azn9/JetBrains-Discord-Integration/releases/download/v2.0.6/JetBrains-Discord-Integration-2.0.6.zip"
-    version="2.0.6">
-    <idea-version since-build="222.0" />
+    id="dev.azn9.plugins.discord"
+    url="https://github.com/Azn9/JetBrains-Discord-Integration/releases/download/v2.0.8/JetBrains-Discord-Integration-v212-2.0.8.zip"
+    version="2.0.8">
+    <idea-version since-build="212" until-build="223.0" />
     <name>Discord Integration v2</name>
     <description><![CDATA[
     Discord Integration v2
@@ -18,8 +18,71 @@ Feel free to open a pull request if you want to contribute to the project.<br>
 Note : The plugin is not available on the JetBrains plugin repository yet.
 ]]></description>
     <change-notes><![CDATA[
-    visit <a href="https://github.com/Azn9/JetBrains-Discord-Integration/releases/tag/v2.0.6">GitHub</a> for changelog
+    visit <a href="https://github.com/Azn9/JetBrains-Discord-Integration/releases/tag/v2.0.8">GitHub</a> for changelog
     ]]></change-notes>
   </plugin>
+
+    <plugin
+            id="dev.azn9.plugins.discord"
+            url="https://github.com/Azn9/JetBrains-Discord-Integration/releases/download/v2.0.8/JetBrains-Discord-Integration-v223-2.0.8.zip"
+            version="2.0.8">
+        <idea-version since-build="223.0" until-build="231.0" />
+        <name>Discord Integration v2</name>
+        <description><![CDATA[
+    Discord Integration v2
+    <h1>Notice</h1>
+    <br>
+This repo is a fork of the original JetBrains Discord Integration plugin, as its owner has been inactive for a while. I will try to keep it up to date with the latest versions of discord and jetbrains IDEs, and fix any issues that may arise.<br>
+Feel free to open an issue if you have any problems with the plugin, or if you have any suggestions.<br>
+Feel free to open a pull request if you want to contribute to the project.<br>
+<br>
+Note : The plugin is not available on the JetBrains plugin repository yet.
+]]></description>
+        <change-notes><![CDATA[
+    visit <a href="https://github.com/Azn9/JetBrains-Discord-Integration/releases/tag/v2.0.8">GitHub</a> for changelog
+    ]]></change-notes>
+    </plugin>
+
+    <plugin
+            id="dev.azn9.plugins.discord"
+            url="https://github.com/Azn9/JetBrains-Discord-Integration/releases/download/v2.0.8/JetBrains-Discord-Integration-v231-2.0.8.zip"
+            version="2.0.8">
+        <idea-version since-build="231.0" until-build="232.0" />
+        <name>Discord Integration v2</name>
+        <description><![CDATA[
+    Discord Integration v2
+    <h1>Notice</h1>
+    <br>
+This repo is a fork of the original JetBrains Discord Integration plugin, as its owner has been inactive for a while. I will try to keep it up to date with the latest versions of discord and jetbrains IDEs, and fix any issues that may arise.<br>
+Feel free to open an issue if you have any problems with the plugin, or if you have any suggestions.<br>
+Feel free to open a pull request if you want to contribute to the project.<br>
+<br>
+Note : The plugin is not available on the JetBrains plugin repository yet.
+]]></description>
+        <change-notes><![CDATA[
+    visit <a href="https://github.com/Azn9/JetBrains-Discord-Integration/releases/tag/v2.0.8">GitHub</a> for changelog
+    ]]></change-notes>
+    </plugin>
+
+    <plugin
+            id="dev.azn9.plugins.discord"
+            url="https://github.com/Azn9/JetBrains-Discord-Integration/releases/download/v2.0.8/JetBrains-Discord-Integration-v232-2.0.8.zip"
+            version="2.0.8">
+        <idea-version since-build="232.0" />
+        <name>Discord Integration v2</name>
+        <description><![CDATA[
+    Discord Integration v2
+    <h1>Notice</h1>
+    <br>
+This repo is a fork of the original JetBrains Discord Integration plugin, as its owner has been inactive for a while. I will try to keep it up to date with the latest versions of discord and jetbrains IDEs, and fix any issues that may arise.<br>
+Feel free to open an issue if you have any problems with the plugin, or if you have any suggestions.<br>
+Feel free to open a pull request if you want to contribute to the project.<br>
+<br>
+Note : The plugin is not available on the JetBrains plugin repository yet.
+]]></description>
+        <change-notes><![CDATA[
+    visit <a href="https://github.com/Azn9/JetBrains-Discord-Integration/releases/tag/v2.0.8">GitHub</a> for changelog
+    ]]></change-notes>
+    </plugin>
 
 </plugins>
