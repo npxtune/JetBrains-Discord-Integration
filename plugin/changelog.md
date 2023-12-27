@@ -1,3 +1,11 @@
+## v2.0.7
+- Added back support for IDEs version from 2021.2 to 2022.3
+- Fixed some deprecated API usages to conform with the jetbrains marketplace requirements
+- Changed the plugin id to `dev.azn9.plugins.discord` to conform with the jetbrains marketplace requirements
+- Fixed the "ContainerDisposedException" happening when switching between projects
+- Fixed an issue occurring when closing the IDE while a render update is in progress, causing logging of errors
+- Updated the plugin description to explain the changes made to the original plugin and why there is two versions of the same plugin
+
 ## v2.0.6
 - Changed plugin id to `dev.azn9.jetbrains.plugins.discord` to avoid conflicts with the original plugin
 - Added buttons to the rich presence. The title and the url of each button can be configured in the project settings
