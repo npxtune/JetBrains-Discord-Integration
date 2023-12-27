@@ -28,7 +28,7 @@ repositories {
 
 dependencies {
 //    implementation(libs.gradle.shadow)
-    implementation("com.github.johnrengelman:shadow:8.1.0") // TODO
+    implementation("com.github.johnrengelman:shadow:8.1.1") // TODO
     implementation("org.apache.ant:ant:1.10.14")
 
     implementation(libs.pngtastic)
@@ -37,18 +37,12 @@ dependencies {
     implementation(libs.commons.io)
     implementation(libs.commons.lang)
 
-    implementation(libs.docker)
     // Because docker-java includes an ancient version of guava
     implementation(libs.guava)
 }
 
 gradlePlugin {
     plugins {
-        create("DockerPlugin") {
-            id = "docker"
-            implementationClass = "DockerPlugin"
-        }
-
         create("FileIndicesPlugin") {
             id = "fileIndices"
             implementationClass = "FileIndicesPlugin"

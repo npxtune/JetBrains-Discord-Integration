@@ -25,6 +25,7 @@ after this you can search it in Marketplace just like normal plugin.
 #### ...from the GitHub release page
 
 Go to the [GitHub release page](https://github.com/Azn9/JetBrains-Discord-Integration/tags) and grab the latest `JetBrains-Discord-Integration-X.X.X.zip`. Do not unzip the file. In your IDE go to `Settings > Plugins > Install plugin from disk...` and select the previously downloaded zip file.
+See below to choose the correct version for your IDE.
 
 #### ...or compile from source
 
@@ -41,6 +42,16 @@ chmod +x gradlew
 This will generate the file `JetBrains-Discord-Integration-X.X.X.zip`.
 
 To install the zip file follow the steps from the [previous install method](#from-the-github-release-page).
+See below to choose the correct version for your IDE.
+
+### Which version to choose?
+This plugin is split into three different versions to support different IDE versions.
+- "-pre223" is for IDEs with a version number between `2021.2` and `2022.3` (not included)
+- "-pre231" is for IDEs with a version number between `2022.3` and `2023.1` (not included)
+- "-post231" is for IDEs with a version number higher or equal to `2023.1`
+
+If you are unsure which version to choose, use the [JetBrains Plugin Repository](#from-the-jetbrains-plugin-repository-need-to-do-it-manually) method to install the plugin. It will automatically choose the correct version for you.
+
 
 ## Support...
 

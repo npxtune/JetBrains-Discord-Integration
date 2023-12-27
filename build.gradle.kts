@@ -20,11 +20,10 @@
 import com.github.benmanes.gradle.versions.updates.gradle.GradleReleaseChannel
 import com.palantir.gradle.gitversion.VersionDetails
 import groovy.lang.Closure
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.nio.file.Files
 
 plugins {
-    alias(libs.plugins.kotlin) apply false
+    //alias(libs.plugins.kotlin.latest) apply false
     alias(libs.plugins.versions)
     alias(libs.plugins.gitversion)
 
@@ -54,7 +53,7 @@ allprojects {
 }
 
 subprojects {
-    group = rootProject.group.toString() + "." + project.name.lowercase()
+    group = rootProject.group.toString() + "." + project.name.toLowerCase()
     version = rootProject.version
 
     val secrets: File = rootProject.file("secrets.gradle.kts")
@@ -65,18 +64,6 @@ subprojects {
     repositories {
         mavenCentral()
         maven("https://jitpack.io")
-    }
-
-    tasks {
-        withType<KotlinCompile> {
-            kotlinOptions {
-                jvmTarget = libs.versions.jdk.get()
-                freeCompilerArgs += "-Xjvm-default=all"
-
-                apiVersion = kotlinLanguageVersion(libs.versions.kotlin.ide())
-                languageVersion = kotlinLanguageVersion(libs.versions.kotlin.ide())
-            }
-        }
     }
 }
 
@@ -109,16 +96,8 @@ tasks {
     }
 
     create("default") {
-        val buildPlugin = project.tasks.getByPath("plugin:buildPlugin") as Zip
-
+        val buildPlugin = project.tasks.getByPath("plugin:buildPlugin")
         dependsOn(buildPlugin)
-
-        doLast {
-            copy {
-                from(buildPlugin.outputs)
-                into(".")
-            }
-        }
     }
 
     create<Delete>("clean-sandbox") {

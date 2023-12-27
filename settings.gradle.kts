@@ -21,7 +21,10 @@ includeBuild("gradle/plugins")
 
 include("icons")
 include("plugin")
-include("uploader")
+include("plugin:common")
+include("plugin:pre223")
+include("plugin:pre231")
+include("plugin:post231")
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")

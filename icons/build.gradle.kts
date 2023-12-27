@@ -16,9 +16,10 @@
  */
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    alias(libs.plugins.kotlin)
+    alias(libs.plugins.kotlin.common)
     id("fileIndices")
 }
 
@@ -103,4 +104,19 @@ tasks {
 
     generateIcons.dependsOn(generateMaterialApplicationIcons)
     generateMaterialApplicationIcons.dependsOn(deleteMaterialApplicationIcons)
+}
+
+kotlin {
+    /*jvmToolchain {
+        vendor = JvmVendorSpec.JETBRAINS
+        languageVersion = JavaLanguageVersion.of("11")
+    }*/
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "11"
+        freeCompilerArgs += "-Xjvm-default=all"
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+    }
 }
