@@ -45,10 +45,14 @@ To install the zip file follow the steps from the [previous install method](#fro
 See below to choose the correct version for your IDE.
 
 ### Which version to choose?
-This plugin is split into three different versions to support different IDE versions.
-- "-pre223" is for IDEs with a version number between `2021.2` and `2022.3` (not included)
-- "-pre231" is for IDEs with a version number between `2022.3` and `2023.1` (not included)
-- "-post231" is for IDEs with a version number higher or equal to `2023.1`
+This plugin is split into different versions corresponding to the lowest supported version of the IDE.
+- `v212` is for IDEs 2021.2.X and above
+- `v223` is for IDEs 2022.3.X and above
+- `v231` is for IDEs 2023.1.X and above
+- `v232` is for IDEs 2023.2.X and above
+
+Warning, you must choose the correct lowest version for your IDE!
+For instance, if you are using IntelliJ IDEA 2022.2.X you **must** choose the `v212` version, not the `v223` version, even though the `v223` version is nearer to your version. 
 
 If you are unsure which version to choose, use the [JetBrains Plugin Repository](#from-the-jetbrains-plugin-repository-need-to-do-it-manually) method to install the plugin. It will automatically choose the correct version for you.
 

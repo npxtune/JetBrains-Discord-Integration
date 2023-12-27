@@ -22,8 +22,9 @@ jobs:
           gradle-build-module: |-
             :icons
             :plugin:common
-            :plugin:pre223
-            :plugin:pre231
-            :plugin:post231
+            :plugin:v212
+            :plugin:v223
+            :plugin:v231
+            :plugin:v232
           gradle-build-configuration: |-
             compileClasspath

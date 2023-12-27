@@ -15,27 +15,18 @@
  * limitations under the License.
  */
 
-val versions = listOf("v212", "v223", "v231", "v232")
+package dev.azn9.plugins.discord.extensions.git
 
-tasks {
-    create("buildPlugin") {
-        versions.forEach { version ->
-            val buildPlugin = project.tasks.getByPath("$version:buildPlugin") as Zip
+import com.intellij.dvcs.DvcsUtil
+import com.intellij.openapi.application.runReadAction
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.VirtualFile
+import dev.azn9.plugins.discord.extensions.VcsInfoExtension
+import git4idea.repo.GitRepositoryManager
 
-            dependsOn(buildPlugin)
-
-            doLast {
-                copy {
-                    from(buildPlugin.outputs)
-                    into("..")
-                }
-            }
-        }
-    }
-
-    create("verifyPluginCompatibility") {
-        versions.forEach { version ->
-            dependsOn("$version:runPluginVerifier")
-        }
+class GitVcsInfoExtension : VcsInfoExtension() {
+    override fun getCurrentVcsBranch(project: Project, file: VirtualFile?): String? = runReadAction action@{
+        val manager = GitRepositoryManager.getInstance(project)
+        return@action manager.getRepositoryForRootQuick(DvcsUtil.findVcsRootFor(project, file))?.currentBranchName
     }
 }

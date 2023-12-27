@@ -15,27 +15,24 @@
  * limitations under the License.
  */
 
-val versions = listOf("v212", "v223", "v231", "v232")
+package dev.azn9.plugins.discord.postLoad
 
-tasks {
-    create("buildPlugin") {
-        versions.forEach { version ->
-            val buildPlugin = project.tasks.getByPath("$version:buildPlugin") as Zip
+import dev.azn9.plugins.discord.render.renderService
+import dev.azn9.plugins.discord.utils.DisposableCoroutineScope
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.startup.ProjectActivity
+import com.intellij.openapi.startup.StartupActivity
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
-            dependsOn(buildPlugin)
+class RenderPreloadingActivity : ProjectActivity, DisposableCoroutineScope {
+    override val parentJob: Job = SupervisorJob()
 
-            doLast {
-                copy {
-                    from(buildPlugin.outputs)
-                    into("..")
-                }
-            }
+    override suspend fun execute(project: Project) {
+        launch {
+            renderService.startRenderClock()
         }
     }
 
-    create("verifyPluginCompatibility") {
-        versions.forEach { version ->
-            dependsOn("$version:runPluginVerifier")
-        }
-    }
 }
