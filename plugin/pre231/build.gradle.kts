@@ -254,9 +254,11 @@ tasks {
     }
 
     signPlugin {
-        certificateChainFile.set(file("../certs/chain.crt"))
-        privateKeyFile.set(file("../certs/private.pem"))
-        password.set(file("../certs/password").readText())
+        if (file("../certs").exists()) {
+            certificateChainFile.set(file("../certs/chain.crt"))
+            privateKeyFile.set(file("../certs/private.pem"))
+            password.set(file("../certs/password").readText())
+        }
     }
 }
 
