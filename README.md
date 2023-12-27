@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="plugin\src\main\resources\META-INF\pluginIcon.svg" alt="JetBrains Discord Integration" width="200"/>
+  <img src=".idea/icon.png" alt="JetBrains Discord Integration" width="200"/>
 </p>
 <h1 align="center">JetBrains Discord Integration v2</h1>
 
@@ -24,7 +24,7 @@ after this you can search it in Marketplace just like normal plugin.
 
 #### ...from the GitHub release page
 
-Go to the [GitHub release page](https://github.com/Azn9/JetBrains-Discord-Integration/tags) and grab the latest `JetBrains-Discord-Integration-X.X.X.zip`. Do not unzip the file. In your IDE go to `Settings > Plugins > Install plugin from disk...` and select the previously downloaded zip file.
+Go to the [GitHub release page](https://github.com/Azn9/JetBrains-Discord-Integration/tags) and grab the latest `JetBrains-Discord-Integration-X.X.X.zip` **corresponding to your version** ([Which version to choose?](#which-version-to-choose)). Do not unzip the file. In your IDE go to `Settings > Plugins > Install plugin from disk...` and select the previously downloaded zip file.
 See below to choose the correct version for your IDE.
 
 #### ...or compile from source
@@ -64,12 +64,6 @@ There is a [dedicated Discord server](https://discord.gg/mEDvg6sYp2) for the Jet
 ### ...using GitHub issues
 
 For feature requests and bug reports, feel free to make use of the GitHub issues by submitting a new issue. Please check whether someone has reported your issue already before creating your own report. If you submit a new Issue please include as much detail as possible in your issue and how to reproduce it if possible and relevant.
-
-#### ...or why not join the JetBrains community server
-
-If you have questions regarding any JetBrains IDE or other JetBrains products and projects feel free to join the [JetBrains community Discord server](https://discord.gg/9ut9sqD) where many users of JetBrains hang out alongside some of the JetBrains team.
-
-[![JetBrains Community Discord Server](https://discordapp.com/api/guilds/433980600391696384/embed.png?style=banner2)](https://discord.gg/9ut9sqD)
 
 ## License
 
