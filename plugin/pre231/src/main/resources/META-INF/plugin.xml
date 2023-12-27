@@ -15,12 +15,12 @@
   ~ limitations under the License.
   -->
 
-<idea-plugin url="https://github.com/Almighty-Alpaca/JetBrains-Discord-Integration" require-restart="true">
-    <id>dev.azn9.intellij.plugins.discord</id>
+<idea-plugin url="https://github.com/Azn9/JetBrains-Discord-Integration" require-restart="true">
+    <id>dev.azn9.plugins.discord</id>
     <name>Discord Integration V2</name>
     <vendor email="contact@azn9.dev" url="https://github.com/Azn9/JetBrains-Discord-Integration">Azn9</vendor>
 
-    <idea-version since-build="222"/>
+    <idea-version since-build="223.0" until-build="231.0"/>
 
     <depends>com.intellij.modules.lang</depends>
 
@@ -55,20 +55,14 @@
                 nonDefaultProject="false"
                 instance="dev.azn9.plugins.discord.settings.ProjectConfigurable"/>
 
-        <backgroundPostStartupActivity
-                implementation="dev.azn9.plugins.discord.notifications.NotificationPostStartupActivity"/>
-
         <notificationGroup displayType="STICKY_BALLOON" id="com.almightyalpaca.jetbrains.plugins.discord.notification.project.show"/>
         <notificationGroup displayType="STICKY_BALLOON" id="com.almightyalpaca.jetbrains.plugins.discord.notification.update" isLogByDefault="true"/>
 
-        <postStartupActivity implementation="dev.azn9.plugins.discord.time.TimeProjectManagerListener"/>
-
-        <!--suppress PluginXmlValidity -->
-        <applicationInitializedListener implementation="dev.azn9.plugins.discord.time.TimePreloadingActivity"/>
-        <!--suppress PluginXmlValidity -->
-        <applicationInitializedListener implementation="dev.azn9.plugins.discord.diagnose.DiagnosePreloadingActivity"/>
-        <!--suppress PluginXmlValidity -->
-        <applicationInitializedListener implementation="dev.azn9.plugins.discord.render.RenderPreloadingActivity"/>
+        <backgroundPostStartupActivity implementation="dev.azn9.plugins.discord.postLoad.NotificationPostStartupActivity"/>
+        <backgroundPostStartupActivity implementation="dev.azn9.plugins.discord.postLoad.TimeProjectManagerListener"/>
+        <backgroundPostStartupActivity implementation="dev.azn9.plugins.discord.postLoad.TimePreloadingActivity"/>
+        <backgroundPostStartupActivity implementation="dev.azn9.plugins.discord.postLoad.DiagnosePreloadingActivity"/>
+        <backgroundPostStartupActivity implementation="dev.azn9.plugins.discord.postLoad.RenderPreloadingActivity"/>
     </extensions>
 
     <actions>

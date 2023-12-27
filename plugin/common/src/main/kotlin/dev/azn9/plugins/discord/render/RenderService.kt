@@ -17,16 +17,17 @@
 
 package dev.azn9.plugins.discord.render
 
+import com.intellij.openapi.components.Service
+import com.intellij.openapi.components.service
+import com.intellij.openapi.progress.ProcessCanceledException
+import com.intellij.util.concurrency.AppExecutorUtil
 import dev.azn9.plugins.discord.DiscordPlugin
 import dev.azn9.plugins.discord.data.dataService
 import dev.azn9.plugins.discord.rpc.rpcService
 import dev.azn9.plugins.discord.source.sourceService
 import dev.azn9.plugins.discord.utils.DisposableCoroutineScope
+import dev.azn9.plugins.discord.utils.debugLazy
 import dev.azn9.plugins.discord.utils.scheduleWithFixedDelay
-import com.intellij.openapi.components.Service
-import com.intellij.openapi.components.service
-import com.intellij.openapi.progress.ProcessCanceledException
-import com.intellij.util.concurrency.AppExecutorUtil
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
@@ -47,14 +48,19 @@ class RenderService : DisposableCoroutineScope {
     @Synchronized
     fun render(force: Boolean = false) {
         renderJob?.let {
-            DiscordPlugin.LOG.debug("Canceling previous render due to new request")
+            DiscordPlugin.LOG.debugLazy { "Canceling previous render due to new request" }
             it.cancel()
         }
 
         renderJob = launch {
-            DiscordPlugin.LOG.debug("Scheduling render, force=$force")
+            DiscordPlugin.LOG.debugLazy { "Scheduling render, force=$force" }
 
-            val data = dataService.getData(Renderer.Mode.NORMAL) ?: return@launch
+            val data = dataService.getData(Renderer.Mode.NORMAL)
+
+            if (data == null) {
+                DiscordPlugin.LOG.debugLazy { "No data to render" }
+                return@launch
+            }
 
             val context = RenderContext(sourceService.source, data, Renderer.Mode.NORMAL)
 
@@ -62,9 +68,9 @@ class RenderService : DisposableCoroutineScope {
             val presence = renderer?.render()
 
             if (presence == null) {
-                DiscordPlugin.LOG.debug("Render result: hidden")
+                DiscordPlugin.LOG.debugLazy { "Render result: hidden" }
             } else {
-                DiscordPlugin.LOG.debug("Render result: visible")
+                DiscordPlugin.LOG.debugLazy { "Render result: visible" }
             }
 
             rpcService.update(presence, force)
@@ -74,7 +80,10 @@ class RenderService : DisposableCoroutineScope {
     }
 
     fun startRenderClock() {
-        if (renderClockJob != null && !renderClockJob!!.isCancelled) {
+        DiscordPlugin.LOG.debugLazy { "Starting render service" }
+
+        if (renderClockJob != null && !renderClockJob!!.isCancelled && !renderClockJob!!.isDone) {
+            DiscordPlugin.LOG.debugLazy { "Render clock job already running" }
             return
         }
 

@@ -18,13 +18,14 @@
 @file:Suppress("SuspiciousCollectionReassignment")
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jsoup.Jsoup
 
 fun properties(key: String) = providers.gradleProperty(key)
 
 plugins {
-    alias(libs.plugins.kotlin)
-    alias(libs.plugins.intellij)
+    alias(libs.plugins.kotlin.pre231)
+    alias(libs.plugins.intellij.pre231)
 
     antlr
 }
@@ -33,7 +34,7 @@ val github = "https://github.com/Azn9/JetBrains-Discord-Integration"
 
 dependencies {
     implementation(project(path = ":icons", configuration = "minimizedJar"))
-    implementation(project(":plugin:common", configuration = "instrumentedJar"))
+    implementation(project(":plugin:common"))
 
     implementation(libs.discord.ipc)
 
@@ -70,22 +71,21 @@ sourceSets {
 val isCI by lazy { System.getenv("CI") != null }
 
 intellij {
-    pluginName = properties("pluginName")
+    pluginName.set(properties("pluginName").get())
 
     version(libs.versions.ide.pre231)
     downloadSources(!isCI)
     sandboxDir("${project.rootDir.absolutePath}/.sandbox.pre231")
 
-    instrumentCode(false)
+    updateSinceUntilBuild(false)
 
     plugins("vcs-git")
-    //plugins("git4idea")
 }
 
 kotlin {
     jvmToolchain {
-        vendor = JvmVendorSpec.JETBRAINS
-        languageVersion = JavaLanguageVersion.of(libs.versions.jdk.get())
+        //vendor.set(JvmVendorSpec.JETBRAINS)
+        languageVersion.set(JavaLanguageVersion.of("17"))
     }
 }
 
@@ -242,7 +242,14 @@ tasks {
         group = "markdown"
 
         doLast {
-            println(readInfoFile(project.file("description.md")))
+            println(readInfoFile(project.file("../description.md")))
+        }
+    }
+
+    withType<KotlinCompile> {
+        kotlinOptions {
+            jvmTarget = "17"
+            freeCompilerArgs += "-Xjvm-default=all"
         }
     }
 

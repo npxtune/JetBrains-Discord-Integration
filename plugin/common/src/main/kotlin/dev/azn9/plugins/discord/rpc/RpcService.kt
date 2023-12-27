@@ -25,6 +25,7 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.progress.ProcessCanceledException
 import com.intellij.openapi.util.Disposer
+import dev.azn9.plugins.discord.utils.debugLazy
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -90,17 +91,16 @@ class RpcService : DisposableCoroutineScope {
         }
 
         mutex.withLock {
-            MainScope().launch(exceptionHandler) {
+            launch(exceptionHandler) mutex@ {
                 DiscordPlugin.LOG.debug("Updating presence, forceUpdate=$forceUpdate, forceReconnect=$forceReconnect")
 
-                if (!(forceUpdate || forceReconnect)) {
-                    if (lastPresence != null) {
-                        if (lastPresence == presence) {
-                            return@launch
-                        }
-
-                        lastPresence = presence
+                if (!(forceUpdate || forceReconnect) && lastPresence != null) {
+                    if (lastPresence == presence) {
+                        DiscordPlugin.LOG.debug("Presence unchanged, skipping update")
+                        return@mutex
                     }
+
+                    lastPresence = presence
                 }
 
                 if (presence?.appId == null) { // Stop connection
@@ -115,6 +115,8 @@ class RpcService : DisposableCoroutineScope {
                         connection?.disconnect()
                         connection = null
                     }
+
+                    return@mutex
                 } else {
                     if (forceReconnect || connection?.appId != presence.appId) {
                         when {
@@ -136,10 +138,9 @@ class RpcService : DisposableCoroutineScope {
                         }
 
                         connectionChecker = checkConnected()
-
                     }
 
-                    withTimeoutOrNull(1000) {
+                    withTimeoutOrNull(4500) {
                         connection?.send(presence)
                     }
                 }

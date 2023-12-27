@@ -17,16 +17,6 @@
 
 package dev.azn9.plugins.discord.data
 
-import dev.azn9.plugins.discord.DiscordPlugin
-import dev.azn9.plugins.discord.extensions.VcsInfoExtension
-import dev.azn9.plugins.discord.render.Renderer
-import dev.azn9.plugins.discord.settings.settings
-import dev.azn9.plugins.discord.settings.values.IdleVisibility.*
-import dev.azn9.plugins.discord.settings.values.ProjectShow
-import dev.azn9.plugins.discord.time.timeActive
-import dev.azn9.plugins.discord.time.timeOpened
-import dev.azn9.plugins.discord.time.timeService
-import dev.azn9.plugins.discord.utils.*
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ex.ApplicationInfoEx
 import com.intellij.openapi.application.runReadAction
@@ -42,6 +32,16 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.guessModuleDir
 import com.intellij.openapi.wm.IdeFocusManager
 import com.intellij.xdebugger.XDebuggerManager
+import dev.azn9.plugins.discord.DiscordPlugin
+import dev.azn9.plugins.discord.extensions.VcsInfoExtension
+import dev.azn9.plugins.discord.render.Renderer
+import dev.azn9.plugins.discord.settings.settings
+import dev.azn9.plugins.discord.settings.values.IdleVisibility.*
+import dev.azn9.plugins.discord.settings.values.ProjectShow
+import dev.azn9.plugins.discord.time.timeActive
+import dev.azn9.plugins.discord.time.timeOpened
+import dev.azn9.plugins.discord.time.timeService
+import dev.azn9.plugins.discord.utils.*
 
 val dataService: DataService
     get() = service()
@@ -49,7 +49,9 @@ val dataService: DataService
 @Service
 class DataService {
     suspend fun getData(mode: Renderer.Mode): Data? = tryOrNull {
-        mode.runCatching {getData() }.getOrNull()
+        mode.runCatching { getData() }
+            .onFailure { DiscordPlugin.LOG.warnLazy(it) { "Failed to get data" } }
+            .getOrNull()
     }
 
     @JvmName("getDataInternal")
@@ -83,7 +85,11 @@ class DataService {
 
         val editor: FileEditor? = project?.let {
             invokeOnEventThread {
-                FileEditorManager.getInstance(project)?.selectedEditor
+                runCatching {
+                    FileEditorManager.getInstance(project)?.selectedEditor
+                }.onFailure {
+                    DiscordPlugin.LOG.warnLazy(it) { "Failed to get selected editor" }
+                }.getOrNull()
             }
         }
 

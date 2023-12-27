@@ -14,5 +14,5 @@ Show everyone on Discord what awesome projects you're working on!
 For bug reports please take a look at the [GitHub repository](https://github.com/Azn9/JetBrains-Discord-Integration).
 For feature requests and other feedback please use the [Discord server](https://discord.gg/mEDvg6sYp2). 
 
-## What is different from the original plugin?
+## Why "v2"? What happened with the v1?
 This plugin is a fork of the original [Jetbrains Discord Integration plugin by Aljoscha Grebe (Almighty Alpagca)](https://plugins.jetbrains.com/plugin/10233-discord-integration). I started this fork because the original plugin was not being updated anymore and left with a lot of bugs and compatibility issues. I also wanted to add some features that I thought were missing from the original plugin.

@@ -37,18 +37,12 @@ dependencies {
     implementation(libs.commons.io)
     implementation(libs.commons.lang)
 
-    implementation(libs.docker)
     // Because docker-java includes an ancient version of guava
     implementation(libs.guava)
 }
 
 gradlePlugin {
     plugins {
-        create("DockerPlugin") {
-            id = "docker"
-            implementationClass = "DockerPlugin"
-        }
-
         create("FileIndicesPlugin") {
             id = "fileIndices"
             implementationClass = "FileIndicesPlugin"

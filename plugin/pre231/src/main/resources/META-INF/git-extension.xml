@@ -16,7 +16,7 @@
   -->
 
 <idea-plugin>
-    <extensions defaultExtensionNs="com.almightyalpaca.intellij.plugins.discord">
-        <vcsInfo implementation="dev.azn9.jetbrains.plugins.discord.plugin.extensions.git.GitVcsInfoExtension"/>
+    <extensions defaultExtensionNs="dev.azn9.plugins.discord">
+        <vcsInfo implementation="dev.azn9.plugins.discord.extensions.git.GitVcsInfoExtension"/>
     </extensions>
 </idea-plugin>

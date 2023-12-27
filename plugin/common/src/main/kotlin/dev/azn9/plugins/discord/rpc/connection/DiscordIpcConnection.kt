@@ -22,6 +22,7 @@ import dev.azn9.plugins.discord.rpc.RichPresence
 import dev.azn9.plugins.discord.rpc.User
 import dev.azn9.plugins.discord.rpc.UserCallback
 import dev.azn9.plugins.discord.utils.DisposableCoroutineScope
+import dev.azn9.plugins.discord.utils.debugLazy
 import dev.azn9.plugins.discord.utils.errorLazy
 import dev.azn9.plugins.discord.utils.warnLazy
 import dev.cbyrne.kdiscordipc.KDiscordIPC
@@ -60,7 +61,7 @@ class DiscordIpcConnection(override val appId: Long, private val userCallback: U
                 }
             }
 
-            MainScope().launch(exceptionHandler) {
+            launch(exceptionHandler) {
                 withTimeoutOrNull(5000) {
                     ipcClient.connect()
                     DiscordPlugin.LOG.debug("Started new ipc connection")
@@ -70,18 +71,16 @@ class DiscordIpcConnection(override val appId: Long, private val userCallback: U
     }
 
     override suspend fun send(presence: RichPresence?) {
-        DiscordPlugin.LOG.debug("Sending new presence")
+        DiscordPlugin.LOG.info("Sending new presence")
 
         try {
             if (running)
                 ipcClient.activityManager.setActivity(presence?.toNative())
         } catch (e: TimeoutCancellationException) {
-            DiscordPlugin.LOG.warnLazy { "Error sending presence, timed out" }
+            DiscordPlugin.LOG.debugLazy { "Error sending presence, timed out" }
         } catch (e: Exception) {
-            DiscordPlugin.LOG.warn("Error sending presence, is the client running?", e)
+            DiscordPlugin.LOG.warnLazy(e) { "Error sending presence, is the client running?" }
         }
-
-        DiscordPlugin.LOG.debug("Sent new presence")
     }
 
     override suspend fun disconnect() = disconnectInternal()
@@ -105,7 +104,7 @@ class DiscordIpcConnection(override val appId: Long, private val userCallback: U
             }
         }
 
-        MainScope().launch(exceptionHandler) {
+        launch(exceptionHandler) {
             withTimeoutOrNull(5000) {
                 ipcClient.disconnect()
                 DiscordPlugin.LOG.debug("IPC connection closed")

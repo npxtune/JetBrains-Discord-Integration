@@ -22,6 +22,7 @@ includeBuild("gradle/plugins")
 include("icons")
 include("plugin")
 include("plugin:common")
+include("plugin:pre223")
 include("plugin:pre231")
 include("plugin:post231")
 

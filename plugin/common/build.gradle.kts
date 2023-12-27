@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 /*
  * Copyright 2017-2020 Aljoscha Grebe
  * Copyright 2023 Axel JOLY (Azn9) <contact@azn9.dev>
@@ -19,19 +21,19 @@ fun properties(key: String) = providers.gradleProperty(key)
 val isCI by lazy { System.getenv("CI") != null }
 
 plugins {
-    alias(libs.plugins.kotlin)
-    alias(libs.plugins.intellij)
+    alias(libs.plugins.kotlin.common)
+    alias(libs.plugins.intellij.common)
 
     antlr
 }
 
 // Used only to add the required dependencies
 intellij {
-    pluginName = properties("pluginName")
-    version(libs.versions.ide.common)
+    pluginName.set(properties("pluginName").get())
+    version(libs.versions.ide.pre223) // Lowest supported version
     downloadSources(!isCI)
-
-    plugins("vcs-git")
+    instrumentCode(false)
+    updateSinceUntilBuild(false)
 }
 
 repositories {
@@ -45,14 +47,15 @@ repositories {
 }
 
 dependencies {
-    compileOnly(project(path = ":icons", configuration = "minimizedJar"))
+    implementation(project(path = ":icons", configuration = "minimizedJar"))
 
-    compileOnly(libs.discord.ipc)
-    compileOnly(libs.commons.io)
-    compileOnly(libs.jackson.dataformat.yaml)
+    implementation(libs.kotlinx.serialization)
+    implementation(libs.discord.ipc)
+    implementation(libs.commons.io)
+    implementation(libs.jackson.dataformat.yaml)
 
     antlr(libs.antlr)
-    compileOnly(libs.antlr.runtime)
+    implementation(libs.antlr.runtime)
 }
 
 val generatedSourceDir = project.file("src/generated")
@@ -68,8 +71,8 @@ sourceSets {
 
 kotlin {
     jvmToolchain {
-        vendor = JvmVendorSpec.JETBRAINS
-        languageVersion = JavaLanguageVersion.of(libs.versions.jdk.get())
+        //vendor = JvmVendorSpec.JETBRAINS
+        languageVersion.set(JavaLanguageVersion.of("11"))
     }
 }
 
@@ -130,5 +133,12 @@ tasks {
 
     compileKotlin {
         dependsOn(generateGrammarSource)
+    }
+
+    withType<KotlinCompile> {
+        kotlinOptions {
+            jvmTarget = "11"
+            freeCompilerArgs += "-Xjvm-default=all"
+        }
     }
 }
