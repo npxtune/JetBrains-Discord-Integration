@@ -20,6 +20,10 @@ jobs:
         with:
           use-gradlew: true
           gradle-build-module: |-
-            :plugin
+            :icons
+            :plugin:common
+            :plugin:pre223
+            :plugin:pre231
+            :plugin:post231
           gradle-build-configuration: |-
             compileClasspath
