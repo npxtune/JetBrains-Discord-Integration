@@ -30,6 +30,8 @@ plugins {
     antlr
 }
 
+version = rootProject.version as String + ".231"
+
 val github = "https://github.com/Azn9/JetBrains-Discord-Integration"
 
 dependencies {
@@ -184,7 +186,7 @@ tasks {
     }
 
     buildPlugin {
-        archiveBaseName(rootProject.name + "-v231")
+        archiveBaseName(rootProject.name)
     }
 
     buildSearchableOptions {

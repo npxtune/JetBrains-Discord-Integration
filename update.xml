@@ -4,7 +4,7 @@
   <plugin
     id="dev.azn9.plugins.discord"
     url="https://github.com/Azn9/JetBrains-Discord-Integration/releases/download/v2.0.8/JetBrains-Discord-Integration-v212-2.0.8.zip"
-    version="2.0.8">
+    version="2.0.8.212">
     <idea-version since-build="212" until-build="223.0" />
     <name>Discord Integration v2</name>
     <description><![CDATA[
@@ -25,7 +25,7 @@ Note : The plugin is not available on the JetBrains plugin repository yet.
     <plugin
             id="dev.azn9.plugins.discord"
             url="https://github.com/Azn9/JetBrains-Discord-Integration/releases/download/v2.0.8/JetBrains-Discord-Integration-v223-2.0.8.zip"
-            version="2.0.8">
+            version="2.0.8.223">
         <idea-version since-build="223.0" until-build="231.0" />
         <name>Discord Integration v2</name>
         <description><![CDATA[
@@ -46,7 +46,7 @@ Note : The plugin is not available on the JetBrains plugin repository yet.
     <plugin
             id="dev.azn9.plugins.discord"
             url="https://github.com/Azn9/JetBrains-Discord-Integration/releases/download/v2.0.8/JetBrains-Discord-Integration-v231-2.0.8.zip"
-            version="2.0.8">
+            version="2.0.8.231">
         <idea-version since-build="231.0" until-build="232.0" />
         <name>Discord Integration v2</name>
         <description><![CDATA[
@@ -67,7 +67,7 @@ Note : The plugin is not available on the JetBrains plugin repository yet.
     <plugin
             id="dev.azn9.plugins.discord"
             url="https://github.com/Azn9/JetBrains-Discord-Integration/releases/download/v2.0.8/JetBrains-Discord-Integration-v232-2.0.8.zip"
-            version="2.0.8">
+            version="2.0.8.232">
         <idea-version since-build="232.0" />
         <name>Discord Integration v2</name>
         <description><![CDATA[
