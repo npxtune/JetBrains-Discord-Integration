@@ -21,6 +21,7 @@ import com.github.benmanes.gradle.versions.updates.gradle.GradleReleaseChannel
 import com.palantir.gradle.gitversion.VersionDetails
 import groovy.lang.Closure
 import java.nio.file.Files
+import java.util.*
 
 plugins {
     //alias(libs.plugins.kotlin.latest) apply false
@@ -53,7 +54,7 @@ allprojects {
 }
 
 subprojects {
-    group = rootProject.group.toString() + "." + project.name.toLowerCase()
+    group = rootProject.group.toString() + "." + project.name.lowercase(Locale.ROOT)
     version = rootProject.version
 
     val secrets: File = rootProject.file("secrets.gradle.kts")

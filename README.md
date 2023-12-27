@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="plugin\src\main\resources\META-INF\pluginIcon.svg" alt="JetBrains Discord Integration" width="200"/>
+  <img src=".idea/icon.png" alt="JetBrains Discord Integration" width="200"/>
 </p>
 <h1 align="center">JetBrains Discord Integration v2</h1>
 
@@ -24,7 +24,7 @@ after this you can search it in Marketplace just like normal plugin.
 
 #### ...from the GitHub release page
 
-Go to the [GitHub release page](https://github.com/Azn9/JetBrains-Discord-Integration/tags) and grab the latest `JetBrains-Discord-Integration-X.X.X.zip`. Do not unzip the file. In your IDE go to `Settings > Plugins > Install plugin from disk...` and select the previously downloaded zip file.
+Go to the [GitHub release page](https://github.com/Azn9/JetBrains-Discord-Integration/tags) and grab the latest `JetBrains-Discord-Integration-X.X.X.zip` **corresponding to your version** ([Which version to choose?](#which-version-to-choose)). Do not unzip the file. In your IDE go to `Settings > Plugins > Install plugin from disk...` and select the previously downloaded zip file.
 See below to choose the correct version for your IDE.
 
 #### ...or compile from source
@@ -45,10 +45,14 @@ To install the zip file follow the steps from the [previous install method](#fro
 See below to choose the correct version for your IDE.
 
 ### Which version to choose?
-This plugin is split into three different versions to support different IDE versions.
-- "-pre223" is for IDEs with a version number between `2021.2` and `2022.3` (not included)
-- "-pre231" is for IDEs with a version number between `2022.3` and `2023.1` (not included)
-- "-post231" is for IDEs with a version number higher or equal to `2023.1`
+This plugin is split into different versions corresponding to the lowest supported version of the IDE.
+- `v212` is for IDEs 2021.2.X and above
+- `v223` is for IDEs 2022.3.X and above
+- `v231` is for IDEs 2023.1.X and above
+- `v232` is for IDEs 2023.2.X and above
+
+Warning, you must choose the correct lowest version for your IDE!
+For instance, if you are using IntelliJ IDEA 2022.2.X you **must** choose the `v212` version, not the `v223` version, even though the `v223` version is nearer to your version. 
 
 If you are unsure which version to choose, use the [JetBrains Plugin Repository](#from-the-jetbrains-plugin-repository-need-to-do-it-manually) method to install the plugin. It will automatically choose the correct version for you.
 
@@ -64,12 +68,6 @@ There is a [dedicated Discord server](https://discord.gg/mEDvg6sYp2) for the Jet
 ### ...using GitHub issues
 
 For feature requests and bug reports, feel free to make use of the GitHub issues by submitting a new issue. Please check whether someone has reported your issue already before creating your own report. If you submit a new Issue please include as much detail as possible in your issue and how to reproduce it if possible and relevant.
-
-#### ...or why not join the JetBrains community server
-
-If you have questions regarding any JetBrains IDE or other JetBrains products and projects feel free to join the [JetBrains community Discord server](https://discord.gg/9ut9sqD) where many users of JetBrains hang out alongside some of the JetBrains team.
-
-[![JetBrains Community Discord Server](https://discordapp.com/api/guilds/433980600391696384/embed.png?style=banner2)](https://discord.gg/9ut9sqD)
 
 ## License
 

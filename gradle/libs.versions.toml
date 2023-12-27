@@ -13,6 +13,8 @@ junit = "5.10.0"
 junit-jupiter = "5.10.0"
 junixsocket = "2.8.3"
 konf = "1.1.2"
+kotlinx-coroutines = "1.7.3"
+kotlinx-serialization = "1.3.3"
 logback = "1.4.14"
 okhttp3 = "4.12.0"
 pngtastic = "1.7"
@@ -21,22 +23,23 @@ versions = "0.50.0"
 zeroAllocationHashing = "0.16"
 
 ide-common = "2021.2" # Lower bound for all IDE versions
-ide-pre223 = "2021.2" # Uses Java 11
-ide-pre231 = "2022.3.3" # Uses Java 17
-ide-post231 = "2023.1.5"
+ide-v212 = "2021.2" # Uses Java 11
+ide-v223 = "2022.3.3" # Uses Java 17
+ide-v231 = "2023.1.5" # New postLoad system
+ide-v232 = "2023.2.4" # New idle listener system
 
 intellij-common = "1.16.1"
-intellij-pre223 = "1.16.1"
-intellij-pre231 = "1.16.1"
-intellij-post231 = "1.16.1"
+intellij-v212 = "1.16.1"
+intellij-v223 = "1.16.1"
+intellij-v231 = "1.16.1"
+intellij-v232 = "1.16.1"
 
 kotlin-latest = "1.9.22"
 kotlin-common = "1.7.0"
-kotlin-pre223 = "1.7.0"
-kotlin-pre231 = "1.9.22"
-kotlin-post231 = "1.9.22"
-kotlinx-coroutines = "1.7.3"
-kotlinx-serialization = "1.3.3"
+kotlin-v212 = "1.7.0"
+kotlin-v223 = "1.9.22"
+kotlin-v231 = "1.9.22"
+kotlin-v232 = "1.9.22"
 
 [libraries]
 antlr = { group = "org.antlr", name = "antlr4", version.ref = "antlr" }
@@ -66,9 +69,9 @@ pngtastic = { group = "com.github.depsypher", name = "pngtastic", version.ref = 
 zeroAllocationHashing = { group = "net.openhft", name = "zero-allocation-hashing", version.ref = "zeroAllocationHashing" }
 
 ide-common = { group = "com.jetbrains.intellij.idea", name = "ideaIC", version.ref = "ide-common" }
-ide-pre223 = { group = "com.jetbrains.intellij.idea", name = "ideaIC", version.ref = "ide-pre223" }
-ide-pre231 = { group = "com.jetbrains.intellij.idea", name = "ideaIC", version.ref = "ide-pre231" }
-ide-post231 = { group = "com.jetbrains.intellij.idea", name = "ideaIC", version.ref = "ide-post231" }
+ide-v212 = { group = "com.jetbrains.intellij.idea", name = "ideaIC", version.ref = "ide-v212" }
+ide-v223 = { group = "com.jetbrains.intellij.idea", name = "ideaIC", version.ref = "ide-v223" }
+ide-v231 = { group = "com.jetbrains.intellij.idea", name = "ideaIC", version.ref = "ide-v231" }
 
 kotlin-bom-ide = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "kotlin-common" }
 kotlin-bom-latest = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "kotlin-common" }
@@ -86,11 +89,13 @@ versions = { id = "com.github.ben-manes.versions", version.ref = "versions" }
 
 kotlin-latest = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-latest" }
 kotlin-common = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-common" }
-kotlin-pre223 = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-pre223" }
-kotlin-pre231 = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-pre231" }
-kotlin-post231 = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-post231" }
+kotlin-v212 = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-v212" }
+kotlin-v223 = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-v223" }
+kotlin-v231 = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-v231" }
+kotlin-v232 = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-v232" }
 
 intellij-common = { id = "org.jetbrains.intellij", version.ref = "intellij-common" }
-intellij-pre223 = { id = "org.jetbrains.intellij", version.ref = "intellij-pre223" }
-intellij-pre231 = { id = "org.jetbrains.intellij", version.ref = "intellij-pre231" }
-intellij-post231 = { id = "org.jetbrains.intellij", version.ref = "intellij-post231" }
+intellij-v212 = { id = "org.jetbrains.intellij", version.ref = "intellij-v212" }
+intellij-v223 = { id = "org.jetbrains.intellij", version.ref = "intellij-v223" }
+intellij-v231 = { id = "org.jetbrains.intellij", version.ref = "intellij-v231" }
+intellij-v232 = { id = "org.jetbrains.intellij", version.ref = "intellij-v232" }

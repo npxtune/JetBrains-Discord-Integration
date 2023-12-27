@@ -30,7 +30,7 @@ plugins {
 // Used only to add the required dependencies
 intellij {
     pluginName.set(properties("pluginName").get())
-    version(libs.versions.ide.pre223) // Lowest supported version
+    version(libs.versions.ide.v212) // Lowest supported version
     downloadSources(!isCI)
     instrumentCode(false)
     updateSinceUntilBuild(false)
