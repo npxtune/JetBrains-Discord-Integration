@@ -18,7 +18,7 @@ Feel free to open a pull request if you want to contribute to the project.
 
 You can install it directly from your IDE by going to `Settings > Plugins > Marketplace` and searching for `Discord Integration v2`.
 
-<a href="https://plugins.jetbrains.com/plugin/23420-discord-integration-v2"><img src="marketplace/download.png" alt="Download from the marketplace"/></a>
+<a href="https://plugins.jetbrains.com/plugin/23420-discord-integration-v2"><img src="marketplace/download.png" alt="Download from the marketplace" height="50px"/></a>
 
 #### ...from the GitHub release page
 
