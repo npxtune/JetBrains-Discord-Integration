@@ -70,3 +70,14 @@ For feature requests and bug reports, feel free to make use of the GitHub issues
 ## License
 
 This project has been released under the Apache 2.0 license. You can see the full license [here](/LICENSE.md)
+
+## Star History
+
+<a href="https://star-history.com/#Azn9/Jetbrains-Discord-Integration&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=Azn9/Jetbrains-Discord-Integration&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=Azn9/Jetbrains-Discord-Integration&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=Azn9/Jetbrains-Discord-Integration&type=Date" />
+  </picture>
+</a>
+
