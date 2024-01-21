@@ -38,6 +38,8 @@ body:
         - Windows
         - MacOS
         - Linux
+    validations:
+      required: true
   - type: textarea
     id: logs
     attributes:
