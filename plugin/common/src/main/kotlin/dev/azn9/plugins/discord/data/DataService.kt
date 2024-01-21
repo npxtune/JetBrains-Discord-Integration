@@ -115,7 +115,7 @@ class DataService {
                         val fileUniqueName = when (DumbService.isDumb(project)) {
                             true -> fileName
                             false -> invokeReadAction {
-                                tryOrDefault(fileName) {
+                                tryOrDefault(fileName, false) {
                                     UniqueVFilePathBuilder.getInstance().getUniqueVirtualFilePath(project, file)
                                 }
                             }
