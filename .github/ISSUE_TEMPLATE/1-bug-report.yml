@@ -13,14 +13,14 @@ body:
   - type: input
     id: ide-version
     attributes:
-      label: Version
+      label: IDE version
       description: What IDE version are you using?
     validations:
       required: true
   - type: dropdown
     id: plugin-version
     attributes:
-      label: Version
+      label: Plugin version
       description: What version of the plugin are you using?
       options:
         - 2.0.8
@@ -34,7 +34,6 @@ body:
     id: os
     attributes:
       label: What operating system are you using?
-      multiple: true
       options:
         - Windows
         - MacOS
