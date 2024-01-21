@@ -26,6 +26,8 @@ import dev.azn9.plugins.discord.utils.label
 import com.intellij.icons.AllIcons
 import com.intellij.ui.components.fields.ExtendableTextComponent
 import com.intellij.ui.components.fields.ExtendableTextField
+import dev.azn9.plugins.discord.DiscordPlugin
+import dev.azn9.plugins.discord.utils.warnLazy
 import java.awt.Desktop
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
@@ -42,7 +44,11 @@ fun OptionCreator<in CustomTemplate>.template(text: String, initialValue: String
 class TemplateOption(text: String, description: String?, initialValue: String) : SimpleOption<CustomTemplate>(text, description, CustomTemplate(initialValue)) {
 
     private val textFieldInfoExtension = ExtendableTextComponent.Extension.create(AllIcons.General.Information, "Supports templates (click for more info)") {
-        Desktop.getDesktop().browse(URI.create(Plugin.branchBase + "/plugin/templates.adoc"))
+        try {
+            Desktop.getDesktop().browse(URI.create(Plugin.branchBase + "/plugin/templates.adoc"))
+        } catch (e: Exception) {
+            DiscordPlugin.LOG.warnLazy(e) { "Failed to open templates.adoc" }
+        }
     }
 
     override val componentImpl by lazy {
