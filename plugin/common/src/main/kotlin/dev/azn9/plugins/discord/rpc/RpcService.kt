@@ -78,6 +78,8 @@ class RpcService : DisposableCoroutineScope {
     fun update(presence: RichPresence?, forceUpdate: Boolean = false, forceReconnect: Boolean = false) = launch {
         DiscordPlugin.LOG.debug("Called .update , islocked=${mutex.isLocked}")
 
+        throw IllegalStateException("This is a test") // TODO: remove
+
         val exceptionHandler = CoroutineExceptionHandler { _, error ->
             when (error) {
                 is ProcessCanceledException -> {

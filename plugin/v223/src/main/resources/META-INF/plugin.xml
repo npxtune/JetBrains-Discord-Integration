@@ -63,6 +63,8 @@
         <backgroundPostStartupActivity implementation="dev.azn9.plugins.discord.postLoad.TimePreloadingActivity"/>
         <backgroundPostStartupActivity implementation="dev.azn9.plugins.discord.postLoad.DiagnosePreloadingActivity"/>
         <backgroundPostStartupActivity implementation="dev.azn9.plugins.discord.postLoad.RenderPreloadingActivity"/>
+
+        <errorHandler implementation="dev.azn9.plugins.discord.errorreporting.ErrorReporting"/>
     </extensions>
 
     <actions>
