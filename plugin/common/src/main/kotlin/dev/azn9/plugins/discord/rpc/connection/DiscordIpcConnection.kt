@@ -71,7 +71,7 @@ class DiscordIpcConnection(override val appId: Long, private val userCallback: U
     }
 
     override suspend fun send(presence: RichPresence?) {
-        DiscordPlugin.LOG.info("Sending new presence")
+        DiscordPlugin.LOG.debugLazy { "Sending new presence" }
 
         try {
             if (running)
