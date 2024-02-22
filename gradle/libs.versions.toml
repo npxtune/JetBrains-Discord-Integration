@@ -6,6 +6,7 @@ commons-text = "1.11.0"
 discord-ipc = "0.2.2"
 docker = "3.2.13"
 foojay-resolver-convention = "0.8.0" # Also update manually in settings.gradle.kts
+github-api = "1.318"
 gitversion = "3.0.0"
 guava = "33.0.0-jre"
 jackson = "2.16.1"
@@ -49,6 +50,7 @@ commons-lang = { group = "org.apache.commons", name = "commons-lang3", version.r
 commons-text = { group = "org.apache.commons", name = "commons-text", version.ref = "commons-text" }
 discord-ipc = { group = "com.github.cbyrneee", name = "azn9_KDiscordIPC", version.ref = "discord-ipc" }
 docker = { group = "com.github.docker-java", name = "docker-java", version.ref = "docker" }
+github-api = { group = "org.kohsuke", name = "github-api", version.ref = "github-api" }
 gradle-shadow = { group = "gradle.plugin.com.github.jengelman.gradle.plugins", name = "shadow", version.ref = "shadow" }
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
 jackson-bom = { group = "com.fasterxml.jackson", name = "jackson-bom", version.ref = "jackson" }

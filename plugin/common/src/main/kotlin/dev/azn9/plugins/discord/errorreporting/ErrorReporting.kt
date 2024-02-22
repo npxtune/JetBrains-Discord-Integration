@@ -30,12 +30,33 @@ import com.intellij.openapi.progress.Task
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.SystemInfo
 import com.intellij.util.Consumer
+import dev.azn9.plugins.discord.DiscordPlugin
 import dev.azn9.plugins.discord.utils.Plugin
+import dev.azn9.plugins.discord.utils.infoLazy
+import dev.azn9.plugins.discord.utils.warnLazy
+import org.kohsuke.github.GHIssue
+import org.kohsuke.github.GHIssueState
+import org.kohsuke.github.GHRepository
+import org.kohsuke.github.GitHubBuilder
 import java.awt.Component
 import java.io.PrintWriter
 import java.io.StringWriter
 
-fun gatherErrorData(event: IdeaLoggingEvent, additionalInfo: String?): MutableMap<String, String> {
+data class ErrorData(
+    val pluginVersion: String,
+    val osName: String,
+    val javaVersion: String,
+    val appFullName: String,
+    val isEAP: String,
+    val appBuild: String,
+    val appVersion: String,
+    val errorMessage: String,
+    val stackTrace: String,
+    val hash: String,
+    val additionalInfo: String
+)
+
+fun gatherErrorData(event: IdeaLoggingEvent, additionalInfo: String?): ErrorData {
     val appInfo = ApplicationInfoEx.getInstanceEx()
     val namesInfo = ApplicationNamesInfo.getInstance()
     val error = event.throwable
@@ -44,30 +65,104 @@ fun gatherErrorData(event: IdeaLoggingEvent, additionalInfo: String?): MutableMa
     error.printStackTrace(PrintWriter(sw))
     val stackTrace = sw.toString()
 
-    return mutableMapOf(
-        "Plugin Version" to Plugin.version.toString(),
-        "OS Name" to SystemInfo.OS_NAME,
-        "Java Version" to SystemInfo.JAVA_VERSION,
-        "App Name" to namesInfo.productName,
-        "App Full Name" to namesInfo.fullProductName,
-        "App Version name" to appInfo.versionName,
-        "Is EAP" to java.lang.Boolean.toString(appInfo.isEAP),
-        "App Build" to appInfo.build.asString(),
-        "App Version" to appInfo.fullVersion,
-
-        "error.message" to (error.message ?: "/"),
-        "error.stacktrace" to stackTrace,
-        "error.hash" to error.stackTrace.contentHashCode().toString(),
-
-        "additional.info" to (additionalInfo ?: "/")
+    return ErrorData(
+        Plugin.version.toString(),
+        SystemInfo.OS_NAME,
+        SystemInfo.JAVA_VERSION,
+        namesInfo.fullProductName,
+        java.lang.Boolean.toString(appInfo.isEAP),
+        appInfo.build.asString(),
+        appInfo.fullVersion,
+        error.message ?: "?",
+        stackTrace,
+        error.stackTrace.contentHashCode().toString(),
+        additionalInfo ?: "/"
     )
 }
 
+fun sendErrorReport(data: ErrorData): SubmittedReportInfo {
+    val repositoryId = "Azn9/JDI-Test"//"JetBrains-Discord-Integration"
+
+    // Initialize the GitHub client
+    val client = GitHubBuilder().withOAuthToken("", "JDI-Bot").build()
+    if (!client.isCredentialValid) {
+        DiscordPlugin.LOG.warnLazy { "Failed to authenticate with GitHub" }
+        return SubmittedReportInfo(null, "Failed to authenticate with GitHub", SubmittedReportInfo.SubmissionStatus.FAILED)
+    } else {
+        DiscordPlugin.LOG.infoLazy { "Authenticated with GitHub" }
+        DiscordPlugin.LOG.infoLazy { client.myself.name }
+    }
+
+    val repository = client.getRepository(repositoryId)
+    if (repository == null) {
+        DiscordPlugin.LOG.warnLazy { "Failed to find the repository" }
+        return SubmittedReportInfo(null, "Failed to find the repository", SubmittedReportInfo.SubmissionStatus.FAILED)
+    }
+
+    // Create the new GitHub issue
+    var title = "Error Report: ${data.errorMessage}"
+    if (title.length > 256) title = title.substring(0, 253) + "..."
+    val body = generateGitHubIssueBody(data)
+
+    // Check if the issue already exists
+    val duplicate = findFirstDuplicate(data.hash, repository)
+
+    return if (duplicate != null) {
+        duplicate.comment(body)
+
+        SubmittedReportInfo(duplicate.url.toString(), "See issue", SubmittedReportInfo.SubmissionStatus.DUPLICATE)
+    } else {
+        val newIssue = repository.createIssue(title)
+            .body(body)
+            .label("automated")
+            .create()
+
+        SubmittedReportInfo(newIssue.url.toString(), "See issue", SubmittedReportInfo.SubmissionStatus.NEW_ISSUE)
+    }
+}
+
+fun findFirstDuplicate(hash: String, repository: GHRepository): GHIssue? {
+    return repository.queryIssues()
+        .state(GHIssueState.OPEN)
+        .label("automated")
+        .list()
+        .firstOrNull { it.body?.startsWith("`${hash}`") ?: false }
+}
+
+fun generateGitHubIssueBody(data: ErrorData): String {
+    return """
+`${data.hash}`
+
+### IDE version
+${data.appFullName} ${data.appVersion} (${data.appBuild})
+
+### OS
+${data.osName}
+
+### Java version
+${data.javaVersion}
+
+### Plugin version
+${data.pluginVersion}
+
+### Error message
+${data.errorMessage}
+
+### Additional info
+${data.additionalInfo}
+
+<details><summary>Stack trace</summary>
+<pre><code>
+${data.stackTrace}
+</code></pre>
+</details>
+    """.trimIndent()
+}
+
 class SendErrorTask(
-    private val project: Project?,
+    project: Project?,
     private val event: IdeaLoggingEvent,
     private val additionalInfo: String?,
-    private val parentComponent: Component,
     private val submittedReportConsumer: Consumer<in SubmittedReportInfo>
 ) : Task.Backgroundable(project, "Sending error report...") {
 
@@ -76,12 +171,17 @@ class SendErrorTask(
         indicator.text = "Sending error report..."
         indicator.fraction = 0.0
 
-        gatherErrorData(event, additionalInfo)
+        val status = try {
+            val data = gatherErrorData(event, additionalInfo)
+
+            sendErrorReport(data)
+        } catch (e: Exception) {
+            DiscordPlugin.LOG.warnLazy(e) { "Failed to send error report" }
+
+            SubmittedReportInfo(null, "Failed to send error report", SubmittedReportInfo.SubmissionStatus.FAILED)
+        }
 
         ApplicationManager.getApplication().invokeLater {
-            //val status = SubmittedReportInfo("", "", SubmittedReportInfo.SubmissionStatus.NEW_ISSUE)
-            val status = SubmittedReportInfo(SubmittedReportInfo.SubmissionStatus.NEW_ISSUE)
-
             submittedReportConsumer.consume(status)
         }
     }
@@ -96,7 +196,7 @@ class ErrorReporting : ErrorReportSubmitter() {
 
         val event = events.firstOrNull { it.throwable != null } ?: return false
 
-        SendErrorTask(project, event, additionalInfo, parentComponent, consumer).queue()
+        SendErrorTask(project, event, additionalInfo, consumer).queue()
 
         return true
     }
