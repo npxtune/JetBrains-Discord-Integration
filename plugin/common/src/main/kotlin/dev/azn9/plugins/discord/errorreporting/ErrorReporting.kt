@@ -17,6 +17,7 @@
 
 package dev.azn9.plugins.discord.errorreporting
 
+import com.google.gson.Gson
 import com.intellij.ide.DataManager
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.application.ApplicationManager
@@ -41,13 +42,16 @@ import org.kohsuke.github.GitHubBuilder
 import java.awt.Component
 import java.io.PrintWriter
 import java.io.StringWriter
+import java.net.URI
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
 
 data class ErrorData(
     val pluginVersion: String,
     val osName: String,
     val javaVersion: String,
     val appFullName: String,
-    val isEAP: String,
     val appBuild: String,
     val appVersion: String,
     val errorMessage: String,
@@ -70,7 +74,6 @@ fun gatherErrorData(event: IdeaLoggingEvent, additionalInfo: String?): ErrorData
         SystemInfo.OS_NAME,
         SystemInfo.JAVA_VERSION,
         namesInfo.fullProductName,
-        java.lang.Boolean.toString(appInfo.isEAP),
         appInfo.build.asString(),
         appInfo.fullVersion,
         error.message ?: "?",
@@ -81,82 +84,21 @@ fun gatherErrorData(event: IdeaLoggingEvent, additionalInfo: String?): ErrorData
 }
 
 fun sendErrorReport(data: ErrorData): SubmittedReportInfo {
-    val repositoryId = "Azn9/JDI-Test"//"JetBrains-Discord-Integration"
+    val gson = Gson()
+    val httpClient = HttpClient.newBuilder().build()
+    val request = HttpRequest.newBuilder()
+        .uri(URI.create("https://jdierrors.azn9.dev/"))
+        .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(data)))
+        .build()
+    val response = httpClient.send(request, HttpResponse.BodyHandlers.ofString())
 
-    // Initialize the GitHub client
-    val client = GitHubBuilder().withOAuthToken("", "JDI-Bot").build()
-    if (!client.isCredentialValid) {
-        DiscordPlugin.LOG.warnLazy { "Failed to authenticate with GitHub" }
-        return SubmittedReportInfo(null, "Failed to authenticate with GitHub", SubmittedReportInfo.SubmissionStatus.FAILED)
-    } else {
-        DiscordPlugin.LOG.infoLazy { "Authenticated with GitHub" }
-        DiscordPlugin.LOG.infoLazy { client.myself.name }
+    if (response.statusCode() != 200) {
+        DiscordPlugin.LOG.warnLazy { "Failed to send error report" }
+        return SubmittedReportInfo(SubmittedReportInfo.SubmissionStatus.FAILED)
     }
 
-    val repository = client.getRepository(repositoryId)
-    if (repository == null) {
-        DiscordPlugin.LOG.warnLazy { "Failed to find the repository" }
-        return SubmittedReportInfo(null, "Failed to find the repository", SubmittedReportInfo.SubmissionStatus.FAILED)
-    }
-
-    // Create the new GitHub issue
-    var title = "Error Report: ${data.errorMessage}"
-    if (title.length > 256) title = title.substring(0, 253) + "..."
-    val body = generateGitHubIssueBody(data)
-
-    // Check if the issue already exists
-    val duplicate = findFirstDuplicate(data.hash, repository)
-
-    return if (duplicate != null) {
-        duplicate.comment(body)
-
-        SubmittedReportInfo(duplicate.url.toString(), "See issue", SubmittedReportInfo.SubmissionStatus.DUPLICATE)
-    } else {
-        val newIssue = repository.createIssue(title)
-            .body(body)
-            .label("automated")
-            .create()
-
-        SubmittedReportInfo(newIssue.url.toString(), "See issue", SubmittedReportInfo.SubmissionStatus.NEW_ISSUE)
-    }
-}
-
-fun findFirstDuplicate(hash: String, repository: GHRepository): GHIssue? {
-    return repository.queryIssues()
-        .state(GHIssueState.OPEN)
-        .label("automated")
-        .list()
-        .firstOrNull { it.body?.startsWith("`${hash}`") ?: false }
-}
-
-fun generateGitHubIssueBody(data: ErrorData): String {
-    return """
-`${data.hash}`
-
-### IDE version
-${data.appFullName} ${data.appVersion} (${data.appBuild})
-
-### OS
-${data.osName}
-
-### Java version
-${data.javaVersion}
-
-### Plugin version
-${data.pluginVersion}
-
-### Error message
-${data.errorMessage}
-
-### Additional info
-${data.additionalInfo}
-
-<details><summary>Stack trace</summary>
-<pre><code>
-${data.stackTrace}
-</code></pre>
-</details>
-    """.trimIndent()
+    DiscordPlugin.LOG.infoLazy { "Error report sent" }
+    return SubmittedReportInfo(null, "Error report sent", SubmittedReportInfo.SubmissionStatus.NEW_ISSUE)
 }
 
 class SendErrorTask(
