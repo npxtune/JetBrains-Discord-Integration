@@ -55,8 +55,8 @@
                 nonDefaultProject="false"
                 instance="dev.azn9.plugins.discord.settings.ProjectConfigurable"/>
 
-        <notificationGroup displayType="STICKY_BALLOON" id="com.almightyalpaca.jetbrains.plugins.discord.notification.project.show"/>
-        <notificationGroup displayType="STICKY_BALLOON" id="com.almightyalpaca.jetbrains.plugins.discord.notification.update" isLogByDefault="true"/>
+        <notificationGroup displayType="STICKY_BALLOON" id="dev.azn9.plugins.discord.notification.project.show"/>
+        <notificationGroup displayType="STICKY_BALLOON" id="dev.azn9.plugins.discord.notification.update" isLogByDefault="true"/>
 
         <backgroundPostStartupActivity implementation="dev.azn9.plugins.discord.postLoad.NotificationPostStartupActivity"/>
         <backgroundPostStartupActivity implementation="dev.azn9.plugins.discord.postLoad.TimeProjectManagerListener"/>

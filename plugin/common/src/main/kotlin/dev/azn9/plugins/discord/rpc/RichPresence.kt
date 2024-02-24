@@ -17,7 +17,7 @@
 
 package dev.azn9.plugins.discord.rpc
 
-import com.almightyalpaca.jetbrains.plugins.discord.icons.source.Asset
+import dev.azn9.plugins.discord.icons.source.Asset
 import dev.azn9.plugins.discord.utils.*
 import java.awt.image.BufferedImage
 import java.net.URL

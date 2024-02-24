@@ -35,7 +35,7 @@ object ApplicationUpdateNotification {
 
     fun show(version: String) =
         NotificationGroupManager.getInstance()
-            .getNotificationGroup("com.almightyalpaca.jetbrains.plugins.discord.notification.update")
+            .getNotificationGroup("dev.azn9.plugins.discord.notification.update")
             .createNotification(title(version), content, NotificationType.INFORMATION)
             .addAction(BrowseNotificationAction("Join Discord", "https://discord.gg/mEDvg6sYp2"))
             .run(Notifications.Bus::notify)

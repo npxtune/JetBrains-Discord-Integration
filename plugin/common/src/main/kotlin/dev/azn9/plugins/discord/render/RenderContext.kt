@@ -17,8 +17,8 @@
 
 package dev.azn9.plugins.discord.render
 
-import com.almightyalpaca.jetbrains.plugins.discord.icons.source.IconSet
-import com.almightyalpaca.jetbrains.plugins.discord.icons.source.Source
+import dev.azn9.plugins.discord.icons.source.IconSet
+import dev.azn9.plugins.discord.icons.source.Source
 import dev.azn9.plugins.discord.data.Data
 import dev.azn9.plugins.discord.settings.options.types.SimpleValue
 import dev.azn9.plugins.discord.settings.settings

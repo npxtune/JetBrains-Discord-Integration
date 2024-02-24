@@ -20,7 +20,7 @@ package dev.azn9.plugins.discord.settings.values
 import dev.azn9.plugins.discord.render.RenderContext
 import dev.azn9.plugins.discord.settings.options.types.SimpleValue
 import dev.azn9.plugins.discord.settings.options.types.UiValueType
-import com.almightyalpaca.jetbrains.plugins.discord.icons.source.Asset as SourceAsset
+import dev.azn9.plugins.discord.icons.source.Asset as SourceAsset
 
 typealias IconValue = SimpleValue<PresenceIcon>
 

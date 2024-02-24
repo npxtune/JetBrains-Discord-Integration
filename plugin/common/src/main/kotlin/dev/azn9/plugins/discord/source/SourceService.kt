@@ -17,9 +17,9 @@
 
 package dev.azn9.plugins.discord.source
 
-import com.almightyalpaca.jetbrains.plugins.discord.icons.source.Source
-import com.almightyalpaca.jetbrains.plugins.discord.icons.source.classpath.ClasspathSource
-import com.almightyalpaca.jetbrains.plugins.discord.icons.source.local.LocalSource
+import dev.azn9.plugins.discord.icons.source.Source
+import dev.azn9.plugins.discord.icons.source.classpath.ClasspathSource
+import dev.azn9.plugins.discord.icons.source.local.LocalSource
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import java.nio.file.Paths

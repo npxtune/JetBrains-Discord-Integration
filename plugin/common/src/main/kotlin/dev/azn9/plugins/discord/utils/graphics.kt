@@ -17,7 +17,7 @@
 
 package dev.azn9.plugins.discord.utils
 
-import com.almightyalpaca.jetbrains.plugins.discord.icons.utils.get
+import dev.azn9.plugins.discord.icons.utils.get
 import dev.azn9.plugins.discord.rpc.User
 import java.awt.*
 import java.awt.Color

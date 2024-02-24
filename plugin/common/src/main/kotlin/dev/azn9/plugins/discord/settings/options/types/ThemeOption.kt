@@ -17,7 +17,7 @@
 
 package dev.azn9.plugins.discord.settings.options.types
 
-import com.almightyalpaca.jetbrains.plugins.discord.icons.source.Source
+import dev.azn9.plugins.discord.icons.source.Source
 import dev.azn9.plugins.discord.settings.gui.themes.ThemeDialog
 import dev.azn9.plugins.discord.settings.options.OptionCreator
 import dev.azn9.plugins.discord.settings.options.OptionHolder

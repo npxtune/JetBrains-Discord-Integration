@@ -17,8 +17,8 @@
 
 package dev.azn9.plugins.discord.settings.gui.themes
 
-import com.almightyalpaca.jetbrains.plugins.discord.icons.source.Theme
-import com.almightyalpaca.jetbrains.plugins.discord.icons.source.ThemeMap
+import dev.azn9.plugins.discord.icons.source.Theme
+import dev.azn9.plugins.discord.icons.source.ThemeMap
 import com.intellij.openapi.ui.DialogWrapper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
