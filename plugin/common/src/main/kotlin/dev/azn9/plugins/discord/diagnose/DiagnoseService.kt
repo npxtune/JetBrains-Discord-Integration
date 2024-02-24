@@ -29,6 +29,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import org.apache.commons.lang3.SystemUtils
+import java.io.File
 import java.nio.charset.StandardCharsets
 
 val diagnoseService: DiagnoseService
@@ -94,7 +95,9 @@ class DiagnoseService : DisposableCoroutineScope {
             "firefox.exe",
             "ApplicationFrameHost.exe", // Microsoft Edge
             "opera.exe",
-            "iexplore.exe"
+            "iexplore.exe",
+            "brave.exe",
+            "vivaldi.exe"
         )
 
         val discord = arrayOf(
@@ -103,6 +106,18 @@ class DiagnoseService : DisposableCoroutineScope {
             "DiscordCanary.exe",
             "DiscordDevelopment.exe"
         )
+
+        val hasIpcFile = (0..9).map { "discord-ipc-$it" }.any {
+            try {
+                File("\\\\?\\pipe\\$it").exists()
+            } catch (e: Exception) {
+                false
+            }
+        }
+
+        if (hasIpcFile) {
+            return Discord.OTHER
+        }
 
         val process = Runtime.getRuntime().exec("""tasklist /V /fi "SESSIONNAME eq Console"""")
         val lines = process.inputStream.bufferedReader(StandardCharsets.UTF_8).use { reader ->
@@ -123,7 +138,7 @@ class DiagnoseService : DisposableCoroutineScope {
             }
         }
 
-        return Discord.OTHER
+        return Discord.RUNNING_WITHOUT_RICH_PRESENCE_ENABLED
     }
 
     private fun readPlugins(): Plugins {
@@ -133,6 +148,7 @@ class DiagnoseService : DisposableCoroutineScope {
             when (plugin?.pluginId?.idString) {
                 "com.tsunderebug.discordintellij" -> matches++
                 "com.my.fobes.intellij.discord" -> matches++
+                "com.almightyalpaca.intellij.plugins.discord" -> matches++
             }
         }
 
@@ -170,6 +186,7 @@ class DiagnoseService : DisposableCoroutineScope {
         FLATPAK("It seems like Discord is running in a Flatpak package. This will most likely prevent the plugin from connecting to your Discord client!"),
         BROWSER("It seems like Discord is running in the browser. The plugin will not be able to connect to the Discord client!"),
         CLOSED("Could not detect a running Discord client!"),
+        RUNNING_WITHOUT_RICH_PRESENCE_ENABLED("It seems like Discord is running, but Rich Presence is not enabled!"),
         OTHER("")
     }
 
