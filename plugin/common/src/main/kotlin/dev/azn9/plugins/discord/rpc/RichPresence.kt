@@ -100,6 +100,7 @@ class RichPresence(
 
             if (asset != other.asset) return false
             if (key != other.key) return false
+            if (text != other.text) return false
 
             return true
         }
@@ -107,6 +108,7 @@ class RichPresence(
         override fun hashCode(): Int {
             var result = asset?.hashCode() ?: 0
             result = 31 * result + (key?.hashCode() ?: 0)
+            result = 31 * result + (text?.hashCode() ?: 0)
             return result
         }
     }

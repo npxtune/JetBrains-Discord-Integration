@@ -479,6 +479,7 @@ private fun Data.completeMissingData(): Data.File {
     val applicationTimeActive = application?.applicationTimeActive ?: ApplicationManager.getApplication().timeActive
 
     return Data.File(
+        application?.applicationId ?: 0L,
         application?.applicationName ?: settings.applicationType.getPreviewValue().applicationNameReadable,
         application?.applicationVersion ?: ApplicationInfoEx.getInstance().fullVersion,
         applicationTimeOpened,

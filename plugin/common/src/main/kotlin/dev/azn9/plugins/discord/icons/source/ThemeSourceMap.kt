@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.JsonNode
 
 interface ThemeSourceMap : Map<String, ThemeSource> {
     fun createThemeMap(themes: Map<String, Theme>, default: Theme): ThemeMap
-    fun createTheme(id: String, name: String, description: String, applications: Map<String, Long>): Theme
+    fun createTheme(id: String, name: String, description: String): Theme
 
     fun toThemeMap(): ThemeMap {
         val themes = stream()
@@ -39,14 +39,7 @@ interface ThemeSourceMap : Map<String, ThemeSource> {
     fun ThemeSource.asTheme(): Theme {
         val name: String = node["name"]?.textValue()!!
         val description: String = node["description"]?.textValue()!!
-        val applications: Map<String, Long> = node["applications"].asApplications()
 
-        return createTheme(id, name, description, applications)
-    }
-
-    private fun JsonNode.asApplications(): Map<String, Long> = when {
-        isNull -> emptyMap()
-        isObject -> this.fields().asSequence().associate { (key, value) -> key to value.longValue() }
-        else -> throw RuntimeException()
+        return createTheme(id, name, description)
     }
 }

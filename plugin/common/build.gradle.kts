@@ -64,8 +64,6 @@ repositories {
 }
 
 dependencies {
-    implementation(project(path = ":icons", configuration = "minimizedJar"))
-
     implementation(libs.kotlinx.serialization)
     implementation(libs.discord.ipc)
     implementation(libs.commons.io)
@@ -82,6 +80,9 @@ sourceSets {
     main {
         java {
             srcDir(generatedJavaSourceDir)
+        }
+        resources {
+            srcDir(File("$rootDir/icons"))
         }
     }
 }

@@ -15,12 +15,16 @@
  * limitations under the License.
  */
 
-package dev.azn9.plugins.discord.icons.source.local
+package dev.azn9.plugins.discord.icons.source
 
-import dev.azn9.plugins.discord.icons.source.Asset
-import dev.azn9.plugins.discord.icons.source.Theme
-import dev.azn9.plugins.discord.icons.source.abstract.AbstractIcon
+import java.awt.image.BufferedImage
 
-class LocalIcon(name: String, asset: Asset) : AbstractIcon(name, asset) {
-    constructor(source: LocalSource, name: String, assetId: String, theme: Theme, applicationName: String) : this(name, LocalAsset(source, assetId, theme, applicationName))
+const val ASSET_URL = "https://raw.githubusercontent.com/Azn9/JetBrains-Discord-Integration/develop/icons/src/main/resources/discord"
+
+interface Asset {
+    val id: String
+    val theme: Theme
+
+    fun getImage(size: Int?): BufferedImage?
+    fun getUrl(): String
 }

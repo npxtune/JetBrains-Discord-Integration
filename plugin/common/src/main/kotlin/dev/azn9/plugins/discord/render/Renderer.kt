@@ -61,7 +61,7 @@ abstract class Renderer(protected val context: RenderContext) {
             DiscordPlugin.LOG.debug("RenderContext.icons=null")
         }
 
-        return RichPresence(context.icons?.applicationId) presence@{
+        return RichPresence(context.applicationData?.applicationId) presence@{
             val customTemplateContext by lazy { context.asCustomTemplateContext() }
 
             this@presence.details = when (val line = details?.getValue()?.get(context)) {

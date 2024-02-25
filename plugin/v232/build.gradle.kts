@@ -35,7 +35,6 @@ version = rootProject.version as String + ".232"
 val github = "https://github.com/Azn9/JetBrains-Discord-Integration"
 
 dependencies {
-    implementation(project(path = ":icons", configuration = "minimizedJar"))
     implementation(project(":plugin:common"))
 
     implementation(libs.discord.ipc)

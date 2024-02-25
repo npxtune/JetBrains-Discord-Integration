@@ -15,15 +15,16 @@
  * limitations under the License.
  */
 
-package dev.azn9.plugins.discord.icons.source.local
+package dev.azn9.plugins.discord.icons.source.classpath
 
 import dev.azn9.plugins.discord.icons.source.Asset
 import dev.azn9.plugins.discord.icons.source.Theme
 import dev.azn9.plugins.discord.icons.source.abstract.AbstractIconSet
 
-class LocalIconSet(private val source: LocalSource, theme: Theme, applicationId: Long?, icons: Set<String>, applicationName: String) : AbstractIconSet(theme, applicationId, icons, applicationName) {
+class ClasspathIconSet(private val source: ClasspathSource, theme: Theme, icons: Set<String>, applicationName: String) :
+    AbstractIconSet(theme, icons, applicationName) {
     override fun getAsset(assetId: String): Asset? = when (assetId in this) {
-        true -> LocalAsset(source, assetId, theme, applicationName)
+        true -> ClasspathAsset(source, assetId, theme, applicationName)
         false -> null
     }
 }

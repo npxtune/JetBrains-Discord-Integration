@@ -17,29 +17,15 @@
 
 package dev.azn9.plugins.discord.source
 
-import dev.azn9.plugins.discord.icons.source.Source
-import dev.azn9.plugins.discord.icons.source.classpath.ClasspathSource
-import dev.azn9.plugins.discord.icons.source.local.LocalSource
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
-import java.nio.file.Paths
+import dev.azn9.plugins.discord.icons.source.Source
+import dev.azn9.plugins.discord.icons.source.classpath.ClasspathSource
 
 val sourceService: SourceService
     get() = service()
 
 @Service
 class SourceService {
-    val source: Source
-
-    init {
-        val env = System.getenv("dev.azn9.plugins.discord.source")?.split(':', limit = 2) ?: listOf("")
-        val platform = env[0]
-        val location = env.getOrNull(1)
-
-        source = when (platform.lowercase()) {
-            "local" -> LocalSource(Paths.get(location ?: throw IllegalStateException("LocalSource needs a path")))
-            "classpath" -> ClasspathSource(location ?: "discord")
-            else -> ClasspathSource("discord")
-        }
-    }
+    val source: Source = ClasspathSource("discord")
 }

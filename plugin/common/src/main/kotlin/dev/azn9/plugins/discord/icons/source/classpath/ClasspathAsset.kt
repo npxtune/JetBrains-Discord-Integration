@@ -17,9 +17,11 @@
 
 package dev.azn9.plugins.discord.icons.source.classpath
 
+import dev.azn9.plugins.discord.icons.source.ASSET_URL
 import dev.azn9.plugins.discord.icons.source.Theme
 import dev.azn9.plugins.discord.icons.source.abstract.AbstractAsset
 import java.awt.image.BufferedImage
+import java.util.logging.LogManager
 import javax.imageio.ImageIO
 
 class ClasspathAsset(private val source: ClasspathSource, id: String, theme: Theme, private val applicationName: String) : AbstractAsset(id, theme) {
@@ -30,4 +32,11 @@ class ClasspathAsset(private val source: ClasspathSource, id: String, theme: The
         }
         else -> source.loadResource("${source.pathThemes}/${theme.id}/$id.png")
     }?.use(ImageIO::read)
+
+    override fun getUrl(): String {
+        return when (id) {
+            "application" -> "${ASSET_URL}/applications/${theme.id}/$applicationName.png"
+            else -> "${ASSET_URL}/themes/${theme.id}/$id.png"
+        }
+    }
 }

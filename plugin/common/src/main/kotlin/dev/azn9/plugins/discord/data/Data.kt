@@ -38,6 +38,7 @@ sealed class Data {
     }
 
     open class Application(
+        val applicationId: Long,
         val applicationName: String,
         val applicationVersion: String,
         val applicationTimeOpened: Long,
@@ -50,6 +51,7 @@ sealed class Data {
     }
 
     open class Project(
+        applicationId: Long,
         applicationName: String,
         applicationVersion: String,
         applicationTimeOpened: Long,
@@ -62,13 +64,14 @@ sealed class Data {
         val projectSettings: ProjectSettings,
         val vcsBranch: String?,
         val debuggerActive: Boolean
-    ) : Application(applicationName, applicationVersion, applicationTimeOpened, applicationTimeActive, applicationSettings) {
+    ) : Application(applicationId, applicationName, applicationVersion, applicationTimeOpened, applicationTimeActive, applicationSettings) {
         override fun toString(): String {
             return "Data.Project(applicationName='$applicationName', applicationVersion='$applicationVersion', applicationTimeOpened=$applicationTimeOpened, applicationTimeActive=$applicationTimeActive, projectName='$projectName', projectDescription='$projectDescription', projectTimeOpened=$projectTimeOpened, projectTimeActive=$projectTimeActive, vcsBranch=$vcsBranch)"
         }
     }
 
     open class File(
+        applicationId: Long,
         applicationName: String,
         applicationVersion: String,
         applicationTimeOpened: Long,
@@ -94,6 +97,7 @@ sealed class Data {
         val pathInModule: String?,
         val fileSize: Int
     ) : Project(
+        applicationId,
         applicationName,
         applicationVersion,
         applicationTimeOpened,

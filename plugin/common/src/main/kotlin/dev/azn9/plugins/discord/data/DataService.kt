@@ -67,6 +67,8 @@ class DataService {
         val applicationTimeOpened = application.timeOpened
         val applicationTimeActive = application.timeActive
 
+        val applicationId = 625803295591497740L // TODO: Get application ID
+
         if (!settings.show.getStoredValue()) {
             return Data.None
         } else if (timeService.idle) {
@@ -158,6 +160,7 @@ class DataService {
                         DiscordPlugin.LOG.debug("Returning file data")
 
                         return Data.File(
+                            applicationId,
                             applicationName,
                             applicationVersion,
                             applicationTimeOpened,
@@ -191,6 +194,7 @@ class DataService {
                 DiscordPlugin.LOG.debug("Returning project data")
 
                 return Data.Project(
+                    applicationId,
                     applicationName,
                     applicationVersion,
                     applicationTimeOpened,
@@ -210,6 +214,7 @@ class DataService {
         DiscordPlugin.LOG.debug("Returning application data")
 
         return Data.Application(
+            applicationId,
             applicationName,
             applicationVersion,
             applicationTimeOpened,

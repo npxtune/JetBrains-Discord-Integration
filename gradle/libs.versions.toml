@@ -52,9 +52,9 @@ docker = { group = "com.github.docker-java", name = "docker-java", version.ref =
 gradle-shadow = { group = "gradle.plugin.com.github.jengelman.gradle.plugins", name = "shadow", version.ref = "shadow" }
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
 jackson-bom = { group = "com.fasterxml.jackson", name = "jackson-bom", version.ref = "jackson" }
-jackson-core = { group = "com.fasterxml.jackson.core", name = "jackson-core" }
-jackson-databind = { group = "com.fasterxml.jackson.core", name = "jackson-databind" }
-jackson-dataformat-yaml = { group = "com.fasterxml.jackson.dataformat", name = "jackson-dataformat-yaml" }
+jackson-core = { group = "com.fasterxml.jackson.core", name = "jackson-core", version.ref = "jackson" }
+jackson-databind = { group = "com.fasterxml.jackson.core", name = "jackson-databind", version.ref = "jackson" }
+jackson-dataformat-yaml = { group = "com.fasterxml.jackson.dataformat", name = "jackson-dataformat-yaml", version.ref = "jackson" }
 junixsocket-core = { group = "com.kohlschutter.junixsocket", name = "junixsocket-core", version.ref = "junixsocket" }
 konf-core = { group = "com.uchuhimo", name = "konf-core", version.ref = "konf" }
 konf-yaml = { group = "com.uchuhimo", name = "konf-yaml", version.ref = "konf" }

@@ -20,7 +20,7 @@ package dev.azn9.plugins.discord.icons.matcher
 sealed class Matcher {
     abstract fun matches(field: String): Boolean
 
-    sealed class Text(val strings: Set<String>, private val matcher: String.(String) -> Boolean) : dev.azn9.plugins.discord.icons.matcher.Matcher() {
+    sealed class Text(private val strings: Set<String>, private val matcher: String.(String) -> Boolean) : dev.azn9.plugins.discord.icons.matcher.Matcher() {
         override fun matches(field: String) = strings.any { s -> field.matcher(s) }
 
         class StartsWith(texts: Set<String>) : dev.azn9.plugins.discord.icons.matcher.Matcher.Text(texts, { s -> startsWith(s, true) })
@@ -32,7 +32,7 @@ sealed class Matcher {
         class Equals(texts: Set<String>) : dev.azn9.plugins.discord.icons.matcher.Matcher.Text(texts, { s -> equals(s, true) })
 
         class RegEx(expressions: Set<String>) : dev.azn9.plugins.discord.icons.matcher.Matcher() {
-            val expressions: Collection<Regex> = expressions.map { e -> e.toRegex(RegexOption.IGNORE_CASE) }
+            private val expressions: Collection<Regex> = expressions.map { e -> e.toRegex(RegexOption.IGNORE_CASE) }
             override fun matches(field: String) = expressions.any { e -> e.containsMatchIn(field) }
         }
     }

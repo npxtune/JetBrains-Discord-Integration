@@ -18,6 +18,7 @@
 package dev.azn9.plugins.discord.rpc.connection
 
 import dev.azn9.plugins.discord.DiscordPlugin
+import dev.azn9.plugins.discord.icons.source.Asset
 import dev.azn9.plugins.discord.rpc.RichPresence
 import dev.azn9.plugins.discord.rpc.User
 import dev.azn9.plugins.discord.rpc.UserCallback
@@ -32,6 +33,9 @@ import dev.cbyrne.kdiscordipc.core.event.impl.ErrorEvent
 import dev.cbyrne.kdiscordipc.core.event.impl.ReadyEvent
 import dev.cbyrne.kdiscordipc.data.activity.*
 import kotlinx.coroutines.*
+import java.io.ByteArrayOutputStream
+import java.util.Base64
+import javax.imageio.ImageIO
 import dev.cbyrne.kdiscordipc.data.user.User as NativeUser
 
 class DiscordIpcConnection(override val appId: Long, private val userCallback: UserCallback) :
@@ -151,7 +155,6 @@ private fun RichPresence.toNative() = activity(
     state = emptyLineHack(this@toNative.state),
     details = emptyLineHack(this@toNative.details),
 ) {
-
     this@toNative.startTimestamp?.let {
         this.timestamps(
             start = it.toEpochSecond(),
@@ -159,8 +162,12 @@ private fun RichPresence.toNative() = activity(
         )
     }
 
-    this@toNative.largeImage?.key?.let { this.largeImage(it, this@toNative.largeImage?.text) }
-    this@toNative.smallImage?.key?.let { this.smallImage(it, this@toNative.smallImage?.text) }
+    this@toNative.largeImage?.asset?.let {
+        this.largeImage(it.getUrl(), this@toNative.largeImage?.text)
+    }
+    this@toNative.smallImage?.asset?.let {
+        this.smallImage(it.getUrl(), this@toNative.smallImage?.text)
+    }
 
     if ((this@toNative.button1Title ?: "") != "" && (this@toNative.button1Url ?: "") != "") {
         this.button(

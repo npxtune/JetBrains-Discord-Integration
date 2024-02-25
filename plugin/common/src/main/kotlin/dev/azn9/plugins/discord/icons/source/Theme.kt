@@ -25,8 +25,6 @@ interface Theme {
             get() = "Default"
         override val description: String
             get() = "The default theme"
-        override val applications: Map<String, Long>
-            get() = emptyMap()
 
         override fun getIconSet(applicationName: String): IconSet? {
             return null
@@ -37,7 +35,6 @@ interface Theme {
     val id: String
     val name: String
     val description: String
-    val applications: Map<String, Long>
 
     fun getIconSet(applicationName: String): IconSet?
 }

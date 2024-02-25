@@ -15,12 +15,17 @@
  * limitations under the License.
  */
 
-package dev.azn9.plugins.discord.icons.source.local
+package dev.azn9.plugins.discord.icons.source.abstract
 
-import dev.azn9.plugins.discord.icons.source.Icon
 import dev.azn9.plugins.discord.icons.source.IconSet
-import dev.azn9.plugins.discord.icons.source.abstract.AbstractLanguageMatch
+import dev.azn9.plugins.discord.icons.source.Theme
 
-class LocalLanguageMatch(private val source: LocalSource, name: String, assetIds: Iterable<String>) : AbstractLanguageMatch(name, assetIds) {
-    override fun findIcon(icons: IconSet): Icon? = assetIds.find { it in icons }?.let { assetId -> LocalIcon(source, name, assetId, icons.theme, icons.applicationName) }
+abstract class AbstractIconSet(
+    override val theme: Theme,
+    private val icons: Set<String>,
+    override val applicationName: String
+) : IconSet, Set<String> by icons {
+    override fun toString(): String {
+        return "AbstractIconSet(theme=$theme, icons=$icons, applicationName='$applicationName')"
+    }
 }

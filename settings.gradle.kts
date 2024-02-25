@@ -19,7 +19,6 @@ rootProject.name = "JetBrains-Discord-Integration"
 
 includeBuild("gradle/plugins")
 
-include("icons")
 include("plugin")
 include("plugin:common")
 include("plugin:v212")

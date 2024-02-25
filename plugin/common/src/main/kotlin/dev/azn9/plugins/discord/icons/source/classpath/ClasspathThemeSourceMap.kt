@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-package dev.azn9.plugins.discord.icons.source.local
+package dev.azn9.plugins.discord.icons.source.classpath
 
 import dev.azn9.plugins.discord.icons.source.Theme
 import dev.azn9.plugins.discord.icons.source.ThemeSource
 import dev.azn9.plugins.discord.icons.source.abstract.AbstractThemeSourceMap
 
-class LocalThemeSourceMap(private val source: LocalSource, map: Map<String, ThemeSource>) : AbstractThemeSourceMap(map) {
-    override fun createThemeMap(themes: Map<String, Theme>, default: Theme) = LocalThemeMap(themes, default)
-    override fun createTheme(id: String, name: String, description: String, applications: Map<String, Long>) =
-        LocalTheme(source, id, name, description, applications)
+class ClasspathThemeSourceMap(private val source: ClasspathSource, map: Map<String, ThemeSource>) : AbstractThemeSourceMap(map) {
+    override fun createThemeMap(themes: Map<String, Theme>, default: Theme) = ClasspathThemeMap(themes, default)
+    override fun createTheme(id: String, name: String, description: String) =
+        ClasspathTheme(source, id, name, description)
 }

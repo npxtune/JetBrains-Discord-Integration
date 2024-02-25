@@ -17,15 +17,13 @@
 
 package dev.azn9.plugins.discord.icons.source.classpath
 
-import dev.azn9.plugins.discord.icons.source.*
-import dev.azn9.plugins.discord.icons.source.local.LocalApplicationSourceMap
-import dev.azn9.plugins.discord.icons.utils.retryAsync
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
+import dev.azn9.plugins.discord.icons.source.*
+import dev.azn9.plugins.discord.icons.utils.retryAsync
 import kotlinx.coroutines.*
 import org.apache.commons.io.FilenameUtils
-import java.io.Closeable
 import java.io.InputStream
 import kotlin.coroutines.CoroutineContext
 
@@ -35,8 +33,8 @@ class ClasspathSource(path: String, retry: Boolean = true) : Source, CoroutineSc
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO + parentJob
 
-    val basePath = "/$path"
-    val pathLanguages = "$basePath/languages"
+    private val basePath = "/$path"
+    private val pathLanguages = "$basePath/languages"
     val pathThemes = "$basePath/themes"
     val pathApplications = "$basePath/applications"
 
@@ -61,7 +59,7 @@ class ClasspathSource(path: String, retry: Boolean = true) : Source, CoroutineSc
 
     private fun readLanguages() = ClasspathLanguageSourceMap(this, read(pathLanguages, ::LanguageSource)).toLanguageMap()
     private fun readThemes() = ClasspathThemeSourceMap(this, read(pathThemes, ::ThemeSource)).toThemeMap()
-    private fun readApplications() = LocalApplicationSourceMap(read(pathApplications, ::ApplicationSource)).toApplicationMap()
+    private fun readApplications() = ClasspathApplicationSourceMap(read(pathApplications, ::ApplicationSource)).toApplicationMap()
 
     private fun <T> read(path: String, factory: (String, JsonNode) -> T): Map<String, T> {
         val mapper = ObjectMapper(YAMLFactory())
@@ -80,8 +78,6 @@ class ClasspathSource(path: String, retry: Boolean = true) : Source, CoroutineSc
     }
 
     fun loadResource(location: String): InputStream? = ClasspathSource::class.java.getResourceAsStream(location)
-
-    fun checkResourceExists(location: String): Boolean = loadResource(location)?.run(Closeable::close) != null
 
     fun listResources(path: String, extension: String): Sequence<String> {
         return (loadResource("$path/index")

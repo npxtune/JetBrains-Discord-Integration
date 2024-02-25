@@ -26,7 +26,7 @@ import java.time.ZoneId
 class IdleRenderer(context: RenderContext) : Renderer(context) {
     override fun RenderContext.render(): RichPresence {
 
-        return RichPresence(context.icons?.applicationId) presence@{
+        return RichPresence(context.applicationData?.applicationId) presence@{
             this@presence.details = "Idling"
 
             this@presence.startTimestamp = idleData?.idleTimestamp?.let {

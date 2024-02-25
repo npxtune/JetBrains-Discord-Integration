@@ -25,10 +25,6 @@ interface Source {
     fun getThemesAsync(): Deferred<ThemeMap>
     fun getApplicationsAsync(): Deferred<ApplicationMap>
 
-    suspend fun getLanguages(): LanguageMap = getLanguagesAsync().await()
-    suspend fun getThemes(): ThemeMap = getThemesAsync().await()
-    suspend fun getApplications(): ApplicationMap = getApplicationsAsync().await()
-
     fun getLanguagesOrNull(): LanguageMap? = getLanguagesAsync().getCompletedOrNull()
     fun getThemesOrNull(): ThemeMap? = getThemesAsync().getCompletedOrNull()
     fun getApplicationsOrNull(): ApplicationMap? = getApplicationsAsync().getCompletedOrNull()
