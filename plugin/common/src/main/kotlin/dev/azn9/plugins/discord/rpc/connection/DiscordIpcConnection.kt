@@ -87,6 +87,19 @@ class DiscordIpcConnection(override val appId: Long, private val userCallback: U
         }
     }
 
+    override suspend fun clearActivity() {
+        DiscordPlugin.LOG.debugLazy { "Clearing presence" }
+
+        try {
+            if (running)
+                ipcClient.activityManager.clearActivity()
+        } catch (e: TimeoutCancellationException) {
+            DiscordPlugin.LOG.debugLazy { "Error clearing presence, timed out" }
+        } catch (e: Exception) {
+            DiscordPlugin.LOG.warnLazy(e) { "Error clearing presence, is the client running?" }
+        }
+    }
+
     override suspend fun disconnect() = disconnectInternal()
 
     private fun disconnectInternal() {
@@ -110,7 +123,6 @@ class DiscordIpcConnection(override val appId: Long, private val userCallback: U
 
         launch(exceptionHandler) {
             withTimeoutOrNull(5000) {
-                ipcClient.activityManager.clearActivity()
                 ipcClient.disconnect()
                 DiscordPlugin.LOG.debug("IPC connection closed")
             }

@@ -46,4 +46,6 @@ interface ProjectSettings : PersistentStateComponent<Element>, OptionHolder {
     val button1Url: StringValue
     val button2Title: StringValue
     val button2Url: StringValue
+
+    val customApplicationId: StringValue
 }

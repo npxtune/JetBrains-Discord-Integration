@@ -22,12 +22,13 @@ import dev.azn9.plugins.discord.render.renderService
 import dev.azn9.plugins.discord.rpc.rpcService
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.DumbAwareAction
+import kotlinx.coroutines.runBlocking
 
 class ForceReconnectAction : DumbAwareAction("Force reconnect") {
     override fun actionPerformed(e: AnActionEvent) {
         DiscordPlugin.LOG.info("Forcing manual reconnect")
 
-        rpcService.update(null)
+        runBlocking { rpcService.update(null) }
 
         renderService.render(true)
     }

@@ -31,8 +31,6 @@ interface ApplicationSourceMap : Map<String, ApplicationSource> {
             .flatMap { it.entries }
             .associate { it.key to it.value }
 
-        DiscordPlugin.LOG.warn("Applications: $applications")
-
         return createApplicationMap(applications)
     }
 

@@ -70,15 +70,38 @@ class DataService {
         val applicationTimeOpened = application.timeOpened
         val applicationTimeActive = application.timeActive
 
-        val applicationsData = sourceService.source.getApplicationsOrNull() ?: let {
-            DiscordPlugin.LOG.warn("No applications data found!")
-            return Data.None
+        val project: Project? = IdeFocusManager.getGlobalInstance().lastFocusedFrame?.project
+
+        val editor: FileEditor? = project?.let {
+            invokeOnEventThread {
+                runCatching {
+                    FileEditorManager.getInstance(project)?.selectedEditor
+                }.onFailure {
+                    DiscordPlugin.LOG.warnLazy(it) { "Failed to get selected editor" }
+                }.getOrNull()
+            }
         }
-        val currentApplicationData = applicationsData[applicationCode] ?: let {
-            DiscordPlugin.LOG.warn("No data found for application code $applicationCode!")
-            return Data.None
+
+        val projectSettings = project?.settings
+        val applicationId = projectSettings?.customApplicationId?.getValue().let {
+            val longId = it?.trim()?.toLongOrNull()
+            if (longId != null && longId > 0) {
+                longId
+            } else {
+                null
+            }
+        } ?: let {
+            val applicationsData = sourceService.source.getApplicationsOrNull() ?: let {
+                DiscordPlugin.LOG.warn("No applications data found!")
+                return Data.None
+            }
+            val currentApplicationData = applicationsData[applicationCode] ?: let {
+                DiscordPlugin.LOG.warn("No data found for application code $applicationCode!")
+                return Data.None
+            }
+
+            currentApplicationData.discordId
         }
-        val applicationId = currentApplicationData.discordId
 
         if (!settings.show.getStoredValue()) {
             return Data.None
@@ -94,18 +117,6 @@ class DataService {
             }
         }
 
-        val project: Project? = IdeFocusManager.getGlobalInstance().lastFocusedFrame?.project
-
-        val editor: FileEditor? = project?.let {
-            invokeOnEventThread {
-                runCatching {
-                    FileEditorManager.getInstance(project)?.selectedEditor
-                }.onFailure {
-                    DiscordPlugin.LOG.warnLazy(it) { "Failed to get selected editor" }
-                }.getOrNull()
-            }
-        }
-
         if (project != null) {
             if (project.settings.show.getValue() <= ProjectShow.DISABLE) {
                 return Data.None
@@ -114,7 +125,6 @@ class DataService {
                 val projectDescription = project.settings.description.getValue()
                 val projectTimeOpened = project.timeOpened
                 val projectTimeActive = project.timeActive
-                val projectSettings = project.settings
                 val debuggerActive: Boolean = XDebuggerManager.getInstance(project).currentSession != null
 
                 if (editor != null) {
@@ -181,7 +191,7 @@ class DataService {
                             projectDescription,
                             projectTimeOpened,
                             projectTimeActive,
-                            projectSettings,
+                            projectSettings!!,
                             vcsBranch,
                             debuggerActive,
                             fileName,
@@ -215,7 +225,7 @@ class DataService {
                     projectDescription,
                     projectTimeOpened,
                     projectTimeActive,
-                    projectSettings,
+                    projectSettings!!,
                     vcsBranch,
                     debuggerActive
                 )

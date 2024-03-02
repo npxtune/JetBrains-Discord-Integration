@@ -31,6 +31,7 @@ import dev.azn9.plugins.discord.utils.scheduleWithFixedDelay
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 
@@ -73,7 +74,7 @@ class RenderService : DisposableCoroutineScope {
                 DiscordPlugin.LOG.debugLazy { "Render result: visible" }
             }
 
-            rpcService.update(presence, force)
+            runBlocking { rpcService.update(presence, force) }
 
             renderJob = null
         }

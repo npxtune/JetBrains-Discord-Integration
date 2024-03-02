@@ -17,15 +17,15 @@
 
 package dev.azn9.plugins.discord.rpc
 
+import com.intellij.openapi.components.Service
+import com.intellij.openapi.components.service
+import com.intellij.openapi.util.Disposer
+import com.intellij.util.IncorrectOperationException
 import dev.azn9.plugins.discord.DiscordPlugin
 import dev.azn9.plugins.discord.rpc.connection.DiscordConnection
 import dev.azn9.plugins.discord.rpc.connection.DiscordIpcConnection
 import dev.azn9.plugins.discord.utils.DisposableCoroutineScope
-import com.intellij.openapi.components.Service
-import com.intellij.openapi.components.service
-import com.intellij.openapi.progress.ProcessCanceledException
-import com.intellij.openapi.util.Disposer
-import dev.azn9.plugins.discord.utils.debugLazy
+import dev.azn9.plugins.discord.utils.warnLazy
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -47,28 +47,10 @@ class RpcService : DisposableCoroutineScope {
 
     private var lastPresence: RichPresence? = null
 
-    private var connectionChecker: Job? = null
-
     private val mutex = Mutex()
 
-    private fun checkConnected(): Job = launch {
-        delay(20_000)
-
-        mutex.withLock {
-            DiscordPlugin.LOG.debug("Checking for running rpc connection")
-
-            val connection = connection ?: return@launch
-
-            if (!connection.running) {
-                DiscordPlugin.LOG.debug("Rpc connection not running, reconnecting")
-
-                update(lastPresence, forceReconnect = true)
-            } else {
-                DiscordPlugin.LOG.debug("Rpc connection is running")
-
-                checkConnected()
-            }
-        }
+    private val exceptionHandler = CoroutineExceptionHandler { _, error ->
+        DiscordPlugin.LOG.warnLazy(error) { "Error while updating presence" }
     }
 
     private fun updateUser(user: User?) {
@@ -76,28 +58,14 @@ class RpcService : DisposableCoroutineScope {
     }
 
     fun update(presence: RichPresence?, forceUpdate: Boolean = false, forceReconnect: Boolean = false) = launch {
-        DiscordPlugin.LOG.debug("Called .update , islocked=${mutex.isLocked}")
-
-        val exceptionHandler = CoroutineExceptionHandler { _, error ->
-            when (error) {
-                is ProcessCanceledException -> {
-                    DiscordPlugin.LOG.warn("PCE while updating presence", error)
-                }
-
-                else -> {
-                    DiscordPlugin.LOG.warn("Error while updating presence", error)
-                }
-            }
-        }
-
         mutex.withLock {
-            launch(exceptionHandler) mutex@ {
+            launch(exceptionHandler) action@{
                 DiscordPlugin.LOG.debug("Updating presence, forceUpdate=$forceUpdate, forceReconnect=$forceReconnect")
 
                 if (!(forceUpdate || forceReconnect) && lastPresence != null) {
                     if (lastPresence == presence) {
                         DiscordPlugin.LOG.debug("Presence unchanged, skipping update")
-                        return@mutex
+                        return@action
                     }
 
                     lastPresence = presence
@@ -110,13 +78,17 @@ class RpcService : DisposableCoroutineScope {
                     }
 
                     if (connection != null) {
-                        connectionChecker?.cancel()
-                        connectionChecker = null
-                        connection?.disconnect()
+                        try {
+                            withTimeout(500) {
+                                connection!!.clearActivity()
+                                connection!!.disconnect()
+                            }
+                        } catch (e: Exception) {
+                            DiscordPlugin.LOG.warnLazy(e) { "Error disconnecting" }
+                        }
+
                         connection = null
                     }
-
-                    return@mutex
                 } else {
                     if (forceReconnect || connection?.appId != presence.appId) {
                         when {
@@ -126,18 +98,29 @@ class RpcService : DisposableCoroutineScope {
                         }
 
                         if (connection != null) {
-                            connectionChecker?.cancel()
-                            connectionChecker = null
-                            connection?.run(Disposer::dispose)
+                            try {
+                                withTimeout(500) {
+                                    connection!!.clearActivity()
+                                }
+                            } catch (e: Exception) {
+                                DiscordPlugin.LOG.warnLazy(e) { "Error clearing activity" }
+                            }
+
+                            Disposer.dispose(connection!!)
+                            connection?.disconnect()
+
                             connection = null
                         }
 
-                        connection = createConnection(presence.appId).apply {
-                            Disposer.register(this@RpcService, this@apply)
-                            connect()
+                        try {
+                            connection = createConnection(presence.appId).apply {
+                                Disposer.register(this@RpcService, this@apply)
+                                connect()
+                            }
+                        } catch (e: IncorrectOperationException) // Registering while parent is alreay disposed
+                        {
+                            DiscordPlugin.LOG.warnLazy(e) { "Error re-creating connection" }
                         }
-
-                        connectionChecker = checkConnected()
                     }
 
                     withTimeoutOrNull(4500) {
