@@ -18,6 +18,7 @@
 package dev.azn9.plugins.discord.utils
 
 import com.intellij.openapi.Disposable
+import dev.azn9.plugins.discord.DiscordPlugin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -30,6 +31,10 @@ interface DisposableCoroutineScope : CoroutineScope, Disposable {
         get() = Dispatchers.Default + parentJob
 
     override fun dispose() {
-        parentJob.cancel()
+        try {
+            parentJob.cancel()
+        } catch (e: Exception) {
+            DiscordPlugin.LOG.warnLazy(e) { "Failed to cancel parent job" }
+        }
     }
 }

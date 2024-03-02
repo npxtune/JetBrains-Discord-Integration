@@ -26,17 +26,14 @@ import javax.imageio.ImageIO
 
 class ClasspathAsset(private val source: ClasspathSource, id: String, theme: Theme, private val applicationName: String) : AbstractAsset(id, theme) {
     override fun getImage(size: Int?): BufferedImage? = when (id) {
-        "application" -> {
-            source.loadResource("${source.pathApplications}/${theme.id}/$applicationName.png")
-                ?: source.loadResource("${source.pathApplications}/$applicationName.png")
-        }
-        else -> source.loadResource("${source.pathThemes}/${theme.id}/$id.png")
+        "application" -> source.loadResource("${source.pathThemes}/${theme.id}/applications/$applicationName.png")
+        else -> source.loadResource("${source.pathThemes}/${theme.id}/languages/$id.png")
     }?.use(ImageIO::read)
 
     override fun getUrl(): String {
         return when (id) {
-            "application" -> "${ASSET_URL}/applications/${theme.id}/$applicationName.png"
-            else -> "${ASSET_URL}/themes/${theme.id}/$id.png"
+            "application" -> "${ASSET_URL}/themes/${theme.id}/applications/$applicationName.png"
+            else -> "${ASSET_URL}/themes/${theme.id}/languages/$id.png"
         }
     }
 }

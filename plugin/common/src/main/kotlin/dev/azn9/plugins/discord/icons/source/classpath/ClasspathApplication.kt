@@ -19,4 +19,4 @@ package dev.azn9.plugins.discord.icons.source.classpath
 
 import dev.azn9.plugins.discord.icons.source.abstract.AbstractApplication
 
-class ClasspathApplication(id: String, dummyFile: String) : AbstractApplication(id, dummyFile)
+class ClasspathApplication(id: String, discordId: Long, dummyFile: String) : AbstractApplication(id, discordId, dummyFile)

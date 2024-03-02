@@ -27,10 +27,10 @@ class ClasspathTheme(private val source: ClasspathSource, id: String, name: Stri
     AbstractTheme(id, name, description) {
     private val sets = ConcurrentHashMap<String, ClasspathIconSet>()
 
-    override fun getIconSet(applicationName: String): IconSet? {
+    override fun getIconSet(applicationName: String): IconSet {
         var set = sets[applicationName]
         if (set == null) {
-            val resources = source.listResources("${source.pathThemes}/$id", ".png")
+            val resources = source.listResources("${source.pathThemes}/$id/languages", ".png")
             val icons = resources
                 .map(FilenameUtils::getBaseName)
                 .toSet() + "application"

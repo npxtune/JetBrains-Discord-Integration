@@ -473,13 +473,15 @@ private fun Data.completeMissingData(): Data.File {
 
     val projectDescription = project?.projectDescription
 
-    val dummyFileName = sourceService.source.getApplicationsOrNull()?.get(applicationCode)?.dummyFile ?: "dummy.txt"
+    val applicationData = sourceService.source.getApplicationsOrNull()?.get(applicationCode)
+    val dummyFileName = applicationData?.dummyFile ?: "dummy.txt"
+    val applicationId = applicationData?.discordId ?: 0L
 
     val applicationTimeOpened = application?.applicationTimeOpened ?: ApplicationManager.getApplication().timeOpened
     val applicationTimeActive = application?.applicationTimeActive ?: ApplicationManager.getApplication().timeActive
 
     return Data.File(
-        application?.applicationId ?: 0L,
+        applicationId,
         application?.applicationName ?: settings.applicationType.getPreviewValue().applicationNameReadable,
         application?.applicationVersion ?: ApplicationInfoEx.getInstance().fullVersion,
         applicationTimeOpened,

@@ -19,7 +19,7 @@ package dev.azn9.plugins.discord.icons.source
 
 import java.awt.image.BufferedImage
 
-const val ASSET_URL = "https://raw.githubusercontent.com/Azn9/JetBrains-Discord-Integration/develop/icons/src/main/resources/discord"
+const val ASSET_URL = "https://raw.githubusercontent.com/Azn9/JetBrains-Discord-Integration/develop/icons/data"
 
 interface Asset {
     val id: String

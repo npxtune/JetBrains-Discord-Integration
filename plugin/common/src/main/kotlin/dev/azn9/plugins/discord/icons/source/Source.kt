@@ -17,15 +17,12 @@
 
 package dev.azn9.plugins.discord.icons.source
 
-import dev.azn9.plugins.discord.icons.utils.getCompletedOrNull
-import kotlinx.coroutines.Deferred
-
 interface Source {
-    fun getLanguagesAsync(): Deferred<LanguageMap>
-    fun getThemesAsync(): Deferred<ThemeMap>
-    fun getApplicationsAsync(): Deferred<ApplicationMap>
+    var languageMap: LanguageMap
+    var themeMap: ThemeMap
+    var applicationMap: ApplicationMap
 
-    fun getLanguagesOrNull(): LanguageMap? = getLanguagesAsync().getCompletedOrNull()
-    fun getThemesOrNull(): ThemeMap? = getThemesAsync().getCompletedOrNull()
-    fun getApplicationsOrNull(): ApplicationMap? = getApplicationsAsync().getCompletedOrNull()
+    fun getLanguagesOrNull(): LanguageMap? = languageMap
+    fun getThemesOrNull(): ThemeMap? = themeMap
+    fun getApplicationsOrNull(): ApplicationMap? = applicationMap
 }

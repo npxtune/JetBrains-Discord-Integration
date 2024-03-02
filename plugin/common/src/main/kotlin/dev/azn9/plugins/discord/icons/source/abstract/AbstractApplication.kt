@@ -21,9 +21,10 @@ import dev.azn9.plugins.discord.icons.source.Application
 
 abstract class AbstractApplication(
     override val id: String,
+    override val discordId: Long,
     override val dummyFile: String
 ) : Application {
     override fun toString(): String {
-        return "AbstractApplication(id='$id', dummyFile='$dummyFile')"
+        return "AbstractApplication(id=$id, discordId=$discordId, dummyFile='$dummyFile')"
     }
 }

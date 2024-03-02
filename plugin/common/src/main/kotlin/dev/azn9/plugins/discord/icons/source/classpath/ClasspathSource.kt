@@ -20,14 +20,18 @@ package dev.azn9.plugins.discord.icons.source.classpath
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
+import dev.azn9.plugins.discord.DiscordPlugin
 import dev.azn9.plugins.discord.icons.source.*
-import dev.azn9.plugins.discord.icons.utils.retryAsync
 import kotlinx.coroutines.*
 import org.apache.commons.io.FilenameUtils
 import java.io.InputStream
+import java.net.URI
+import java.nio.file.FileSystems
+import java.nio.file.Files
 import kotlin.coroutines.CoroutineContext
+import kotlin.io.path.Path
 
-class ClasspathSource(path: String, retry: Boolean = true) : Source, CoroutineScope {
+class ClasspathSource(path: String) : Source, CoroutineScope {
     private val parentJob: Job = SupervisorJob()
 
     override val coroutineContext: CoroutineContext
@@ -35,27 +39,24 @@ class ClasspathSource(path: String, retry: Boolean = true) : Source, CoroutineSc
 
     private val basePath = "/$path"
     private val pathLanguages = "$basePath/languages"
+    private val pathApplications = "$basePath/applications"
     val pathThemes = "$basePath/themes"
-    val pathApplications = "$basePath/applications"
 
-    private val languageJob: Deferred<LanguageMap> = when (retry) {
-        true -> retryAsync { readLanguages() }
-        false -> async { readLanguages() }
+    override var languageMap: LanguageMap = readLanguages()
+    override var themeMap: ThemeMap = readThemes()
+    override var applicationMap: ApplicationMap = readApplications()
+
+    init {
+        if (languageMap.isEmpty()) {
+            DiscordPlugin.LOG.error("No languages found!")
+        }
+        if (themeMap.isEmpty()) {
+            DiscordPlugin.LOG.error("No themes found!")
+        }
+        if (applicationMap.isEmpty()) {
+            DiscordPlugin.LOG.error("No applications found!")
+        }
     }
-
-    private val themeJob: Deferred<ThemeMap> = when (retry) {
-        true -> retryAsync { readThemes() }
-        false -> async { readThemes() }
-    }
-
-    private val applicationJob: Deferred<ApplicationMap> = when (retry) {
-        true -> retryAsync { readApplications() }
-        false -> async { readApplications() }
-    }
-
-    override fun getLanguagesAsync(): Deferred<LanguageMap> = languageJob
-    override fun getThemesAsync(): Deferred<ThemeMap> = themeJob
-    override fun getApplicationsAsync(): Deferred<ApplicationMap> = applicationJob
 
     private fun readLanguages() = ClasspathLanguageSourceMap(this, read(pathLanguages, ::LanguageSource)).toLanguageMap()
     private fun readThemes() = ClasspathThemeSourceMap(this, read(pathThemes, ::ThemeSource)).toThemeMap()
@@ -87,4 +88,8 @@ class ClasspathSource(path: String, retry: Boolean = true) : Source, CoroutineSc
             .filter { it.endsWith(extension) }
             .map { p -> "$path/$p" }
     }
+
+    override fun getLanguagesOrNull(): LanguageMap = languageMap
+    override fun getThemesOrNull(): ThemeMap = themeMap
+    override fun getApplicationsOrNull(): ApplicationMap = applicationMap
 }

@@ -110,7 +110,7 @@ sealed class Data {
         projectSettings,
         vcsBranch,
         debuggerActive
-    ), dev.azn9.plugins.discord.icons.matcher.Matcher.Target.Provider {
+    ), Matcher.Target.Provider {
         /** Path relative to the project directory */
         private val filePathRelative: String by lazy {
             FilenameUtils.separatorsToUnix(filePath)
@@ -128,11 +128,11 @@ sealed class Data {
                 .toSet()
         }
 
-        override fun getField(target: dev.azn9.plugins.discord.icons.matcher.Matcher.Target) = when (target) {
-            dev.azn9.plugins.discord.icons.matcher.Matcher.Target.EXTENSION -> fileExtensions
-            dev.azn9.plugins.discord.icons.matcher.Matcher.Target.NAME -> listOf(fileName)
-            dev.azn9.plugins.discord.icons.matcher.Matcher.Target.BASENAME -> fileBaseNames
-            dev.azn9.plugins.discord.icons.matcher.Matcher.Target.PATH -> listOf(filePathRelative)
+        override fun getField(target: Matcher.Target) = when (target) {
+            Matcher.Target.EXTENSION -> fileExtensions
+            Matcher.Target.NAME -> listOf(fileName)
+            Matcher.Target.BASENAME -> fileBaseNames
+            Matcher.Target.PATH -> listOf(filePathRelative)
         }
 
         override fun toString(): String {

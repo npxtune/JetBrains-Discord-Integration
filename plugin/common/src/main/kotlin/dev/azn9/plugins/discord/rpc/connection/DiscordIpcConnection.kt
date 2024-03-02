@@ -110,6 +110,7 @@ class DiscordIpcConnection(override val appId: Long, private val userCallback: U
 
         launch(exceptionHandler) {
             withTimeoutOrNull(5000) {
+                ipcClient.activityManager.clearActivity()
                 ipcClient.disconnect()
                 DiscordPlugin.LOG.debug("IPC connection closed")
             }

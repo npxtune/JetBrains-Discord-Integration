@@ -111,18 +111,16 @@ class ThemeOption(text: String, val description: String?, val showDefault: Boole
     override var isComponentEnabled by throwing<Boolean> { UnsupportedOperationException() } // TODO
 
     init {
-        source.getThemesAsync().asCompletableFuture().thenAcceptAsync { themes ->
-            var value = this.currentValue
-            if (value == null || value !in themes.keys) {
-                value = themes.default.id
-                this.currentValue = value
-            }
-
-            this.componentValue = value
-
-            this.componentImpl.isEnabled = true
-            this.componentImpl.text = themes[value]!!.name
+        var value = this.currentValue
+        if (value == null || value !in source.themeMap.keys) {
+            value = source.themeMap.default.id
+            this.currentValue = value
         }
+
+        this.componentValue = value
+
+        this.componentImpl.isEnabled = true
+        this.componentImpl.text = source.themeMap[value]!!.name
     }
 
     private val value = ThemeValue(this)

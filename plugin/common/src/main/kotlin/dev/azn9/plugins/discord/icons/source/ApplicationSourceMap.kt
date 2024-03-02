@@ -17,24 +17,31 @@
 
 package dev.azn9.plugins.discord.icons.source
 
-import dev.azn9.plugins.discord.icons.utils.stream
-import dev.azn9.plugins.discord.icons.utils.toMap
+import dev.azn9.plugins.discord.DiscordPlugin
+import kotlin.streams.asSequence
 
 interface ApplicationSourceMap : Map<String, ApplicationSource> {
     fun createApplicationMap(applications: Map<String, Application>): ApplicationMap
-    fun createApplication(id: String, dummyFile: String): Application
+    fun createApplication(id: String, discordId: Long, dummyFile: String): Application
 
     fun toApplicationMap(): ApplicationMap {
-        val applications = stream()
-            .map { (key, value) -> key to value.asApplication() }
-            .toMap()
+        val applications = values.stream()
+            .map { it.asApplications() }
+            .asSequence()
+            .flatMap { it.entries }
+            .associate { it.key to it.value }
+
+        DiscordPlugin.LOG.warn("Applications: $applications")
 
         return createApplicationMap(applications)
     }
 
-    fun ApplicationSource.asApplication(): Application {
+    fun ApplicationSource.asApplications(): Map<String, Application> {
+        val discordId: Long = node["discordId"]?.asLong()!!
         val dummyFile: String = node["dummyFile"]?.textValue()!!
 
-        return createApplication(id, dummyFile)
+        return node["ids"].map {
+            createApplication(it.textValue(), discordId, dummyFile)
+        }.associateBy { it.id }
     }
 }

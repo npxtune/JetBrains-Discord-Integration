@@ -19,5 +19,6 @@ package dev.azn9.plugins.discord.icons.source
 
 interface Application {
     val id: String
+    val discordId: Long
     val dummyFile: String
 }

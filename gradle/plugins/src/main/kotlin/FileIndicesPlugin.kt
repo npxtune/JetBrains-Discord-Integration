@@ -93,6 +93,8 @@ open class GenerateFileIndices : DefaultTask() {
                 }
         }
 
+        println("Loaded ${fileMap.size()} files")
+
         for ((path, files) in fileMap.asMap()) {
             val indexFile = outputDir.resolve("$path/$indexFileName")
             Files.createDirectories(indexFile.parent)

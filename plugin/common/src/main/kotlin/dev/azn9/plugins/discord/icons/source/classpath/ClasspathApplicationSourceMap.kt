@@ -23,5 +23,5 @@ import dev.azn9.plugins.discord.icons.source.abstract.AbstractApplicationSourceM
 
 class ClasspathApplicationSourceMap(map: Map<String, ApplicationSource>) : AbstractApplicationSourceMap(map) {
     override fun createApplicationMap(applications: Map<String, Application>) = ClasspathApplicationMap(applications)
-    override fun createApplication(id: String, dummyFile: String) = ClasspathApplication(id, dummyFile)
+    override fun createApplication(id: String, discordId: Long, dummyFile: String) = ClasspathApplication(id, discordId, dummyFile)
 }

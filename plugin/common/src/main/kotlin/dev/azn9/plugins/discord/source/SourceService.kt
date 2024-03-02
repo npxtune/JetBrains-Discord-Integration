@@ -27,5 +27,5 @@ val sourceService: SourceService
 
 @Service
 class SourceService {
-    val source: Source = ClasspathSource("discord")
+    val source: Source = ClasspathSource("data")
 }

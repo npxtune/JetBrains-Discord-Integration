@@ -17,6 +17,7 @@
 
 package dev.azn9.plugins.discord.data
 
+import com.intellij.openapi.application.ApplicationInfo
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ex.ApplicationInfoEx
 import com.intellij.openapi.application.runReadAction
@@ -38,6 +39,7 @@ import dev.azn9.plugins.discord.render.Renderer
 import dev.azn9.plugins.discord.settings.settings
 import dev.azn9.plugins.discord.settings.values.IdleVisibility.*
 import dev.azn9.plugins.discord.settings.values.ProjectShow
+import dev.azn9.plugins.discord.source.sourceService
 import dev.azn9.plugins.discord.time.timeActive
 import dev.azn9.plugins.discord.time.timeOpened
 import dev.azn9.plugins.discord.time.timeService
@@ -62,12 +64,21 @@ class DataService {
 
         val application = ApplicationManager.getApplication()
         val applicationInfo = ApplicationInfoEx.getInstance()
+        val applicationCode = ApplicationInfo.getInstance().build.productCode
         val applicationName = settings.applicationType.getValue().applicationNameReadable
         val applicationVersion = applicationInfo.fullVersion
         val applicationTimeOpened = application.timeOpened
         val applicationTimeActive = application.timeActive
 
-        val applicationId = 625803295591497740L // TODO: Get application ID
+        val applicationsData = sourceService.source.getApplicationsOrNull() ?: let {
+            DiscordPlugin.LOG.warn("No applications data found!")
+            return Data.None
+        }
+        val currentApplicationData = applicationsData[applicationCode] ?: let {
+            DiscordPlugin.LOG.warn("No data found for application code $applicationCode!")
+            return Data.None
+        }
+        val applicationId = currentApplicationData.discordId
 
         if (!settings.show.getStoredValue()) {
             return Data.None
