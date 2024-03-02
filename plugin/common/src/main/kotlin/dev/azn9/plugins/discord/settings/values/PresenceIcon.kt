@@ -25,6 +25,9 @@ import dev.azn9.plugins.discord.icons.source.Asset as SourceAsset
 typealias IconValue = SimpleValue<PresenceIcon>
 
 enum class PresenceIcon(override val text: String, override val description: String? = null) : RenderedValue<PresenceIcon.Result>, UiValueType {
+    PROJECT("Project") {
+        override fun RenderContext.getResult() = icons?.getAsset("project").toResult()
+    },
     APPLICATION("Application") {
         override fun RenderContext.getResult() = icons?.getAsset("application").toResult()
     },
@@ -39,14 +42,14 @@ enum class PresenceIcon(override val text: String, override val description: Str
 
     object Large {
         val Application = APPLICATION to arrayOf(APPLICATION, NONE)
-        val Project = APPLICATION to arrayOf(APPLICATION, NONE)
-        val File = FILE to arrayOf(APPLICATION, FILE, NONE)
+        val Project = PROJECT to arrayOf(PROJECT, APPLICATION, NONE)
+        val File = FILE to arrayOf(PROJECT, APPLICATION, FILE, NONE)
     }
 
     object Small {
         val Application = NONE to arrayOf(APPLICATION, NONE)
         val Project = NONE to arrayOf(APPLICATION, NONE)
-        val File = APPLICATION to arrayOf(APPLICATION, FILE, NONE)
+        val File = PROJECT to arrayOf(PROJECT, APPLICATION, FILE, NONE)
     }
 
     fun SourceAsset?.toResult() = when (this) {
