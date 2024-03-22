@@ -29,8 +29,8 @@ enum class ProjectShow(
     // Do not reorder these, some logic depends on the order
     DISABLE("Hide Completely"),
     APPLICATION("Show Application"),
-    PROJECT("Show Project"),
     ASK("Ask", "Show notification when first opening a new project"),
+    PROJECT("Show Project"),
     PROJECT_FILES("Show Project and Files");
 
     companion object {
